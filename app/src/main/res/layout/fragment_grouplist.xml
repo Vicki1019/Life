@@ -13,7 +13,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/grouptitle"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFF9E9"
             android:minHeight="?attr/actionBarSize"
