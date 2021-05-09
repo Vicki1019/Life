@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
+        <activity android:name=".LoginActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
