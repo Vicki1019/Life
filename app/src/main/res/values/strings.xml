@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Life</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_reflist">我的冰箱</string>
+    <string name="title_shoplist">購物清單</string>
+    <string name="title_grouplist">群組</string>
+    <string name="title_scan">掃描</string>
+    <string name="title_setting">設定</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
