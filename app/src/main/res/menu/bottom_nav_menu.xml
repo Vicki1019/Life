@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/reflist"
         android:icon="@drawable/reflist"
         android:title="@string/title_reflist" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/shoplist"
         android:icon="@drawable/shoplist"
         android:title="@string/title_shoplist" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/grouplist"
         android:icon="@drawable/grouplist"
         android:title="@string/title_grouplist" />
 
     <item
-        android:id="@+id/navigation_notifications2"
+        android:id="@+id/scan"
         android:icon="@drawable/scan"
         android:title="@string/title_scan" />
 
     <item
-        android:id="@+id/navigation_notifications3"
+        android:id="@+id/setting"
         android:icon="@drawable/setting"
         android:title="@string/title_setting" />
 
