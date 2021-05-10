@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -25,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton registerok = (ImageButton) findViewById(R.id.registerok);
+        ImageView registerok = (ImageView) findViewById(R.id.registerok);
         registerok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

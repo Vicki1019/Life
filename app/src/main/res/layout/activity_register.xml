@@ -31,17 +31,6 @@
             app:layout_constraintTop_toBottomOf="@+id/register_title"
             app:srcCompat="@drawable/user" />
 
-        <ImageButton
-            android:id="@+id/registerok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#00FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordck"
-            app:srcCompat="@drawable/register" />
-
         <EditText
             android:id="@+id/myemail"
             android:layout_width="225dp"
@@ -127,6 +116,18 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/registerok"
+            android:layout_width="113dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordck"
+            app:srcCompat="@drawable/register" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
