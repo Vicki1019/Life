@@ -9,24 +9,4 @@
         android:name="com.example.life.Reflist"
         android:label="fragment_reflist"
         tools:layout="@layout/fragment_reflist" />
-    <fragment
-        android:id="@+id/shoplist2"
-        android:name="com.example.life.Shoplist"
-        android:label="fragment_shoplist"
-        tools:layout="@layout/fragment_shoplist" />
-    <fragment
-        android:id="@+id/grouplist2"
-        android:name="com.example.life.Grouplist"
-        android:label="fragment_grouplist"
-        tools:layout="@layout/fragment_grouplist" />
-    <fragment
-        android:id="@+id/scan2"
-        android:name="com.example.life.Scan"
-        android:label="fragment_scan"
-        tools:layout="@layout/fragment_scan" />
-    <fragment
-        android:id="@+id/setting2"
-        android:name="com.example.life.Setting"
-        android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
 </navigation>
