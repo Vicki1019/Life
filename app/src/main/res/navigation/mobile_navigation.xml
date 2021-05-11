@@ -3,10 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/reflist2">
+    app:startDestination="@id/reflist">
     <fragment
-        android:id="@+id/reflist2"
+        android:id="@+id/reflist"
         android:name="com.example.life.Reflist"
         android:label="fragment_reflist"
-        tools:layout="@layout/fragment_reflist" />
+        tools:layout="@layout/fragment_reflist">
+        <action
+            android:id="@+id/action_reflist_to_reflistadd2"
+            app:destination="@id/reflistadd" />
+    </fragment>
+    <fragment
+        android:id="@+id/reflistadd"
+        android:name="com.example.life.Reflistadd"
+        android:label="fragment_reflistadd"
+        tools:layout="@layout/fragment_reflistadd" />
 </navigation>
