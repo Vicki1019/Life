@@ -90,7 +90,7 @@
 
         <ImageView
             android:id="@+id/setaccount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/setaccount"
@@ -101,7 +101,7 @@
 
         <ImageView
             android:id="@+id/setganeral"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
             android:clickable="true"
@@ -112,7 +112,7 @@
 
         <ImageView
             android:id="@+id/setnotity"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
             android:clickable="true"
@@ -123,7 +123,7 @@
 
         <ImageView
             android:id="@+id/setcode"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
             android:clickable="true"
@@ -134,7 +134,7 @@
 
         <ImageView
             android:id="@+id/settype"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
             android:clickable="true"
@@ -145,7 +145,7 @@
 
         <ImageView
             android:id="@+id/setlogout"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
             android:src="@drawable/setlogout"
