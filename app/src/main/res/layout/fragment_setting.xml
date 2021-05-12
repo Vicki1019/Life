@@ -25,7 +25,7 @@
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="170dp"
             android:layout_marginTop="10dp"
             android:background="#FFF9E9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -143,6 +143,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/setcode" />
 
+        <ImageView
+            android:id="@+id/setlogout"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/setlogout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settype" />
+
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
@@ -152,34 +162,31 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settype" />
+            app:layout_constraintTop_toBottomOf="@+id/setlogout" />
 
         <TextView
-            android:id="@+id/appver"
+            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="APP版本：V 0.1"
-            android:textColor="#A8884800"
+            android:layout_marginTop="5dp"
+            android:text="APP開發版本：V 0.1"
+            android:textColor="#DC884800"
             android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settype" />
+            app:layout_constraintEnd_toEndOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="@+id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/setlogout" />
 
         <TextView
             android:id="@+id/member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="3dp"
             android:text="開發人員：姚奕廷、莊展眉、曾薇瑄、孔令彤"
-            android:textColor="#A8884800"
+            android:textColor="#DC884800"
             android:textSize="18dp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.49"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appver" />
+            app:layout_constraintStart_toStartOf="@+id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/version" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
