@@ -1,14 +1,19 @@
 package com.example.life;
 
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -42,16 +47,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setMain();
 
+
+        setMain();
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
 
     private void setMain() {  //主畫面
 
         this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,new Reflist()).commit();
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        FloatingActionMenu menu = findViewById(R.id.floatingActionMenu);
+        if (ev.getAction() == MotionEvent.ACTION_UP && menu.isOpened()){
+            menu.close(true);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    public void Refadd(View view) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        View refv = getLayoutInflater().inflate(R.layout.alertdialog_titlebar,null);
+        alertDialog.setTitle("新增冰箱清單");
+        alertDialog.setView(refv);
+        alertDialog.setPositiveButton("確定",((dialog, which) -> {}));
+        AlertDialog dialog = alertDialog.create();
+        alertDialog.show();
+    }
+
+    public void Shopadd(View view) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        View shopv = getLayoutInflater().inflate(R.layout.alertdialog_titlebar,null);
+        alertDialog.setTitle("新增購物清單");
+        alertDialog.setView(shopv);
+        alertDialog.setPositiveButton("確定",((dialog, which) -> {}));
+        AlertDialog dialog = alertDialog.create();
+        alertDialog.show();
+    }
 }

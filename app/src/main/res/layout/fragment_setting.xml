@@ -36,19 +36,19 @@
             android:id="@+id/refname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:text="冰箱名稱"
             android:textColor="#FFFFFF"
             android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/settitle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:src="@drawable/user"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -60,10 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="60dp"
             android:text="使用者暱稱"
             android:textColor="#884800"
             android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="@+id/view" />
 
@@ -76,6 +77,7 @@
             android:text="Email"
             android:textColor="#884800"
             android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -86,17 +88,70 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
-        <View
-            android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+        <ImageView
+            android:id="@+id/setaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#FFF9E9"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/setaccount"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <ImageView
+            android:id="@+id/setganeral"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:clickable="true"
+            android:src="@drawable/setganeral"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setaccount" />
+
+        <ImageView
+            android:id="@+id/setnotity"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:clickable="true"
+            android:src="@drawable/setnotify"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setganeral" />
+
+        <ImageView
+            android:id="@+id/setcode"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:clickable="true"
+            android:src="@drawable/setcode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setnotity" />
+
+        <ImageView
+            android:id="@+id/settype"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:clickable="true"
+            android:src="@drawable/settype"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setcode" />
+
+        <ImageView
+            android:id="@+id/setlogout"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/setlogout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settype" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
