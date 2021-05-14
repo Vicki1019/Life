@@ -7,6 +7,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -51,6 +53,5 @@ public class MainActivity extends AppCompatActivity {
 
         this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,new Reflist()).commit();
     }
-
 
 }
