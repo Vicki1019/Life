@@ -2,10 +2,16 @@ package com.example.life;
 
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -69,22 +75,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Refadd(View view) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        View refv = getLayoutInflater().inflate(R.layout.alertdialog_titlebar,null);
-        alertDialog.setTitle("新增冰箱清單");
-        alertDialog.setView(refv);
-        alertDialog.setPositiveButton("確定",((dialog, which) -> {}));
-        AlertDialog dialog = alertDialog.create();
-        alertDialog.show();
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
+        View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null);//嵌入View
+        ImageView backDialog = refview.findViewById(R.id.back);//連結關閉視窗的Button
+        mBuilder.setView(refview);//設置View
+        AlertDialog dialog = mBuilder.create();
+        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
     public void Shopadd(View view) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        View shopv = getLayoutInflater().inflate(R.layout.alertdialog_titlebar,null);
-        alertDialog.setTitle("新增購物清單");
+        View shopv = getLayoutInflater().inflate(R.layout.activity_shopadd,null);
         alertDialog.setView(shopv);
-        alertDialog.setPositiveButton("確定",((dialog, which) -> {}));
         AlertDialog dialog = alertDialog.create();
         alertDialog.show();
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 }
