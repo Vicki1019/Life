@@ -93,6 +93,12 @@ public class RegisterActivity extends AppCompatActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(stringRequest);
+        }else{
+            loading.setVisibility(View.GONE);
+            nickname.setError("請輸入暱稱");
+            email.setError("請輸入E-mail");
+            passwd.setError("請輸入密碼");
+            passwdck.setError("請再次輸入密碼");
         }
     }
 }
