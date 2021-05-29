@@ -121,12 +121,24 @@
             android:id="@+id/registerok"
             android:layout_width="113dp"
             android:layout_height="70dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:clickable="true"
+            android:onClick="register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordck"
+            app:layout_constraintTop_toBottomOf="@+id/rloading"
             app:srcCompat="@drawable/register" />
+
+        <ProgressBar
+            android:id="@+id/rloading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
