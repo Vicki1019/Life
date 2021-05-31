@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://172.16.1.47/life/register.php"; //API URL(register.php)_彤家WIFI_IP
+    private static String url = "http://172.16.1.57/life/register.php"; //API URL(register.php)_彤家WIFI_IP
     //private String url = "http://192.168.210.110/life/register.php"; //API URL(register.php)_彤手機WIFI_IP
 
     @Override
