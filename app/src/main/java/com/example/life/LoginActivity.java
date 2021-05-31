@@ -27,8 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    //private static String url = "http://172.16.1.47/life/login.php"; //API URL(login.php)_彤家WIFI_IP
-    private String url = "http://192.168.210.110/life/login.php"; //API URL(login.php)_彤手機WIFI_IP
+    private static String url = "http://172.16.1.47/life/login.php"; //API URL(login.php)_彤家WIFI_IP
+    //private String url = "http://192.168.210.110/life/login.php"; //API URL(login.php)_彤手機WIFI_IP
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -28,8 +28,8 @@
 
     <View
         android:id="@+id/view4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="413dp"
+        android:layout_height="390dp"
         android:background="#FFEEC6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,19 +123,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_name" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textColor="#884800"
-        android:textColorHighlight="#884800"
-        android:textColorLink="#884800"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_name_input" />
-
     <TextView
         android:id="@+id/refadd_data"
         android:layout_width="wrap_content"
@@ -149,24 +136,11 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_quantity" />
 
-    <EditText
-        android:id="@+id/refadd_data_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:textColor="#884800"
-        android:textColorHighlight="#884800"
-        android:textColorLink="#884800"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
-
     <TextView
         android:id="@+id/refadd_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:text="分類項目"
         android:textColor="#884800"
@@ -175,26 +149,12 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_data" />
 
-    <EditText
-        android:id="@+id/refadd_type_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textColor="#884800"
-        android:textColorHighlight="#884800"
-        android:textColorLink="#884800"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_data_input" />
-
     <Button
         android:id="@+id/refadd_ok"
         style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:background="#884800"
         android:text="新增"
@@ -202,7 +162,80 @@
         android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_type_input" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/decreae_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:background="#884800"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_name_input" />
+
+    <TextView
+        android:id="@+id/refadd_quantity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:text="1"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/decreae_btn"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_name_input" />
+
+    <Button
+        android:id="@+id/increase_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#884800"
+        android:text="+"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/refadd_quantity_text"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_name_input" />
+
+    <EditText
+        android:id="@+id/refadd_data_input"
+        android:layout_width="176dp"
+        android:layout_height="46dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
+    <Button
+        android:id="@+id/calender_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/calender"
+        app:layout_constraintStart_toEndOf="@+id/refadd_data_input"
+        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/spinner"
+        app:layout_constraintStart_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_data_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
