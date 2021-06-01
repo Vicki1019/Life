@@ -92,8 +92,8 @@
 
     <EditText
         android:id="@+id/refadd_name_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -171,14 +171,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="1"
+        android:textColor="#000000"
         android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/decrease_btn"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
     <EditText
         android:id="@+id/refadd_data_input"
-        android:layout_width="176dp"
-        android:layout_height="46dp"
+        android:layout_width="175dp"
+        android:layout_height="45dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="18dp"
@@ -226,7 +227,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:clickable="true"
-        android:onClick="datePicker"
         app:layout_constraintStart_toEndOf="@+id/refadd_data_input"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         app:srcCompat="@drawable/calender" />
