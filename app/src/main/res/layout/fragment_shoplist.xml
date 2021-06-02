@@ -38,20 +38,33 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="381dp"
+            android:layout_height="330dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shoptitle" />
 
+        <TextView
+            android:id="@+id/getdate"
+            android:layout_width="385dp"
+            android:layout_height="30dp"
+            android:hint="請選擇日期"
+            android:textColor="#854800"
+            android:textColorHint="#B3884800"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="370dp"
             android:layout_height="277dp"
+            android:layout_marginTop="5dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarView">
+            app:layout_constraintTop_toBottomOf="@+id/getdate">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="CheckBox" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
