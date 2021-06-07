@@ -231,4 +231,13 @@
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         app:srcCompat="@drawable/calender" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/increase_btn"
+        app:layout_constraintTop_toTopOf="@+id/guideline9"
+        android:background="@drawable/spinner_back" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
