@@ -31,19 +31,6 @@
             app:layout_constraintTop_toBottomOf="@+id/register_title"
             app:srcCompat="@drawable/user" />
 
-        <EditText
-            android:id="@+id/myemail"
-            android:layout_width="225dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="請輸入E-mail"
-            android:inputType="textPersonName"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nickname" />
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
@@ -75,6 +62,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <EditText
+            android:id="@+id/myemail"
+            android:layout_width="225dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="請輸入E-mail"
+            android:inputType="textPersonName"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
         <EditText
             android:id="@+id/password"

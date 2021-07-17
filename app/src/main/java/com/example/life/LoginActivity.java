@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://172.16.1.69/life/login.php"; //API URL(login.php)
+    private static String url = "http://192.168.184.110/life/login.php"; //API URL(login.php)
 
 
     @Override

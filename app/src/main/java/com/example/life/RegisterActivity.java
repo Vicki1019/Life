@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://172.16.1.69/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.184.110/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         if(!rpasswd.equals(rpasswdck)){
             passwdck.setError("輸入密碼不一致");
-        }else if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("")){
+        }else if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("") && !rpasswdck.equals("")){
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -94,10 +94,83 @@ public class RegisterActivity extends AppCompatActivity {
             requestQueue.add(stringRequest);
         }else{
             loading.setVisibility(View.GONE);
-            nickname.setError("請輸入暱稱");
-            email.setError("請輸入E-mail");
-            passwd.setError("請輸入密碼");
-            passwdck.setError("請再次輸入密碼");
+            //rnickname.equals("") && remail.equals("") && rpasswd.equals("") && rpasswdck.equals("")
+            if(rnickname.equals("")){
+                if(remail.equals("")){
+                    if(rpasswd.equals("")){
+                        if(rpasswdck.equals("")){
+                            nickname.setError("請輸入暱稱");
+                            email.setError("請輸入E-mail");
+                            passwd.setError("請輸入密碼");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            nickname.setError("請輸入暱稱");
+                            email.setError("請輸入E-mail");
+                            passwd.setError("請輸入密碼");
+                        }
+                    }else{
+                        if(rpasswdck.equals("")){
+                            nickname.setError("請輸入暱稱");
+                            email.setError("請輸入E-mail");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            nickname.setError("請輸入暱稱");
+                            email.setError("請輸入E-mail");
+                        }
+                    }
+                }else{
+                    if(rpasswd.equals("")){
+                        if(rpasswdck.equals("")){
+                            nickname.setError("請輸入暱稱");
+                            passwd.setError("請輸入密碼");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            nickname.setError("請輸入暱稱");
+                            passwd.setError("請輸入密碼");
+                        }
+                    }else{
+                        if(rpasswdck.equals("")){
+                            nickname.setError("請輸入暱稱");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            nickname.setError("請輸入暱稱");
+                        }
+                    }
+                }
+            }else{
+                if(remail.equals("")){
+                    if(rpasswd.equals("")){
+                        if(rpasswdck.equals("")){
+                            email.setError("請輸入E-mail");
+                            passwd.setError("請輸入密碼");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            email.setError("請輸入E-mail");
+                            passwd.setError("請輸入密碼");
+                        }
+                    }else{
+                        if(rpasswdck.equals("")){
+                            email.setError("請輸入E-mail");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            email.setError("請輸入E-mail");
+                        }
+                    }
+                }else{
+                    if(rpasswd.equals("")){
+                        if(rpasswdck.equals("")){
+                            passwd.setError("請輸入密碼");
+                            passwdck.setError("請再次輸入密碼");
+                        }else{
+                            passwd.setError("請輸入密碼");
+                        }
+                    }else{
+                        if(rpasswdck.equals("")){
+                            passwdck.setError("請再次輸入密碼");
+                        }
+                    }
+                }
+            }
         }
     }
 }
