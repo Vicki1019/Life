@@ -57,41 +57,44 @@ public class RegisterActivity extends AppCompatActivity {
         rpasswd = passwd.getText().toString().trim();
         rpasswdck = passwdck.getText().toString().trim();
         loading.setVisibility(View.VISIBLE);
-        if(!rpasswd.equals(rpasswdck)){
-            passwdck.setError("輸入密碼不一致");
-        }else if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("") && !rpasswdck.equals("")){
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if (response.equals("success")) {
-                        loading.setVisibility(View.GONE);
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                        Toast.makeText(RegisterActivity.this,"註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
-                    } else if (response.equals("failure")) {
-                        loading.setVisibility(View.GONE);
-                        Toast.makeText(RegisterActivity.this,"此信箱已註冊過", Toast.LENGTH_SHORT).show();
+
+        if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("") && !rpasswdck.equals("")){
+            if(!rpasswd.equals(rpasswdck)) {
+                loading.setVisibility(View.GONE);
+                passwdck.setError("輸入密碼不一致");
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.equals("success")) {
+                            loading.setVisibility(View.GONE);
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                            Toast.makeText(RegisterActivity.this,"註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                        } else if (response.equals("failure")) {
+                            loading.setVisibility(View.GONE);
+                            Toast.makeText(RegisterActivity.this,"此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loading.setVisibility(View.GONE);
-                    Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> data = new HashMap<>();
-                    data.put("name", rnickname);
-                    data.put("email", remail);
-                    data.put("passwd", rpasswd);
-                    return data;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            requestQueue.add(stringRequest);
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loading.setVisibility(View.GONE);
+                        Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> data = new HashMap<>();
+                        data.put("name", rnickname);
+                        data.put("email", remail);
+                        data.put("passwd", rpasswd);
+                        return data;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                requestQueue.add(stringRequest);
+            }
         }else{
             loading.setVisibility(View.GONE);
             //rnickname.equals("") && remail.equals("") && rpasswd.equals("") && rpasswdck.equals("")
