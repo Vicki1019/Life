@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://192.168.184.110/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.19.110/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
             if(!rpasswd.equals(rpasswdck)) {
                 loading.setVisibility(View.GONE);
                 passwdck.setError("輸入密碼不一致");
+            }else{
+                loading.setVisibility(View.GONE);
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -89,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                         data.put("name", rnickname);
                         data.put("email", remail);
                         data.put("passwd", rpasswd);
+                        data.put("passwdck", rpasswdck);
                         return data;
                     }
                 };
@@ -97,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }else{
             loading.setVisibility(View.GONE);
-            //rnickname.equals("") && remail.equals("") && rpasswd.equals("") && rpasswdck.equals("")
             if(rnickname.equals("")){
                 if(remail.equals("")){
                     if(rpasswd.equals("")){
