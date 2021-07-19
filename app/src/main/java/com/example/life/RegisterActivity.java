@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://1192.168.84.110/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.122.110/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
