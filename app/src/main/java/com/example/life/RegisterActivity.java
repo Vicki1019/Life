@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://192.168.122.110/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.82.110/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,44 +59,52 @@ public class RegisterActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
 
         if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("") && !rpasswdck.equals("")){
-            if(!rpasswd.equals(rpasswdck)) {
+            if(rpasswd.length()< 5) {
+                passwd.setError("密碼長度不得小於5");
                 loading.setVisibility(View.GONE);
-                passwdck.setError("輸入密碼不一致");
-            }else{
+            }else if(rpasswd.length() >10){
+                passwd.setError("密碼長度不得大於10");
                 loading.setVisibility(View.GONE);
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.equals("success")) {
-                            loading.setVisibility(View.GONE);
-                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                            Toast.makeText(RegisterActivity.this,"註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
-                        } else if (response.equals("failure")) {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(RegisterActivity.this,"此信箱已註冊過", Toast.LENGTH_SHORT).show();
+            }else {
+                if (!rpasswd.equals(rpasswdck)) {
+                    loading.setVisibility(View.GONE);
+                    passwdck.setError("輸入密碼不一致");
+                } else {
+                    loading.setVisibility(View.GONE);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.equals("success")) {
+                                loading.setVisibility(View.GONE);
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                                Toast.makeText(RegisterActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                            } else if (response.equals("failure")) {
+                                loading.setVisibility(View.GONE);
+                                Toast.makeText(RegisterActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loading.setVisibility(View.GONE);
-                        Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> data = new HashMap<>();
-                        data.put("name", rnickname);
-                        data.put("email", remail);
-                        data.put("passwd", rpasswd);
-                        data.put("passwdck", rpasswdck);
-                        return data;
-                    }
-                };
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                requestQueue.add(stringRequest);
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loading.setVisibility(View.GONE);
+                            Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("name", rnickname);
+                            data.put("email", remail);
+                            data.put("passwd", rpasswd);
+                            data.put("passwdck", rpasswdck);
+                            return data;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue.add(stringRequest);
+                }
             }
         }else{
             loading.setVisibility(View.GONE);
@@ -118,9 +126,13 @@ public class RegisterActivity extends AppCompatActivity {
                             nickname.setError("請輸入暱稱");
                             email.setError("請輸入E-mail");
                             passwdck.setError("請再次輸入密碼");
+                            if(rpasswd.length()< 5) passwd.setError("密碼長度不得小於5");
+                            else if(rpasswd.length() >10) passwd.setError("密碼長度不得大於10");
                         }else{
                             nickname.setError("請輸入暱稱");
                             email.setError("請輸入E-mail");
+                            if(rpasswd.length()< 5) passwd.setError("密碼長度不得小於5");
+                            else if(rpasswd.length() >10) passwd.setError("密碼長度不得大於10");
                         }
                     }
                 }else{
@@ -139,6 +151,8 @@ public class RegisterActivity extends AppCompatActivity {
                             passwdck.setError("請再次輸入密碼");
                         }else{
                             nickname.setError("請輸入暱稱");
+                            if(rpasswd.length()< 5) passwd.setError("密碼長度不得小於5");
+                            else if(rpasswd.length() >10) passwd.setError("密碼長度不得大於10");
                         }
                     }
                 }
@@ -157,8 +171,12 @@ public class RegisterActivity extends AppCompatActivity {
                         if(rpasswdck.equals("")){
                             email.setError("請輸入E-mail");
                             passwdck.setError("請再次輸入密碼");
+                            if(rpasswd.length()< 5) passwd.setError("密碼長度不得小於5");
+                            else if(rpasswd.length() >10) passwd.setError("密碼長度不得大於10");
                         }else{
                             email.setError("請輸入E-mail");
+                            if(rpasswd.length()< 5) passwd.setError("密碼長度不得小於5");
+                            else if(rpasswd.length() >10) passwd.setError("密碼長度不得大於10");
                         }
                     }
                 }else{
