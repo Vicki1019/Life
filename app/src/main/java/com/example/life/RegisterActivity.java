@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, passwd, passwdck;
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://192.168.82.110/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.126.110/PHP_API/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +75,11 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if (response.equals("success")) {
-                                loading.setVisibility(View.GONE);
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
                                 Toast.makeText(RegisterActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
                             } else if (response.equals("failure")) {
-                                loading.setVisibility(View.GONE);
                                 Toast.makeText(RegisterActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
                             }
                         }
