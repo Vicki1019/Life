@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.life">
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
-        <activity android:name=".Userset"></activity>
+        <activity android:name=".EditpassActivity"></activity>
+        <activity android:name=".Userset" />
         <activity android:name=".ShopaddActivity" />
         <activity android:name=".RefaddActivity" />
         <activity android:name=".RegisterActivity" />

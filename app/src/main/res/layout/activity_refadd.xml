@@ -8,7 +8,7 @@
     tools:context=".RefaddActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/refadd_titlebar"
+        android:id="@+id/titlebar"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="#FFEEC6"
@@ -27,9 +27,9 @@
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view2"
-        app:layout_constraintEnd_toEndOf="@+id/refadd_titlebar"
+        app:layout_constraintEnd_toEndOf="@+id/titlebar"
         app:layout_constraintStart_toEndOf="@+id/refadd_back"
-        app:layout_constraintTop_toTopOf="@+id/refadd_titlebar"
+        app:layout_constraintTop_toTopOf="@+id/titlebar"
         app:layout_constraintVertical_bias="0.533" />
 
     <View
@@ -38,7 +38,7 @@
         android:layout_height="2dp"
         android:background="#884800"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_titlebar" />
+        app:layout_constraintTop_toBottomOf="@+id/titlebar" />
 
     <View
         android:id="@+id/view4"
@@ -59,8 +59,8 @@
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:contentDescription="TODO"
-        app:layout_constraintBottom_toBottomOf="@+id/refadd_titlebar"
-        app:layout_constraintStart_toStartOf="@+id/refadd_titlebar"
+        app:layout_constraintBottom_toBottomOf="@+id/titlebar"
+        app:layout_constraintStart_toStartOf="@+id/titlebar"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
 
