@@ -14,8 +14,15 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,6 +33,8 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private int i=1;
+    private static String url = "http://192.168.64.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static Spinner unit_spinner;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         setMain();
         BottomNavigationView navigation = findViewById(R.id.nav_view);
@@ -110,6 +117,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //單位下拉選單
+        unit_spinner = (Spinner) findViewById(R.id.unit_spinner);
+        RequestQueue requesrq= Volley.newRequestQueue(this);
+        StringRequest strRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+            requesrq.add(strRequest);
+
         //日期選擇
         calendar_btn .setOnClickListener(new View.OnClickListener() {
             @Override
