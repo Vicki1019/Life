@@ -33,7 +33,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private int i=1;
-    private static String url = "http://192.168.64.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String url = "http://192.168.195.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
     private static Spinner unit_spinner;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
