@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar loading;
     private static String url = "http://192.168.195.110/PHP_API/life/login.php"; //API URL(login.php)
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
