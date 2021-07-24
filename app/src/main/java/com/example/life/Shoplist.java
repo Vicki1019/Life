@@ -2,11 +2,16 @@ package com.example.life;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.TextView;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +57,21 @@ public class Shoplist extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
+            //日期選擇
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            TextView getdate = (TextView) getView().findViewById(R.id.getdate);
+            CalendarView calendarview = (CalendarView) getView().findViewById(R.id.calendarView); //fragment要加上getView()
+            calendarview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
+                    String date = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(day);
+                    getdate.setText(date);
+                }
+            });
         }
     }
 

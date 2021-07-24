@@ -17,8 +17,10 @@
         android:background="#FFF9E9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <ImageView
             android:id="@+id/logo"
@@ -49,7 +51,7 @@
         <ImageView
             android:id="@+id/passwdbg"
             android:layout_width="305dp"
-            android:layout_height="70dp"
+            android:layout_height="65dp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,13 +60,14 @@
 
         <EditText
             android:id="@+id/account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="236dp"
+            android:layout_height="45dp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="#00FFFFFF"
             android:ems="10"
             android:hint="請輸入E-mail"
             android:inputType="textPersonName"
+            android:text=""
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/accountbg"
             app:layout_constraintEnd_toEndOf="@+id/accountbg"
@@ -78,22 +81,11 @@
             android:backgroundTint="#00FFFFFF"
             android:ems="10"
             android:inputType="textPassword"
+            android:text=""
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/passwdbg"
             app:layout_constraintEnd_toEndOf="@+id/passwdbg"
             app:layout_constraintTop_toTopOf="@+id/passwdbg" />
-
-        <TextView
-            android:id="@+id/ckhint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="錯誤提示"
-            android:textColor="#FF0000"
-            android:textSize="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwdbg" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -117,6 +109,7 @@
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:clickable="true"
+            android:onClick="login"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:srcCompat="@drawable/login" />
@@ -132,15 +125,15 @@
             android:id="@+id/forgetpw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
             android:text="忘記密碼"
             android:textColor="#884800"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline5" />
+            app:layout_constraintStart_toEndOf="@+id/login" />
 
         <TextView
             android:id="@+id/other"
@@ -154,6 +147,17 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="35dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwdbg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

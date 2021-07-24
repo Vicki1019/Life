@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/reflist2">
+    app:startDestination="@id/setting">
     <fragment
-        android:id="@+id/reflist2"
-        android:name="com.example.life.Reflist"
-        android:label="fragment_reflist"
-        tools:layout="@layout/fragment_reflist" />
+        android:id="@+id/setting"
+        android:name="com.example.life.Setting"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

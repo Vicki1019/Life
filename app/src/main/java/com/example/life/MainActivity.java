@@ -1,17 +1,34 @@
 package com.example.life;
 
-import android.os.Bundle;
-import android.view.MenuItem;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
+    private int i=1;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -40,17 +57,95 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setMain();
 
+
+        setMain();
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
 
     private void setMain() {  //主畫面
 
         this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,new Reflist()).commit();
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        FloatingActionMenu menu = findViewById(R.id.floatingActionMenu);
+        if (ev.getAction() == MotionEvent.ACTION_UP && menu.isOpened()){
+            menu.close(true);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
+    public void Refadd(View view) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
+        View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null);//嵌入View
+        ImageView backDialog = refview.findViewById(R.id.refadd_back);//連結關閉視窗的Button
+        ImageView increase_btn = refview.findViewById(R.id.increase_btn);//增加數量的Button
+        ImageView decrease_btn = refview.findViewById(R.id.decrease_btn);//減少數量的Button
+        TextView quantity = refview.findViewById(R.id.refadd_quantity_text);//數量顯示
+        ImageView calendar_btn = refview.findViewById(R.id.calendar_btn);//選擇日期的Button
+        EditText date_input = refview.findViewById(R.id.refadd_data_input);//顯示日期
+        mBuilder.setView(refview);//設置View
+        AlertDialog dialog = mBuilder.create();
+        //關閉視窗的監聽事件
+        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+        //增減數量的監聽事件
+        increase_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i<99){
+                    i++;
+                    quantity.setText(""+i);
+                }
+            }
+        });
+        decrease_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i>1){
+                    i--;
+                    quantity.setText(""+i);
+                }
+            }
+        });
+        //日期選擇
+        calendar_btn .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int date = calendar.get(Calendar.DAY_OF_MONTH);
+                new DatePickerDialog(v.getContext(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int date) {
+                        String dateTime = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(date);
+                        date_input.setText(dateTime);
+                    }
+                }, year, month, date).show();
+            }
+        });
+
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
+
+    public void Shopadd(View view) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
+        View shopview = getLayoutInflater().inflate(R.layout.activity_shopadd,null);//嵌入View
+        ImageView backDialog = shopview.findViewById(R.id.shopadd_back);//連結關閉視窗的Button
+        mBuilder.setView(shopview);//設置View
+        AlertDialog dialog = mBuilder.create();
+        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
 }
