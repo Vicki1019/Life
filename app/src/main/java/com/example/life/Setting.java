@@ -62,6 +62,7 @@ public class Setting extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
         userset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +71,16 @@ public class Setting extends Fragment {
                 startActivity(intent);
             }
         });
+        //分類設定
+        ImageView typeset = (ImageView) view.findViewById(R.id.settype);
+        typeset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),TypeSetActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 }
