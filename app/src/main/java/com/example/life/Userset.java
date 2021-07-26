@@ -3,6 +3,7 @@ package com.example.life;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,25 +12,97 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Userset extends AppCompatActivity {
+    TextView result;
+    RequestQueue requesrq;
+    private EditText name;
+    private String uname;
+    private static String url = "http://192.168.0.15/PHP_API/life/userset.php"; //API URL(login.php)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
+        result = findViewById(R.id.account_name);
+        requesrq = Volley.newRequestQueue(this);
+
+        name = findViewById(R.id.account_name);
 
         Button back_setting = (Button) findViewById(R.id.account_back_setting);
         back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(Userset.this, MainActivity.class);
+                intent.setClass(Userset.this, Setting.class);
                 startActivity(intent);
             }
         });
+    }
+    public void user(View view)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            public void onResponse(String response) {
+                result.setText(response);
+            }
+        }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+        requesrq.add(stringRequest);
 
+        uname = name.getText().toString().trim();
+        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success"))
+                {
+                    //loading.setVisibility(View.GONE);
+                    Intent intent = new Intent(Userset.this, Setting.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else if (response.equals("failure"))
+                {
+                    //loading.setVisibility(View.GONE);
+                    name.setError("名字過長");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //loading.setVisibility(View.GONE);
+                Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+            }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<String, String>();
+                data.put("name", uname);
+                return data;
+            }
+
+            };
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest1);
     }
 
 
