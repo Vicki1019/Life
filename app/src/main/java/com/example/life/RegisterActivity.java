@@ -2,6 +2,8 @@ package com.example.life;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observer;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private  String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
     private static String url = "http://192.168.0.12/PHP_API/life/register.php"; //API URL(register.php)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class RegisterActivity extends AppCompatActivity {
         loading = findViewById(R.id.rloading);
 
     }
+
+
 
     public void register(View view) {
         rnickname = nickname.getText().toString().trim();

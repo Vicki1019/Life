@@ -36,7 +36,7 @@ public class Userset extends AppCompatActivity {
     private EditText name;
     private String uname;
     private ProgressBar loading;
-    private static String url = "http://192.168.0.12/PHP_API/life/userset.php"; //API URL(login.php)
+    private static String url = "http://192.168.0.12/PHP_API/life/updateNickname.php"; //API URL(login.php)
 
 
     @Override
@@ -47,7 +47,8 @@ public class Userset extends AppCompatActivity {
         //result = findViewById(R.id.account_name);
         //requesrq = Volley.newRequestQueue(this);
 
-        Button back_setting = (Button) findViewById(R.id.done);
+        Button back_setting = (Button) findViewById(R.id.account_back_setting);
+        Button finish_setting = (Button) findViewById(R.id.done);
         back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +113,7 @@ public class Userset extends AppCompatActivity {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> data = new HashMap<String, String>();
-                    data.put("name", uname);
+                    data.put("name", "uname");
                     return data;
                 }
 
