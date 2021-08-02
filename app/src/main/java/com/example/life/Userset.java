@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -29,10 +31,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Userset extends AppCompatActivity {
-    TextView result;
-    RequestQueue requesrq;
+    //TextView result;
+    //RequestQueue requesrq;
     private EditText name;
     private String uname;
+    private ProgressBar loading;
     private static String url = "http://192.168.0.12/PHP_API/life/userset.php"; //API URL(login.php)
 
 
@@ -44,7 +47,6 @@ public class Userset extends AppCompatActivity {
         //result = findViewById(R.id.account_name);
         //requesrq = Volley.newRequestQueue(this);
 
-
         Button back_setting = (Button) findViewById(R.id.account_back_setting);
         back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +57,7 @@ public class Userset extends AppCompatActivity {
             }
         });
         name = findViewById(R.id.account_name);
+        loading = findViewById(R.id.rloading);
     }
 
    /* public void getusername(View view)
@@ -73,39 +76,50 @@ public class Userset extends AppCompatActivity {
     public void user(View view)
     {
         uname = name.getText().toString().trim();
+        loading.setVisibility(View.VISIBLE);
+
         if(uname.equals(""))
         {
-            name.setError("需輸入匿名");
+            if (uname.length()<0) {
+                name.setError("需輸入匿名");
+                loading.setVisibility(View.GONE);
+            }
+            else if(uname.length()>10){
+                name.setError("匿名過長");
+                loading.setVisibility(View.GONE);
+            }
         }
-        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
-        {
-            @Override
-            public void onResponse(String response) {
-                if (response.equals("success"))
-                {
-                    Intent intent = new Intent(Userset.this, Setting.class);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(Userset.this, "更改成功", Toast.LENGTH_SHORT).show();
+        else {
+            loading.setVisibility(View.GONE);
+
+            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (response.equals("success")) {
+                        Intent intent = new Intent(Userset.this, Setting.class);
+                        startActivity(intent);
+                        finish();
+                        Toast.makeText(Userset.this, "更改成功", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //loading.setVisibility(View.GONE);
-                Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-            }
-            }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> data = new HashMap<String, String>();
-                data.put("name", uname);
-                return data;
-            }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //loading.setVisibility(View.GONE);
+                    Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> data = new HashMap<String, String>();
+                    data.put("name", uname);
+                    return data;
+                }
 
             };
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(stringRequest1);
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(stringRequest1);
+        }
     }
 
 
