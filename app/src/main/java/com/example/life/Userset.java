@@ -47,7 +47,7 @@ public class Userset extends AppCompatActivity {
         //result = findViewById(R.id.account_name);
         //requesrq = Volley.newRequestQueue(this);
 
-        Button back_setting = (Button) findViewById(R.id.account_back_setting);
+        Button back_setting = (Button) findViewById(R.id.done);
         back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,7 @@ public class Userset extends AppCompatActivity {
             }
         });
         name = findViewById(R.id.account_name);
-        loading = findViewById(R.id.rloading);
+        loading = findViewById(R.id.loading);
     }
 
    /* public void getusername(View view)
@@ -105,7 +105,7 @@ public class Userset extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //loading.setVisibility(View.GONE);
+                    loading.setVisibility(View.GONE);
                     Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
                 }
             }) {
