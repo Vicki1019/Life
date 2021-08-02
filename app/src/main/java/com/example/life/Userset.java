@@ -33,17 +33,17 @@ public class Userset extends AppCompatActivity {
     RequestQueue requesrq;
     private EditText name;
     private String uname;
-    private static String url = "http://192.168.0.15/PHP_API/life/userset.php"; //API URL(login.php)
+    private static String url = "http://192.168.0.12/PHP_API/life/userset.php"; //API URL(login.php)
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
-        result = findViewById(R.id.account_name);
-        requesrq = Volley.newRequestQueue(this);
 
-        name = findViewById(R.id.account_name);
+        //result = findViewById(R.id.account_name);
+        //requesrq = Volley.newRequestQueue(this);
+
 
         Button back_setting = (Button) findViewById(R.id.account_back_setting);
         back_setting.setOnClickListener(new View.OnClickListener() {
@@ -54,36 +54,39 @@ public class Userset extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        name = findViewById(R.id.account_name);
     }
-    public void user(View view)
+
+   /* public void getusername(View view)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             public void onResponse(String response) {
                 result.setText(response);
             }
         }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
         requesrq.add(stringRequest);
-
+    }*/
+    public void user(View view)
+    {
         uname = name.getText().toString().trim();
+        if(uname.equals(""))
+        {
+            name.setError("需輸入匿名");
+        }
         StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success"))
                 {
-                    //loading.setVisibility(View.GONE);
                     Intent intent = new Intent(Userset.this, Setting.class);
                     startActivity(intent);
                     finish();
-                }
-                else if (response.equals("failure"))
-                {
-                    //loading.setVisibility(View.GONE);
-                    name.setError("名字過長");
+                    Toast.makeText(Userset.this, "更改成功", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
