@@ -80,7 +80,7 @@ public class Userset extends AppCompatActivity {
 
         if(uname.equals(""))
         {
-            if (uname.length()<0) {
+            if (uname.length()>=1) {
                 name.setError("需輸入匿名");
                 loading.setVisibility(View.GONE);
             }
