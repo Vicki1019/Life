@@ -51,12 +51,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private int i=1;
+    //GET Unit
     private static String uniturl = "http://192.168.133.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
-    RequestQueue requestQueue;
-
-
+    RequestQueue unitrequestQueue;
+    //GET Kind
+    private static String kindurl = "http://192.168.133.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    ArrayList<String> kindlist = new ArrayList<>();
+    ArrayAdapter<String> kindAdapter;
+    RequestQueue kindrequestQueue;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -111,18 +115,15 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this); //創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null); //嵌入View
         ImageView backDialog = refview.findViewById(R.id.refadd_back); //連結關閉視窗的Button
-        ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
-        ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
-        TextView quantity = refview.findViewById(R.id.refadd_quantity_text); //數量顯示
-        Spinner unitsp = (Spinner) refview.findViewById(R.id.unit_spinner); //單位下拉選單
-        ImageView calendar_btn = refview.findViewById(R.id.calendar_btn); //選擇日期的Button
-        EditText date_input = refview.findViewById(R.id.refadd_data_input); //顯示日期
         mBuilder.setView(refview); //設置View
         AlertDialog dialog = mBuilder.create();
 
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
         //增減數量的監聽事件
+        ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
+        ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
+        TextView quantity = refview.findViewById(R.id.refadd_quantity_text); //數量顯示
         increase_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,8 +144,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //unit下拉選單
-        requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, uniturl, null, new Response.Listener<JSONObject>() {
+        Spinner unitsp = (Spinner) refview.findViewById(R.id.unit_spinner); //單位下拉選單
+        unitrequestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest ujsonObjectRequest = new JsonObjectRequest(Request.Method.GET, uniturl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -168,9 +170,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        unitrequestQueue.add(ujsonObjectRequest);
 
         //日期選擇
+        ImageView calendar_btn = refview.findViewById(R.id.calendar_btn); //選擇日期的Button
+        EditText date_input = refview.findViewById(R.id.refadd_data_input); //顯示日期
         calendar_btn .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +191,37 @@ public class MainActivity extends AppCompatActivity {
                 }, year, month, date).show();
             }
         });
-        dialog.show();
+
+        //kind下拉選單
+        Spinner typesp = (Spinner) refview.findViewById(R.id.kind_spinner); //單位下拉選單
+        kindrequestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest tjsonObjectRequest = new JsonObjectRequest(Request.Method.GET, kindurl, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("kind");
+                    for(int k=0;k<jsonArray.length();k++){
+                        JSONObject jsonObject= jsonArray.getJSONObject(k);
+                        String kind_cn = jsonObject.optString("type_cn");
+                        kindlist.add(kind_cn);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                kindAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, kindlist);
+                kindAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                typesp.setAdapter(kindAdapter);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        kindrequestQueue.add(tjsonObjectRequest);
+
+        dialog.show();//顯示Dialog
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
         dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
