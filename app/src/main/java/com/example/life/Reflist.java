@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
+    String str;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +66,12 @@ public class Reflist extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reflist, container, false);
+        View view =  inflater.inflate(R.layout.fragment_reflist, container, false);
+        TextView myref = (TextView) view.findViewById(R.id.myref);
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            str = bundle.getString("emaildata");
+        }
+        return view;
     }
 }

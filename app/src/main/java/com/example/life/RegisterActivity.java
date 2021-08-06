@@ -24,9 +24,9 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText nickname, email, passwd, passwdck;
-    private  String rnickname, remail, rpasswd, rpasswdck;
+    private String rnickname, remail, rpasswd, rpasswdck;
     private ProgressBar loading;
-    private static String url = "http://192.168.133.110/PHP_API/life/register.php"; //API URL(register.php)
+    private static String url = "http://192.168.150.110/PHP_API/life/register.php"; //API URL(register.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

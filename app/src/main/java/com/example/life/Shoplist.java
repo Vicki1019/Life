@@ -63,7 +63,7 @@ public class Shoplist extends Fragment {
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            TextView getdate = (TextView) getView().findViewById(R.id.getdate);
+            /*TextView getdate = (TextView) getView().findViewById(R.id.getdate);
             CalendarView calendarview = (CalendarView) getView().findViewById(R.id.calendarView); //fragment要加上getView()
             calendarview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
@@ -71,7 +71,7 @@ public class Shoplist extends Fragment {
                     String date = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(day);
                     getdate.setText(date);
                 }
-            });
+            });*/
         }
     }
 

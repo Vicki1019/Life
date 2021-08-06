@@ -9,7 +9,27 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +37,10 @@ import android.widget.ImageView;
  * create an instance of this fragment.
  */
 public class Setting extends Fragment {
+    String emaildata, member_nickname;
+    TextView useremail, username;
+    private static String seturl = "http://192.168.150.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
+    RequestQueue setrequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +55,7 @@ public class Setting extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new ㄐinstance of
+     * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
@@ -44,7 +68,7 @@ public class Setting extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.setArguments(args);//設置參數
         return fragment;
     }
 
@@ -53,7 +77,7 @@ public class Setting extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = getArguments().getString(ARG_PARAM2);//獲取參數
         }
     }
 
@@ -62,6 +86,47 @@ public class Setting extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        useremail = (TextView) view.findViewById(R.id.useremail);
+        //取得MainActivity傳來的使用者email值
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            emaildata = bundle.getString("emaildata");
+        }
+        useremail.setText(emaildata);
+
+        //使用者相關資訊
+        username = (TextView) view.findViewById(R.id.username);
+        setrequestQueue = Volley.newRequestQueue(getContext());
+        StringRequest setstringRequest = new StringRequest(Request.Method.POST, seturl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject setjsonObject = new JSONObject(response);
+                    JSONArray setjsonArray = setjsonObject.getJSONArray("username");
+                    for(int i=0;i<setjsonArray.length();i++){
+                        JSONObject jsonObject= setjsonArray.getJSONObject(i);
+                        member_nickname = jsonObject.getString("member_nickname").trim();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                username.setText(member_nickname.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("emaildata", emaildata);
+                return data;
+            }
+        };
+        setrequestQueue.add(setstringRequest);
+
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
         userset.setOnClickListener(new View.OnClickListener() {

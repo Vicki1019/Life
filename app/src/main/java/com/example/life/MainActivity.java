@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -39,6 +40,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,37 +54,87 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    String useremail;
+    FloatingActionMenu addmenu;
+    //預設新增冰箱清單中商品數量為1
     private int i=1;
+
     //GET Unit
-    private static String uniturl = "http://192.168.133.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.150.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.133.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.150.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
 
+    //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.reflist:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Reflist()).commit();  //切換fragment
+                    //當Fragment切換到fragment_reflist時，把從LoginActivity接收的使用者Email值傳送到Reflist中
+                    Reflist reflistfragment = new Reflist();
+                    Bundle reflistdata = new Bundle();
+                    reflistdata.putString("emaildata",useremail);
+                    reflistfragment.setArguments(reflistdata);
+
+                    addmenu = findViewById(R.id.floatingActionMenu);
+                    addmenu.setVisibility(View.VISIBLE);
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,reflistfragment).commit();  //切換fragment
                     return true;
                 case R.id.shoplist:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Shoplist()).commit();
+                    //當Fragment切換到fragment_shoplist時，把從LoginActivity接收的使用者Email值傳送到Shoplist中
+                    Shoplist shoplistfragment = new Shoplist();
+                    Bundle shoplistdata = new Bundle();
+                    shoplistdata.putString("emaildata",useremail);
+                    shoplistfragment.setArguments(shoplistdata);
+
+                    addmenu = findViewById(R.id.floatingActionMenu);
+                    addmenu.setVisibility(View.VISIBLE);
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,shoplistfragment).commit();
                     return true;
                 case R.id.grouplist:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Grouplist()).commit();
+                    //當Fragment切換到fragment_grouplist時，把從LoginActivity接收的使用者Email值傳送到Grouplist中
+                    Grouplist grouplistfragment = new Grouplist();
+                    Bundle grouplistdata = new Bundle();
+                    grouplistdata.putString("emaildata",useremail);
+                    grouplistfragment.setArguments(grouplistdata);
+
+                    addmenu = findViewById(R.id.floatingActionMenu);
+                    addmenu.setVisibility(View.VISIBLE);
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,grouplistfragment).commit();
                     return true;
                 case R.id.scan:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Scan()).commit();
+                    //當Fragment切換到fragment_scan時，把從LoginActivity接收的使用者Email值傳送到Scan中
+                    Scan scanfragment = new Scan();
+                    Bundle scandata = new Bundle();
+                    scandata.putString("emaildata",useremail);
+                    scanfragment.setArguments(scandata);
+
+                    addmenu = findViewById(R.id.floatingActionMenu);
+                    addmenu.setVisibility(View.GONE);
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,scanfragment).commit();
                     return true;
                 case R.id.setting:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Setting()).commit();
+                    //當Fragment切換到fragment_setting時，把從LoginActivity接收的使用者Email值傳送到Setting中
+                    Setting settingfragment = new Setting();
+                    Bundle settingdata = new Bundle();
+                    settingdata.putString("emaildata",useremail);
+                    settingfragment.setArguments(settingdata);
+
+                    addmenu = findViewById(R.id.floatingActionMenu);
+                    addmenu.setVisibility(View.GONE);
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,settingfragment).commit();
                     return true;
             }
             return false;
@@ -91,26 +145,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 取得LoginActivity傳的email值
+        Intent intent = getIntent();
+        useremail =(String)intent.getStringExtra("lemail");
 
-        setMain();
+        setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
 
-    private void setMain() {  //主畫面
-        this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,new Reflist()).commit();
+    private void setMain() {
+        //把從LoginActivity接收的使用者Email值傳送到主畫面中
+        Reflist reflistfragment = new Reflist();
+        Bundle logdata = new Bundle();
+        logdata.putString("emaildata",useremail);
+        reflistfragment.setArguments(logdata);
+
+        this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,reflistfragment).commit();
     }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        FloatingActionMenu menu = findViewById(R.id.floatingActionMenu);
-        if (ev.getAction() == MotionEvent.ACTION_UP && menu.isOpened()){
-            menu.close(true);
+        addmenu = findViewById(R.id.floatingActionMenu);
+        if (ev.getAction() == MotionEvent.ACTION_UP && addmenu.isOpened()){
+            addmenu.close(true);
         }
         return super.dispatchTouchEvent(ev);
     }
 
+    //新增冰箱清單Dialog與功能
     public void Refadd(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this); //創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null); //嵌入View
@@ -228,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
-
+    //新增購物清單Dialog與功能
     public void Shopadd(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
         View shopview = getLayoutInflater().inflate(R.layout.activity_shopadd,null);//嵌入View
