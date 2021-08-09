@@ -39,7 +39,7 @@ import java.util.Map;
 public class Setting extends Fragment {
     String emaildata, member_nickname;
     TextView useremail, username;
-    private static String seturl = "http://192.168.150.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
+    private static String seturl = "http://192.168.25.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
     RequestQueue setrequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -94,7 +94,7 @@ public class Setting extends Fragment {
         }
         useremail.setText(emaildata);
 
-        //使用者相關資訊
+        //取得使用者暱稱
         username = (TextView) view.findViewById(R.id.username);
         setrequestQueue = Volley.newRequestQueue(getContext());
         StringRequest setstringRequest = new StringRequest(Request.Method.POST, seturl, new Response.Listener<String>() {
@@ -133,6 +133,9 @@ public class Setting extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),Userset.class);
+                //Bundle bundle = new Bundle();
+                bundle.putString("emaildata",emaildata);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
