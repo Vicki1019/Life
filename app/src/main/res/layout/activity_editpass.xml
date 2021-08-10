@@ -107,8 +107,8 @@
 
     <ImageView
         android:id="@+id/editpwd_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="38dp"
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:contentDescription="TODO"

@@ -47,9 +47,9 @@ public class Userset extends AppCompatActivity {
         //result = findViewById(R.id.account_name);
         //requesrq = Volley.newRequestQueue(this);
 
-        Button back_setting = (Button) findViewById(R.id.account_back_setting);
-        Button finish_setting = (Button) findViewById(R.id.done);
-        back_setting.setOnClickListener(new View.OnClickListener() {
+        Button account_back_setting = (Button) findViewById(R.id.account_back_setting);
+        Button done = (Button) findViewById(R.id.done);
+        account_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -79,7 +79,7 @@ public class Userset extends AppCompatActivity {
         uname = name.getText().toString().trim();
         loading.setVisibility(View.VISIBLE);
 
-        if(uname.equals(""))
+        if(!uname.equals(""))
         {
             if (uname.length()>=1) {
                 name.setError("需輸入匿名");
@@ -93,7 +93,7 @@ public class Userset extends AppCompatActivity {
         else {
             loading.setVisibility(View.GONE);
 
-            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+           StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     if (response.equals("success")) {
