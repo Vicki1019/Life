@@ -88,14 +88,14 @@ public class Setting extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         useremail = (TextView) view.findViewById(R.id.useremail);
         //取得MainActivity傳來的使用者email值
-        Bundle bundle = this.getArguments();
+        /*Bundle bundle = this.getArguments();
         if(bundle != null){
             emaildata = bundle.getString("emaildata");
         }
-        useremail.setText(emaildata);
+        useremail.setText(emaildata);*/
 
         //取得使用者暱稱
-        username = (TextView) view.findViewById(R.id.username);
+       /* username = (TextView) view.findViewById(R.id.username);
         setrequestQueue = Volley.newRequestQueue(getContext());
         StringRequest setstringRequest = new StringRequest(Request.Method.POST, seturl, new Response.Listener<String>() {
             @Override
@@ -125,7 +125,7 @@ public class Setting extends Fragment {
                 return data;
             }
         };
-        setrequestQueue.add(setstringRequest);
+        setrequestQueue.add(setstringRequest);*/
 
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
@@ -134,9 +134,9 @@ public class Setting extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),Userset.class);
                 //Bundle bundle = new Bundle();
-                bundle.putString("emaildata",emaildata);
+                /*bundle.putString("emaildata",emaildata);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
         //分類設定

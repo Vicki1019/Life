@@ -21,16 +21,14 @@
         <activity android:name=".ShopaddActivity" />
         <activity android:name=".RefaddActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>

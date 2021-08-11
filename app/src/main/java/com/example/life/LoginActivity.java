@@ -19,6 +19,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.195.110/PHP_API/life/login.php"; //API URL(login.php)
-
+    private static String url = "http://192.168.131.110/PHP_API/life/login.php"; //API URL(login.php)
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         email = findViewById(R.id.account);
         passwd = findViewById(R.id.passwd);
+
+        sessionManager = new SessionManager(this);
 
       //註冊
         ImageView register = (ImageView) findViewById(R.id.register);
@@ -61,15 +67,36 @@ public class LoginActivity extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    if (response.equals("success")) {
-                        loading.setVisibility(View.GONE);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else if (response.equals("failure")) {
-                        loading.setVisibility(View.GONE);
-                        email.setError("帳號或密碼有誤");
-                        passwd.setError("帳號或密碼有誤");
+                    try {
+                        JSONObject logjsonObject = new JSONObject(response);
+                        JSONArray logjsonArray = logjsonObject.getJSONArray("userinfo");
+                        for(int i=0;i<logjsonArray.length();i++) {
+                            JSONObject jsonObject = logjsonArray.getJSONObject(i);
+                            String result = jsonObject.getString("response");
+                            if (result.equals("success")) {
+                                loading.setVisibility(View.GONE);
+                                //取得登入user資料
+                                String member_nickname = jsonObject.getString("member_nickname").trim();
+                                String email = jsonObject.getString("email").trim();
+                                String passwd = jsonObject.getString("passwd").trim();
+
+                                //建立SESSION
+                                sessionManager.createSession(member_nickname, email, passwd);
+                                //從LoginActivity 跳轉到 MainActivity
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                /*intent.putExtra("member_nickname", member_nickname);
+                                intent.putExtra("email", email);
+                                intent.putExtra("passwd", passwd);*/
+                                startActivity(intent);
+                                finish();
+                            } else if (result.equals("failure")) {
+                                loading.setVisibility(View.GONE);
+                                email.setError("帳號或密碼有誤");
+                                passwd.setError("帳號或密碼有誤");
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
