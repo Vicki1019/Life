@@ -27,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.25.110/PHP_API/life/login.php"; //API URL(login.php)
+    private static String url = "http://192.168.195.110/PHP_API/life/login.php"; //API URL(login.php)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     if (response.equals("success")) {
                         loading.setVisibility(View.GONE);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);//切換到MainActivity
-                        //若登入成功，傳email值到MainActivity
-                        Bundle bundle = new Bundle();
-                        bundle.putString("lemail",lemail);
-                        intent.putExtras(bundle);
-
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-                        //finish();
+                        finish();
                     } else if (response.equals("failure")) {
                         loading.setVisibility(View.GONE);
                         email.setError("帳號或密碼有誤");
