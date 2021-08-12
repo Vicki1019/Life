@@ -78,10 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                                 //取得登入user資料
                                 String member_nickname = jsonObject.getString("member_nickname").trim();
                                 String email = jsonObject.getString("email").trim();
-                                String passwd = jsonObject.getString("passwd").trim();
+                                //String passwd = jsonObject.getString("passwd").trim();
 
                                 //建立SESSION
-                                sessionManager.createSession(member_nickname, email, passwd);
+                                sessionManager.createSession(member_nickname, email);
                                 //從LoginActivity 跳轉到 MainActivity
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);

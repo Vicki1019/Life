@@ -33,7 +33,10 @@ import java.util.Map;
 public class Userset extends AppCompatActivity {
    public EditText editname;
    public TextView useremail;
-    SessionManager sessionManager;
+   public String newName;
+   Button account_back_setting, editname_ok;
+    private static String url = "http://192.168.146.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
+   SessionManager sessionManager;
 
 
     @Override
@@ -51,7 +54,7 @@ public class Userset extends AppCompatActivity {
         useremail.setText(editEmail);
 
         //返回設定介面
-        Button account_back_setting = (Button) findViewById(R.id.account_back_setting);
+        account_back_setting = (Button) findViewById(R.id.account_back_setting);
         account_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +63,46 @@ public class Userset extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //修改使用者暱稱
+        editname_ok = (Button) findViewById(R.id.editname_ok);
+        editname_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newName = editname.getText().toString().trim();
+                if(!newName.equals("")){
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.equals("success")) {
+                                sessionManager.createSession(newName, editEmail);
+                                Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
+                            } else if (response.equals("failure")) {
+
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("newName", newName);
+                            data.put("email", editEmail);
+                            return data;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue.add(stringRequest);;
+                }else{
+                    editname.setError("請輸入暱稱");
+                }
+            }
+        });
     }
-
-    //修改使用者暱稱
-
 
     //修改密碼介面
     public void Editpwd(View view) {
