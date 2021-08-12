@@ -70,35 +70,39 @@ public class Userset extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 newName = editname.getText().toString().trim();
-                if(!newName.equals("")){
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.equals("success")) {
-                                sessionManager.createSession(newName, editEmail);
-                                Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
-                            } else if (response.equals("failure")) {
+                if(newName.length() <=10){
+                    if(!newName.equals("")){
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.equals("success")) {
+                                    sessionManager.createSession(newName, editEmail);
+                                    Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                } else if (response.equals("failure")) {
+
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
 
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> data = new HashMap<>();
-                            data.put("newName", newName);
-                            data.put("email", editEmail);
-                            return data;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    requestQueue.add(stringRequest);;
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> data = new HashMap<>();
+                                data.put("newName", newName);
+                                data.put("email", editEmail);
+                                return data;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        requestQueue.add(stringRequest);;
+                    }else{
+                        editname.setError("請輸入暱稱");
+                    }
                 }else{
-                    editname.setError("請輸入暱稱");
+                    editname.setError("暱稱長度不得大於10");
                 }
             }
         });

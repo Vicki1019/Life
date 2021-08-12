@@ -27,7 +27,7 @@ public class EditpassActivity extends AppCompatActivity {
     private EditText passwd, npasswd, ckpasswd;
     private String upasswd, unpasswd, uckpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.0.12/PHP_API/life/updateNickname.php"; //API URL(login.php)
+    private static String url = "http://192.168.146.110/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
