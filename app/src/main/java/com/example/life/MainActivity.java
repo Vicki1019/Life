@@ -1,32 +1,28 @@
 package com.example.life;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
-import android.util.JsonReader;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,35 +34,38 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private EditText name,date;
+    private TextView quantity;
+    private Spinner unit,kind;
+    private  String refadd_name,refadd_date,refadd_quantity,refadd_unit,refadd_kind;
+    private ProgressBar loading;
     String useremail;
     FloatingActionMenu addmenu;
     private int i=1;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
 
+    //POST Reflist
+    private static String url = "http://192.168.0.12/PHP_API/life/register.php"; //API URL(register.php)
+
     //GET Unit
-    private static String uniturl = "http://192.168.131.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.0.12/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.131.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.0.12/PHP_API/life/getkind.php"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
@@ -166,6 +165,22 @@ public class MainActivity extends AppCompatActivity {
         String sPasswd = user.get(sessionManager.PASSWD);
         textView = (TextView)findViewById(R.id.textView);
         textView.setText(sName);
+
+        //add reflist
+        Button refadd_ok = (Button) findViewById(R.id.refadd_ok);
+        refadd_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, Reflist.class);
+                startActivity(intent);
+            }
+        });
+        name = findViewById(R.id. refadd_name_input);
+        date = findViewById(R.id. refadd_data_input);
+        quantity = findViewById(R.id. refadd_quantity_text);
+        unit = (Spinner)findViewById(R.id. unit_spinner);
+        kind = (Spinner)findViewById(R.id. kind_spinner);
     }
 
     private void setMain() {
@@ -190,6 +205,83 @@ public class MainActivity extends AppCompatActivity {
 
     //新增冰箱清單Dialog與功能
     public void Refadd(View view) {
+        refadd_name = name.getText().toString().trim();
+        refadd_date = date.getText().toString().trim();
+        refadd_quantity = quantity.getText().toString().trim();
+        refadd_unit = unit.getSelectedItem().toString().trim();
+        refadd_kind = kind.getSelectedItem().toString().trim();
+        loading.setVisibility(View.VISIBLE);
+        if(!refadd_name.equals("") && !refadd_date.equals("") && !refadd_quantity.equals("") && !refadd_unit.equals("") && !refadd_kind.equals(""))
+        {
+            if(refadd_name.length()>10)
+            {
+                name.setError("名字長度不得大於10");
+                loading.setVisibility(View.GONE);
+            }
+            else if(refadd_name.length()<1)
+            {
+                name.setError("請輸入名稱");
+                loading.setVisibility(View.GONE);
+            }
+            else
+            {
+                if(refadd_date.equals(""))
+                {
+                    date.setError("請輸入日期");
+                    loading.setVisibility(View.GONE);
+                }
+                if(refadd_quantity.equals(""))
+                {
+                    quantity.setError("請輸入數量");
+                    loading.setVisibility(View.GONE);
+                }
+                if(refadd_unit == null)
+                {
+                    System.out.println("請輸入數量");
+                }
+                if(refadd_date == null)
+                {
+                    System.out.println("請輸入日期");
+                }
+                else
+                {
+                    loading.setVisibility(View.GONE);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.equals("success")) {
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                                Toast.makeText(MainActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                            } else if (response.equals("failure")) {
+                                Toast.makeText(MainActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loading.setVisibility(View.GONE);
+                            Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("name", refadd_name);
+                            data.put("date", refadd_date);
+                            data.put("quantity", refadd_quantity);
+                            data.put("unit", refadd_unit);
+                            data.put("kind", refadd_kind);
+                            return data;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue.add(stringRequest);
+                }
+            }
+        }
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this); //創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null); //嵌入View
         ImageView backDialog = refview.findViewById(R.id.refadd_back); //連結關閉視窗的Button

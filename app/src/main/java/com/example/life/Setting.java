@@ -39,7 +39,7 @@ import java.util.Map;
 public class Setting extends Fragment {
     String emaildata, member_nickname;
     TextView useremail, username;
-    private static String seturl = "http://192.168.25.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
+    private static String seturl = "http://192.168.0.12/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
     RequestQueue setrequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
