@@ -250,12 +250,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if (response.equals("success")) {
-                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                Intent intent = new Intent(MainActivity.this, Reflist.class);
                                 startActivity(intent);
                                 finish();
-                                Toast.makeText(MainActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
                             } else if (response.equals("failure")) {
-                                Toast.makeText(MainActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "新增不成功，請重新一次", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
