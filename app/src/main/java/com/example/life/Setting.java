@@ -42,8 +42,6 @@ import java.util.Map;
 public class Setting extends Fragment {
     String emaildata, member_nickname;
     TextView useremail, username;
-    private static String seturl = "http://192.168.159.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
-    RequestQueue setrequestQueue;
     SessionManager sessionManager;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -91,46 +89,15 @@ public class Setting extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
+
+        //取得使用者暱稱與信箱
+        username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
-        //取得MainActivity傳來的使用者email值
-        /*Bundle bundle = this.getArguments();
-        if(bundle != null){
-            emaildata = bundle.getString("emaildata");
-        }
-        useremail.setText(emaildata);*/
-
-        //取得使用者暱稱
-       /* username = (TextView) view.findViewById(R.id.username);
-        setrequestQueue = Volley.newRequestQueue(getContext());
-        StringRequest setstringRequest = new StringRequest(Request.Method.POST, seturl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject setjsonObject = new JSONObject(response);
-                    JSONArray setjsonArray = setjsonObject.getJSONArray("username");
-                    for(int i=0;i<setjsonArray.length();i++){
-                        JSONObject jsonObject= setjsonArray.getJSONObject(i);
-                        member_nickname = jsonObject.getString("member_nickname").trim();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                username.setText(member_nickname.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> data = new HashMap<>();
-                data.put("emaildata", emaildata);
-                return data;
-            }
-        };
-        setrequestQueue.add(setstringRequest);*/
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        String sName = user.get(sessionManager.MEMBER_NIKINAME);
+        String sEmail = user.get(sessionManager.EMAIL);
+        username.setText(sName);
+        useremail.setText(sEmail);
 
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);

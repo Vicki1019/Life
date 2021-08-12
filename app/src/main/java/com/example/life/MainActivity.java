@@ -61,18 +61,15 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.159.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.146.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.131.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.146.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
-
-    //test
-    TextView textView;
 
     //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -128,12 +125,10 @@ public class MainActivity extends AppCompatActivity {
         // SESSION
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin(); //檢查是否登入
-        HashMap<String, String> user = sessionManager.getUserDetail();
+       /* HashMap<String, String> user = sessionManager.getUserDetail();
         String sName = user.get(sessionManager.MEMBER_NIKINAME);
         String sEmail = user.get(sessionManager.EMAIL);
-        String sPasswd = user.get(sessionManager.PASSWD);
-        textView = (TextView)findViewById(R.id.textView);
-        textView.setText(sName);
+        String sPasswd = user.get(sessionManager.PASSWD);*/
 
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);

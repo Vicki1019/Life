@@ -31,99 +31,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Userset extends AppCompatActivity {
-    //TextView result;
-    //RequestQueue requesrq;
-    private EditText name;
-    private String uname;
-    private ProgressBar loading;
-    private static String url = "http://192.168.159.12/PHP_API/life/updateNickname.php"; //API URL(login.php)
+   public EditText editname;
+   public TextView useremail;
+    SessionManager sessionManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userset);
+        editname = (EditText) findViewById(R.id.account_name);
+        useremail = (TextView) findViewById(R.id.account_email);
 
-        //result = findViewById(R.id.account_name);
-        //requesrq = Volley.newRequestQueue(this);
+        sessionManager = new SessionManager(this);
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        String editName = user.get(sessionManager.MEMBER_NIKINAME);
+        String editEmail = user.get(sessionManager.EMAIL);
+        editname.setText(editName);
+        useremail.setText(editEmail);
 
+        //返回設定介面
         Button account_back_setting = (Button) findViewById(R.id.account_back_setting);
-        Button done = (Button) findViewById(R.id.done);
         account_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(Userset.this, Setting.class);
+                intent.setClass(Userset.this, MainActivity.class);
                 startActivity(intent);
             }
         });
-        name = findViewById(R.id.account_name);
-        loading = findViewById(R.id.loading);
     }
 
-   /* public void getusername(View view)
-    {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            public void onResponse(String response) {
-                result.setText(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        requesrq.add(stringRequest);
-    }*/
-    public void user(View view)
-    {
-        uname = name.getText().toString().trim();
-        loading.setVisibility(View.VISIBLE);
-
-        if(!uname.equals(""))
-        {
-            if (uname.length()>=1) {
-                name.setError("需輸入匿名");
-                loading.setVisibility(View.GONE);
-            }
-            else if(uname.length()>10){
-                name.setError("匿名過長");
-                loading.setVisibility(View.GONE);
-            }
-        }
-        else {
-            loading.setVisibility(View.GONE);
-
-           StringRequest stringRequest1 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if (response.equals("success")) {
-                        Intent intent = new Intent(Userset.this, Setting.class);
-                        startActivity(intent);
-                        finish();
-                        Toast.makeText(Userset.this, "更改成功", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loading.setVisibility(View.GONE);
-                    Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> data = new HashMap<String, String>();
-                    data.put("name", "uname");
-                    return data;
-                }
-
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            requestQueue.add(stringRequest1);
-        }
-    }
+    //修改使用者暱稱
 
 
+    //修改密碼介面
     public void Editpwd(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_editpass,null);//嵌入View
