@@ -3,13 +3,10 @@ package com.example.life;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import java.util.HashMap;
 
-import static android.content.Context.MODE_PRIVATE;
-
+//可透過SharedPreferences在Activity中呼叫getSharedPreferences取得物件
 public class SessionManager {
-    //可透過SharedPreferences在Activity中呼叫呼叫getSharedPreferences(檔案名稱, MODE_PRIVATE)取得物件
     SharedPreferences sharedPreferences;
     public SharedPreferences.Editor editor;
     public Context context;
@@ -22,16 +19,17 @@ public class SessionManager {
 
     public SessionManager(Context context){
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, 0);
         editor = sharedPreferences.edit();
     }
 
     public void createSession(String member_nickname, String email, String passwd){
-        editor.putBoolean("LOGIN", true);
+        editor.putBoolean(LOGIN, true);
         editor.putString(MEMBER_NIKINAME, member_nickname);
         editor.putString(EMAIL, email);
         editor.putString(PASSWD, passwd);
         editor.apply();
+        
     }
 
     public  boolean isLoggin(){
@@ -39,8 +37,8 @@ public class SessionManager {
     }
 
     public void checkLogin(){
-        if(this.isLoggin()){
-            Intent i= new Intent(context, LoginActivity.class);
+        if (!this.isLoggin()){
+            Intent i = new Intent(context, LoginActivity.class);
             context.startActivity(i);
             ((MainActivity) context).finish();
         }

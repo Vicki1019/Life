@@ -36,7 +36,7 @@ public class Userset extends AppCompatActivity {
     private EditText name;
     private String uname;
     private ProgressBar loading;
-    private static String url = "http://192.168.131.12/PHP_API/life/updateNickname.php"; //API URL(login.php)
+    private static String url = "http://192.168.159.12/PHP_API/life/updateNickname.php"; //API URL(login.php)
 
 
     @Override

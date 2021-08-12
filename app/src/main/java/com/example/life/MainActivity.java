@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.131.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.159.110/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
@@ -81,11 +81,6 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.reflist:
-                    //當Fragment切換到fragment_reflist時，把從LoginActivity接收的使用者Email值傳送到Reflist中
-                   /* Reflist reflistfragment = new Reflist();
-                    Bundle reflistdata = new Bundle();
-                    reflistdata.putString("emaildata",useremail);
-                    reflistfragment.setArguments(reflistdata);*/
 
                     addmenu = findViewById(R.id.floatingActionMenu);
                     addmenu.setVisibility(View.VISIBLE);
@@ -93,11 +88,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Reflist()).commit();  //切換fragment
                     return true;
                 case R.id.shoplist:
-                    //當Fragment切換到fragment_shoplist時，把從LoginActivity接收的使用者Email值傳送到Shoplist中
-                   /* Shoplist shoplistfragment = new Shoplist();
-                    Bundle shoplistdata = new Bundle();
-                    shoplistdata.putString("emaildata",useremail);
-                    shoplistfragment.setArguments(shoplistdata);*/
 
                     addmenu = findViewById(R.id.floatingActionMenu);
                     addmenu.setVisibility(View.VISIBLE);
@@ -105,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Shoplist()).commit();
                     return true;
                 case R.id.grouplist:
-                    //當Fragment切換到fragment_grouplist時，把從LoginActivity接收的使用者Email值傳送到Grouplist中
-                    /*Grouplist grouplistfragment = new Grouplist();
-                    Bundle grouplistdata = new Bundle();
-                    grouplistdata.putString("emaildata",useremail);
-                    grouplistfragment.setArguments(grouplistdata);*/
 
                     addmenu = findViewById(R.id.floatingActionMenu);
                     addmenu.setVisibility(View.VISIBLE);
@@ -117,11 +102,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Grouplist()).commit();
                     return true;
                 case R.id.scan:
-                    //當Fragment切換到fragment_scan時，把從LoginActivity接收的使用者Email值傳送到Scan中
-                    /*Scan scanfragment = new Scan();
-                    Bundle scandata = new Bundle();
-                    scandata.putString("emaildata",useremail);
-                    scanfragment.setArguments(scandata);*/
 
                     addmenu = findViewById(R.id.floatingActionMenu);
                     addmenu.setVisibility(View.GONE);
@@ -129,11 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Scan()).commit();
                     return true;
                 case R.id.setting:
-                    //當Fragment切換到fragment_setting時，把從LoginActivity接收的使用者Email值傳送到Setting中
-                    /*Setting settingfragment = new Setting();
-                    Bundle settingdata = new Bundle();
-                    settingdata.putString("emaildata",useremail);
-                    settingfragment.setArguments(settingdata);*/
 
                     addmenu = findViewById(R.id.floatingActionMenu);
                     addmenu.setVisibility(View.GONE);
@@ -149,13 +124,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 取得LoginActivity傳的email值
-       /* Intent intent = getIntent();
-        useremail =(String)intent.getStringExtra("lemail");*/
-
-        setMain(); //設置主畫面
-        BottomNavigationView navigation = findViewById(R.id.nav_view);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // SESSION
         sessionManager = new SessionManager(this);
@@ -166,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
         String sPasswd = user.get(sessionManager.PASSWD);
         textView = (TextView)findViewById(R.id.textView);
         textView.setText(sName);
+
+        setMain(); //設置主畫面
+        BottomNavigationView navigation = findViewById(R.id.nav_view);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private void setMain() {
