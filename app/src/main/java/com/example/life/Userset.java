@@ -31,12 +31,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Userset extends AppCompatActivity {
+
    public EditText editname;
    public TextView useremail;
    public String newName;
    Button account_back_setting, editname_ok;
-    private static String url = "http://192.168.146.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
-   SessionManager sessionManager;
+   private static String editnameurl = "http://192.168.146.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
+
+
+    private static String editpassurl = "http://192.168.146.110/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
+
+    SessionManager sessionManager;
 
 
     @Override
@@ -72,7 +77,7 @@ public class Userset extends AppCompatActivity {
                 newName = editname.getText().toString().trim();
                 if(newName.length() <=10){
                     if(!newName.equals("")){
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, editnameurl, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 if (response.equals("success")) {
@@ -97,7 +102,7 @@ public class Userset extends AppCompatActivity {
                             }
                         };
                         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        requestQueue.add(stringRequest);;
+                        requestQueue.add(stringRequest);
                     }else{
                         editname.setError("請輸入暱稱");
                     }
@@ -108,15 +113,105 @@ public class Userset extends AppCompatActivity {
         });
     }
 
-    //修改密碼介面
+    //修改密碼
     public void Editpwd(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View refview = getLayoutInflater().inflate(R.layout.activity_editpass,null);//嵌入View
-        ImageView backDialog = refview.findViewById(R.id.editpwd_back);//連結關閉視窗的Button
-        mBuilder.setView(refview);//設置View
+        View passview = getLayoutInflater().inflate(R.layout.activity_editpass,null);//嵌入View
+        ImageView backDialog = passview.findViewById(R.id.editpwd_back);//連結關閉視窗的Button
+        mBuilder.setView(passview);//設置View
         AlertDialog dialog = mBuilder.create();
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
+        sessionManager = new SessionManager(this);
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        String email = user.get(sessionManager.EMAIL);
+
+        Button editpwd_ok = passview.findViewById(R.id.editpwd_ok);
+        EditText oldpwd = (EditText) passview.findViewById(R.id.oldpwd);
+        EditText newpwd = (EditText) passview.findViewById(R.id.newpwd);
+        EditText newpwdck = (EditText) passview.findViewById(R.id.newpwdck);
+        editpwd_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String passwd = oldpwd.getText().toString().trim();
+                String newpasswd = newpwd.getText().toString().trim();
+                String newpasswdck = newpwdck.getText().toString().trim();
+                if(!passwd.equals("") && !newpasswd.equals("") && !newpasswdck.equals("")){
+                    if(!newpasswd.equals(newpasswdck)){
+                        newpwdck.setError("密碼輸入不一致");
+                    }else{
+                        if(newpasswd.length()<5){
+                            newpwd.setError("密碼長度不得小於5");
+                        }else if(newpasswd.length()>10){
+                            newpwd.setError("密碼長度不得大於10");
+                        }else{
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, editpassurl, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    if(response.equals("success")){
+                                        Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                        dialog.hide();
+                                    }else if(response.equals("failure")){
+                                        oldpwd.setError("密碼有誤");
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> data = new HashMap<>();
+                                    data.put("email", email);
+                                    data.put("passwd", passwd);
+                                    data.put("newpasswd", newpasswd);
+                                    return data;
+                                }
+                            };
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(stringRequest);
+                        }
+                    }
+                }else{
+                    if(passwd.equals("")){
+                        if(newpasswd.equals("")){
+                            if(newpasswdck.equals("")){
+                                oldpwd.setError("請輸入舊密碼");
+                                newpwd.setError("新密碼不得為空");
+                                newpwdck.setError("請再次輸入新密碼");
+                            }else{
+                                oldpwd.setError("請輸入舊密碼");
+                                newpwd.setError("新密碼不得為空");
+                            }
+                        }else{
+                            if(newpasswdck.equals("")){
+                                oldpwd.setError("請輸入舊密碼");
+                                newpwdck.setError("請再次輸入新密碼");
+                            }else{
+                                oldpwd.setError("請輸入舊密碼");
+                            }
+                        }
+                    }else{
+                        if(newpasswd.equals("")){
+                            if(newpasswdck.equals("")){
+                                newpwd.setError("新密碼不得為空");
+                                newpwdck.setError("請再次輸入新密碼");
+                            }else{
+                                newpwd.setError("新密碼不得為空");
+                            }
+                        }else{
+                            if(newpasswdck.equals("")){
+                                newpwdck.setError("請再次輸入新密碼");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
