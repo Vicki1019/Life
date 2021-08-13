@@ -36,10 +36,10 @@ public class Userset extends AppCompatActivity {
    public TextView useremail;
    public String newName;
    Button account_back_setting, editname_ok;
-   private static String editnameurl = "http://192.168.146.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
+   private static String editnameurl = "http://192.168.39.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
 
 
-    private static String editpassurl = "http://192.168.146.110/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
+    private static String editpassurl = "http://192.168.39.110/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
 
     SessionManager sessionManager;
 
@@ -84,7 +84,9 @@ public class Userset extends AppCompatActivity {
                                     sessionManager.createSession(newName, editEmail);
                                     Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
                                 } else if (response.equals("failure")) {
-
+                                    if(newName.equals(editName)){
+                                        Toast.makeText(Userset.this, "您的暱稱為；"+editName, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -150,10 +152,14 @@ public class Userset extends AppCompatActivity {
                                 @Override
                                 public void onResponse(String response) {
                                     if(response.equals("success")){
-                                        Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
                                         dialog.hide();
+                                        Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
                                     }else if(response.equals("failure")){
-                                        oldpwd.setError("密碼有誤");
+                                       if(passwd.equals(newpasswd)){
+                                           newpwd.setError("不得與原密碼相同");
+                                       }else{
+                                           oldpwd.setError("密碼有誤");
+                                       }
                                     }
                                 }
                             }, new Response.ErrorListener() {
