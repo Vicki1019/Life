@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -53,9 +54,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    String useremail;
+    String sEmail;
     FloatingActionMenu addmenu;
     private int i=1;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
@@ -125,10 +127,8 @@ public class MainActivity extends AppCompatActivity {
         // SESSION
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin(); //檢查是否登入
-       /* HashMap<String, String> user = sessionManager.getUserDetail();
-        String sName = user.get(sessionManager.MEMBER_NIKINAME);
-        String sEmail = user.get(sessionManager.EMAIL);
-        String sPasswd = user.get(sessionManager.PASSWD);*/
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        sEmail = user.get(sessionManager.EMAIL);
 
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
@@ -186,13 +186,14 @@ public class MainActivity extends AppCompatActivity {
         //unit下拉選單
         Spinner unitsp = (Spinner) refview.findViewById(R.id.unit_spinner); //單位下拉選單
         unitrequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest ujsonObjectRequest = new JsonObjectRequest(Request.Method.GET, uniturl, null, new Response.Listener<JSONObject>() {
+        StringRequest unitstrRequest = new StringRequest(Request.Method.POST, uniturl, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String response) {
                 try {
-                    JSONArray jsonArray = response.getJSONArray("unit");
-                    for(int j=0;j<jsonArray.length();j++){
-                        JSONObject jsonObject= jsonArray.getJSONObject(j);
+                    JSONObject unitjsonObject = new JSONObject(response);
+                    JSONArray unitjsonArray = unitjsonObject.getJSONArray("unit");
+                    for(int j=0;j<unitjsonArray.length();j++) {
+                        JSONObject jsonObject = unitjsonArray.getJSONObject(j);
                         String unit_cn = jsonObject.optString("unit_cn");
                         unitlist.add(unit_cn);
                     }
@@ -202,15 +203,21 @@ public class MainActivity extends AppCompatActivity {
                 unitAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, unitlist);
                 unitAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
                 unitsp.setAdapter(unitAdapter);
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
-        unitrequestQueue.add(ujsonObjectRequest);
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                return data;
+            }
+        };
+        unitrequestQueue.add(unitstrRequest);
 
         //日期選擇
         ImageView calendar_btn = refview.findViewById(R.id.calendar_btn); //選擇日期的Button
@@ -233,15 +240,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //kind下拉選單
-        Spinner typesp = (Spinner) refview.findViewById(R.id.kind_spinner); //單位下拉選單
+        Spinner kindsp = (Spinner) refview.findViewById(R.id.kind_spinner); //單位下拉選單
         kindrequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest tjsonObjectRequest = new JsonObjectRequest(Request.Method.GET, kindurl, null, new Response.Listener<JSONObject>() {
+
+        StringRequest typestrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String response) {
                 try {
-                    JSONArray jsonArray = response.getJSONArray("kind");
-                    for(int k=0;k<jsonArray.length();k++){
-                        JSONObject jsonObject= jsonArray.getJSONObject(k);
+                    JSONObject kindjsonObject = new JSONObject(response);
+                    JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
+                    for(int k=0;k<kindjsonArray.length();k++){
+                        JSONObject jsonObject= kindjsonArray.getJSONObject(k);
                         String kind_cn = jsonObject.optString("type_cn");
                         kindlist.add(kind_cn);
                     }
@@ -250,16 +259,22 @@ public class MainActivity extends AppCompatActivity {
                 }
                 kindAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, kindlist);
                 kindAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
-                typesp.setAdapter(kindAdapter);
-
+                kindsp.setAdapter(kindAdapter);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
-        kindrequestQueue.add(tjsonObjectRequest);
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                return data;
+            }
+        };
+        kindrequestQueue.add(typestrRequest);
 
         dialog.show();//顯示Dialog
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
