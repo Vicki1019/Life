@@ -40,8 +40,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Setting extends Fragment {
-    String emaildata, member_nickname;
-    TextView useremail, username;
+    TextView useremail, username,refname;
     SessionManager sessionManager;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -91,11 +90,14 @@ public class Setting extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         //取得使用者暱稱與信箱
+        refname = (TextView) view.findViewById(R.id.refname);
         username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
         HashMap<String, String> user = sessionManager.getUserDetail();
+        String sRefName = user.get(sessionManager.MEMBER_NIKINAME);
         String sName = user.get(sessionManager.MEMBER_NIKINAME);
         String sEmail = user.get(sessionManager.EMAIL);
+        refname.setText(sRefName+"的冰箱");
         username.setText(sName);
         useremail.setText(sEmail);
 

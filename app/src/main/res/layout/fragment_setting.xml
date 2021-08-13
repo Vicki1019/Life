@@ -36,13 +36,13 @@
             android:id="@+id/refname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
             android:text="冰箱名稱"
             android:textColor="#FFFFFF"
-            android:textSize="30dp"
+            android:textSize="35dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/settitle"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/settitle"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -141,8 +141,8 @@
 
         <View
             android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="406dp"
+            android:layout_height="114dp"
             android:layout_marginTop="2dp"
             android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +154,7 @@
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="55dp"
             android:text="APP開發版本：V 0.1"
             android:textColor="#DC884800"
             android:textSize="18dp"

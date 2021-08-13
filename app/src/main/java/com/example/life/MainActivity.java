@@ -136,12 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMain() {
-        //把從LoginActivity接收的使用者Email值傳送到主畫面中
         Reflist reflistfragment = new Reflist();
-        Bundle logdata = new Bundle();
-        logdata.putString("emaildata",useremail);
-        reflistfragment.setArguments(logdata);
-
         this.getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_activity_main,reflistfragment).commit();
     }
 
