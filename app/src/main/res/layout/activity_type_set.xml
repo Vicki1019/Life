@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
-            android:text="分類項目"
+            android:text="分類"
             android:textColor="#884800"
             android:textSize="35dp"
             android:textStyle="bold"
@@ -44,6 +44,8 @@
             android:id="@+id/type_back_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:background="#00FFFFFF"
             android:text="ㄑ返回"
             android:textColor="#884800"
@@ -54,12 +56,12 @@
 
         <Button
             android:id="@+id/type_edit"
-            android:layout_width="94dp"
-            android:layout_height="41dp"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/shape"
-            android:text="編輯分類"
+            android:text="　編輯分類　"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -67,11 +69,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline13"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

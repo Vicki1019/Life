@@ -141,8 +141,8 @@
 
         <View
             android:id="@+id/view2"
-            android:layout_width="406dp"
-            android:layout_height="114dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="2dp"
             android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +154,7 @@
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="60dp"
             android:text="APP開發版本：V 0.1"
             android:textColor="#DC884800"
             android:textSize="18dp"
