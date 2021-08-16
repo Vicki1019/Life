@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.131.110/PHP_API/life/login.php"; //API URL(login.php)
+    private static String url = "http://192.168.128.110/PHP_API/life/login.php"; //API URL(login.php)
     SessionManager sessionManager;
 
     @Override
@@ -78,17 +78,15 @@ public class LoginActivity extends AppCompatActivity {
                                 //取得登入user資料
                                 String member_nickname = jsonObject.getString("member_nickname").trim();
                                 String email = jsonObject.getString("email").trim();
-                                String passwd = jsonObject.getString("passwd").trim();
+                                //String passwd = jsonObject.getString("passwd").trim();
 
                                 //建立SESSION
-                                sessionManager.createSession(member_nickname, email, passwd);
+                                sessionManager.createSession(member_nickname, email);
                                 //從LoginActivity 跳轉到 MainActivity
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                /*intent.putExtra("member_nickname", member_nickname);
-                                intent.putExtra("email", email);
-                                intent.putExtra("passwd", passwd);*/
                                 startActivity(intent);
                                 finish();
+
                             } else if (result.equals("failure")) {
                                 loading.setVisibility(View.GONE);
                                 email.setError("帳號或密碼有誤");

@@ -41,7 +41,7 @@ public class TypeSetActivity extends AppCompatActivity {
     SessionManager sessionManager;
     //Volley
     String kind_cn;
-    private static String kindurl = "http://192.168.51.110/PHP_API/life/getkind.php"; //API URL(getunit.php)
+    private static String kindurl = "http://192.168.128.110/PHP_API/life/getkind.php"; //API URL(getunit.php)
     RequestQueue kindrequestQueue;
     //RecycleView
     RecyclerView kindRecyclerView;
