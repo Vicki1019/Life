@@ -1,10 +1,8 @@
 package com.example.life;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,7 +23,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,8 +37,10 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Setting extends Fragment {
-    TextView useremail, username,refname;
-    SessionManager sessionManager;
+    String emaildata, member_nickname;
+    TextView useremail, username;
+    private static String seturl = "http://192.168.25.110/PHP_API/life/getuserinfo.php"; //API URL(getuserinfo.php)
+    RequestQueue setrequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,7 +79,6 @@ public class Setting extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);//獲取參數
         }
-        sessionManager = new SessionManager(getActivity());
     }
 
     @Override
@@ -88,18 +86,46 @@ public class Setting extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
-
-        //取得使用者暱稱與信箱
-        refname = (TextView) view.findViewById(R.id.refname);
-        username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
-        HashMap<String, String> user = sessionManager.getUserDetail();
-        String sRefName = user.get(sessionManager.MEMBER_NIKINAME);
-        String sName = user.get(sessionManager.MEMBER_NIKINAME);
-        String sEmail = user.get(sessionManager.EMAIL);
-        refname.setText(sRefName+"的冰箱");
-        username.setText(sName);
-        useremail.setText(sEmail);
+        //取得MainActivity傳來的使用者email值
+        /*Bundle bundle = this.getArguments();
+        if(bundle != null){
+            emaildata = bundle.getString("emaildata");
+        }
+        useremail.setText(emaildata);*/
+
+        //取得使用者暱稱
+       /* username = (TextView) view.findViewById(R.id.username);
+        setrequestQueue = Volley.newRequestQueue(getContext());
+        StringRequest setstringRequest = new StringRequest(Request.Method.POST, seturl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject setjsonObject = new JSONObject(response);
+                    JSONArray setjsonArray = setjsonObject.getJSONArray("username");
+                    for(int i=0;i<setjsonArray.length();i++){
+                        JSONObject jsonObject= setjsonArray.getJSONObject(i);
+                        member_nickname = jsonObject.getString("member_nickname").trim();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                username.setText(member_nickname.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("emaildata", emaildata);
+                return data;
+            }
+        };
+        setrequestQueue.add(setstringRequest);*/
 
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
@@ -107,7 +133,10 @@ public class Setting extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),Userset.class);
-                startActivity(intent);
+                //Bundle bundle = new Bundle();
+                /*bundle.putString("emaildata",emaildata);
+                intent.putExtras(bundle);
+                startActivity(intent);*/
             }
         });
         //分類設定
@@ -117,15 +146,6 @@ public class Setting extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),TypeSetActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        //登出設定
-        ImageView logout = (ImageView) view.findViewById(R.id.setlogout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sessionManager.logout();
             }
         });
 
