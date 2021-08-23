@@ -28,9 +28,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/titlebar"
+        app:layout_constraintHorizontal_bias="0.211"
         app:layout_constraintStart_toEndOf="@+id/refadd_back"
         app:layout_constraintTop_toTopOf="@+id/titlebar"
-        app:layout_constraintVertical_bias="0.533" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <View
         android:id="@+id/view2"
@@ -48,7 +49,7 @@
         android:scrollbarAlwaysDrawVerticalTrack="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2"
         app:layout_constraintVertical_bias="0.0" />
@@ -252,5 +253,33 @@
         android:spinnerMode="dialog"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_data_input" />
+
+    <TextView
+        android:id="@+id/locate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="存放位置"
+        android:textColor="#884800"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
+
+    <Spinner
+        android:id="@+id/locate_spinner"
+        android:layout_width="120dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/spinner_back"
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.983" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
