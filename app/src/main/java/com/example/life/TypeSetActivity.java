@@ -2,11 +2,15 @@ package com.example.life;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TypeSetActivity extends AppCompatActivity {
@@ -40,13 +45,12 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    String kind_cn;
-    private static String kindurl = "http://192.168.128.110/PHP_API/life/getkind.php"; //API URL(getunit.php)
+    private static String kindurl = "http://192.168.156.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
     RequestQueue kindrequestQueue;
-    //RecycleView
-    RecyclerView kindRecyclerView;
-    MyListAdapter kindListAdapter;
-    ArrayList<HashMap<String,String>> kindarrayList = new ArrayList<>();
+    //RecyclerView
+    RecyclerView myRecyclerView;
+    MyListAdapter myListAdapter;
+    ArrayList<String> kindarrayList = new ArrayList<>();
 
 
     @Override
@@ -67,10 +71,12 @@ public class TypeSetActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        GetKind();
+    }
 
-        //取得kind資料
+    //取得kind資料
+    public void GetKind(){
         kindrequestQueue = Volley.newRequestQueue(this);
-
         StringRequest typestrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -79,11 +85,18 @@ public class TypeSetActivity extends AppCompatActivity {
                     JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
                     for(int k=0;k<kindjsonArray.length();k++){
                         JSONObject jsonObject= kindjsonArray.getJSONObject(k);
-                        kind_cn = jsonObject.optString("type_cn");
+                        String kind_cn = jsonObject.getString("type_cn");
+                        kindarrayList.add(kind_cn);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //設置RecyclerView
+                myRecyclerView = findViewById(R.id.recycleview);
+                myRecyclerView.setLayoutManager(new LinearLayoutManager(TypeSetActivity.this));
+                myRecyclerView.addItemDecoration(new DividerItemDecoration(TypeSetActivity.this, DividerItemDecoration.VERTICAL));
+                myListAdapter = new MyListAdapter();
+                myRecyclerView.setAdapter(myListAdapter);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -99,47 +112,38 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         };
         kindrequestQueue.add(typestrRequest);
-
-        //RecycleView 設置
-        kindRecyclerView = findViewById(R.id.recycleview);
-        kindRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        kindListAdapter = new MyListAdapter();
-        kindRecyclerView.setAdapter(kindListAdapter);
     }
 
-    private class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
+    public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
         class ViewHolder extends RecyclerView.ViewHolder{
-            private TextView typeset_name;
-            private CardView listbg;
-            private View typesetView;
+            private TextView typename;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                typeset_name = itemView.findViewById(R.id.typeset_name);
-                listbg = itemView.findViewById(R.id.listbg);
-                typesetView  = itemView;
+                typename = itemView.findViewById(R.id.typeset_name);
             }
         }
 
+        //連接layout檔案，Return一個view
         @NonNull
         @Override
-        //連接layout
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.typeset_list_layout,parent,false);
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.typeset_list_layout,parent,false);
             return new ViewHolder(view);
         }
 
+        //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-            holder.typeset_name.setText(kindarrayList.get(position).get(kind_cn));
+            holder.typename.setText(kindarrayList.get(position));
         }
 
-        @Override
         //取得顯示數量
+        @Override
         public int getItemCount() {
             return kindarrayList.size();
         }
     }
-
 }
