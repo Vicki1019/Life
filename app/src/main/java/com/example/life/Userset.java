@@ -36,10 +36,10 @@ public class Userset extends AppCompatActivity {
    public TextView useremail;
    public String newName;
    Button account_back_setting, editname_ok;
-   private static String editnameurl = "http://223.225.225.0/PHP_API/life/updatename.php"; //API URL(updatename.php)
+   private static String editnameurl = "http://192.168.51.110/PHP_API/life/updatename.php"; //API URL(updatename.php)
 
 
-    private static String editpassurl = "http://225.225.225.0/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
+    private static String editpassurl = "http://192.168.51.110/PHP_API/life/updatepass.php"; //API URL(updatepass.php)
 
     SessionManager sessionManager;
 
