@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,13 +42,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
 public class TypeSetActivity extends AppCompatActivity {
     Button type_back_setting;
     String sEmail;
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.156.110/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.227.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
@@ -72,6 +77,7 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         });
         GetKind();
+        recyclerViewAction(myRecyclerView,kindarrayList,myListAdapter);
     }
 
     //取得kind資料
@@ -113,7 +119,7 @@ public class TypeSetActivity extends AppCompatActivity {
         };
         kindrequestQueue.add(typestrRequest);
     }
-
+    //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
         class ViewHolder extends RecyclerView.ViewHolder{
@@ -145,5 +151,33 @@ public class TypeSetActivity extends AppCompatActivity {
         public int getItemCount() {
             return kindarrayList.size();
         }
+    }
+    //側滑刪除功能
+    private void recyclerViewAction(RecyclerView recyclerView, final ArrayList<String> choose, final MyListAdapter myAdapter){
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);//僅左滑
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;//管理上下滑動
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                //管理滑動情形
+                int position = viewHolder.getAdapterPosition();
+                switch (direction) {
+                    case ItemTouchHelper.LEFT:
+                    case ItemTouchHelper.RIGHT:
+                        choose.remove(position);
+                        myAdapter.notifyItemRemoved(position);
+                        break;
+                }
+            }
+        });
+        helper.attachToRecyclerView(recyclerView);
     }
 }
