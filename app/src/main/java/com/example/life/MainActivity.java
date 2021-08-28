@@ -70,19 +70,19 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //POST Reflist
-    private static String url = "http://225.225.225.0/PHP_API/index.php/Refrigerator/list.php"; //API URL(register.php)
+    private static String url = "http://192.168.64.110/PHP_API/index.php/Refrigerator/list"; //API URL(register.php)
     //GET Unit
-    private static String uniturl = "http://225.225.225.0/PHP_API/index.php/Refrigerator/getUnit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getUnit"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://225.225.225.0/PHP_API/index.php/Refrigerator/getKind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getKind"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://225.225.225.0/PHP_API/index.php/Refrigerator/getLocate.php"; //API URL(getlocate.php)
+    private static String locateurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getLocate"; //API URL(getlocate.php)
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
@@ -148,16 +148,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //add reflist
-        Button refadd_ok = (Button) findViewById(R.id.refadd_ok);
-        refadd_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, Reflist.class);
-                startActivity(intent);
-            }
-        });
         name = findViewById(R.id. refadd_name_input);
         date = findViewById(R.id. refadd_data_input);
         quantity = findViewById(R.id. refadd_quantity_text);
@@ -428,6 +418,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         locaterequestQueue.add(typestrRequest);
+
+        //確定新增reflist
+        Button refadd_ok = (Button) refview.findViewById(R.id.refadd_ok);
+        refadd_ok.setOnClickListener(v1 -> {dialog.dismiss();}); // [暫時]按下新增後關閉dialog
+
 
         dialog.show();//顯示Dialog
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
