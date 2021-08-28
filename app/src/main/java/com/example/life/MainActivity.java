@@ -70,19 +70,19 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //POST Reflist
-    private static String url = "http://192.168.0.12/PHP_API/life/register.php"; //API URL(register.php)
+    private static String url = "http://225.225.225.0/PHP_API/life/register.php"; //API URL(register.php)
     //GET Unit
-    private static String uniturl = "http://192.168.0.12/PHP_API/life/getunit.php"; //API URL(getunit.php)
+    private static String uniturl = "http://225.225.225.0/PHP_API/life/getunit.php"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.0.12/PHP_API/life/getkind.php"; //API URL(getkind.php)
+    private static String kindurl = "http://225.225.225.0/PHP_API/life/getkind.php"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.0.12/PHP_API/life/getlocate.php"; //API URL(getlocate.php)
+    private static String locateurl = "http://225.225.225.0/PHP_API/life/getlocate.php"; //API URL(getlocate.php)
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
