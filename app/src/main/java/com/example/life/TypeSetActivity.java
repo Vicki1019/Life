@@ -7,13 +7,20 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -29,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +48,10 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.227.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
+    private static String addurl = "http://192.168.227.110/PHP_API/index.php/UserSetting/addtype";
+    RequestQueue addrequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
     MyListAdapter myListAdapter;
@@ -109,6 +119,7 @@ public class TypeSetActivity extends AppCompatActivity {
         };
         kindrequestQueue.add(typestrRequest);
     }
+
     //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
@@ -152,7 +163,12 @@ public class TypeSetActivity extends AppCompatActivity {
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;//管理上下滑動
+                //管理上下滑動
+                int position_dragged = viewHolder.getAdapterPosition();
+                int position_target = target.getAdapterPosition();
+                Collections.swap(choose, position_dragged, position_target);
+                myAdapter.notifyItemMoved(position_dragged, position_target);
+                return false;
             }
 
             @Override
@@ -169,5 +185,63 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
+    }
+
+    public void AddType(View view) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
+        View typeview = getLayoutInflater().inflate(R.layout.type_add_layout,null);//嵌入View
+        ImageView backDialog = typeview.findViewById(R.id.addtype_back);//連結關閉視窗的Button
+        mBuilder.setView(typeview);//設置View
+        AlertDialog dialog = mBuilder.create();
+        //關閉視窗的監聽事件
+        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
+        addrequestQueue = Volley.newRequestQueue(this);
+        Button addtype_ok = typeview.findViewById(R.id.addtype_ok);
+        EditText typeinput = (EditText) typeview.findViewById(R.id.newtype_input);
+        addtype_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newtype = typeinput.getText().toString().trim();
+                if(!newtype.equals("")){
+                    StringRequest addstringRequest = new StringRequest(Request.Method.POST, addurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.equals("success")) {
+                                dialog.hide();
+                                Toast.makeText(TypeSetActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                            } else if (response.equals("failure")) {
+                                Toast.makeText(TypeSetActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                            }else if(response.equals("repetition")){
+                                typeinput.setError("已有該分類項目");
+                                //Toast.makeText(TypeSetActivity.this, "已有該分類項目", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email", sEmail);
+                            data.put("newtype", newtype);
+                            return data;
+                        }
+                    };
+                    addrequestQueue.add(addstringRequest);
+                }else{
+                    typeinput.setError("請輸入分類名稱");
+                }
+            }
+        });
+
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 }
