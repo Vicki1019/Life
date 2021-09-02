@@ -79,7 +79,6 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         });
         GetKind();
-        recyclerViewAction(myRecyclerView,kindarrayList,myListAdapter);
     }
 
     //取得kind資料
