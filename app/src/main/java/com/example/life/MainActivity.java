@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
     private int i=1;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
 
-    //POST Reflist
-    private static String url = "http://192.168.60.110/PHP_API/index.php/Refrigerator/list";
     //GET Unit
     private static String uniturl = "http://192.168.60.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
@@ -86,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
+    //ADD Reflist
+    private static String refaddurl = "http://192.168.60.110/PHP_API/index.php/Refrigerator/refadd";
+    RequestQueue refaddrequestQueue;
 
     //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -267,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
         //增減數量的監聽事件
         ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
         ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
@@ -413,17 +415,70 @@ public class MainActivity extends AppCompatActivity {
         });
         locaterequestQueue.add(locatestrRequest);
 
-        //確定新增reflist(暫定)
+        //新增冰箱清單
+        TextView name_input = refview.findViewById(R.id.refadd_name_input);
         Button refadd_ok = (Button) refview.findViewById(R.id.refadd_ok);
+        refaddrequestQueue = Volley.newRequestQueue(this);
         refadd_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.hide();
+                String refadd_name = name_input.getText().toString().trim(); //取得食品名稱
+                String refadd_quantity = quantity.getText().toString().trim(); //取得數量
+                String refadd_unit = unitsp.getSelectedItem().toString().trim(); //取得單位
+                String refadd_date = date_input.getText().toString().trim(); //取得有效期限
+                String refadd_kind = kindsp.getSelectedItem().toString().trim(); //取得分類
+                String refadd_locate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
+                //Toast.makeText(MainActivity.this, refadd_name+"\n"+refadd_quantity+"\n"+refadd_unit+"\n"+refadd_date+"\n"+refadd_kind+"\n"+refadd_locate, Toast.LENGTH_SHORT).show();
+                if(!refadd_name.equals("") && !refadd_date.equals("")){
+                    StringRequest refaddstrRequest = new StringRequest(Request.Method.POST, refaddurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            dialog.hide();
+                            if (response.equals("success")) {
+                                Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.setClass(MainActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            } else if (response.equals("failure")) {
+                                Toast.makeText(MainActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email", sEmail);
+                            data.put("foodname", refadd_name);
+                            data.put("quantity", refadd_quantity);
+                            data.put("unit", refadd_unit);
+                            data.put("expdate", refadd_date);
+                            data.put("type", refadd_kind);
+                            data.put("locate", refadd_locate);
+                            return data;
+                        }
+                    };
+                    refaddrequestQueue.add(refaddstrRequest);
+                }else{
+                    if(refadd_name.equals("")){
+                        if(refadd_date.equals("")){
+                            name_input.setError("請輸入食品名稱");
+                            date_input.setError("請輸入有效日期");
+                        }else{
+                            name_input.setError("請輸入食品名稱");
+                        }
+                    }else{
+                        if(refadd_date.equals("")){
+                            date_input.setError("請輸入有效日期");
+                        }
+                    }
+                }
             }
         });
-
-        //新增冰箱清單
-
 
         dialog.show();//顯示Dialog
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度

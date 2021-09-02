@@ -28,10 +28,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/titlebar"
-        app:layout_constraintHorizontal_bias="0.211"
         app:layout_constraintStart_toEndOf="@+id/refadd_back"
-        app:layout_constraintTop_toTopOf="@+id/titlebar"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/titlebar" />
 
     <View
         android:id="@+id/view2"
@@ -99,7 +97,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textColor="#884800"
+        android:textColor="#000000"
         android:textColorHighlight="#884800"
         android:textColorLink="#884800"
         android:textSize="18dp"
@@ -184,6 +182,7 @@
         android:layout_width="170dp"
         android:layout_height="45dp"
         android:ems="10"
+        android:hint="例如：2021/01/01"
         android:inputType="textPersonName"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
