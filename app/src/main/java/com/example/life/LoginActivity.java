@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.64.110/PHP_API/index.php/Login/login";
+    private static String url = "http://192.168.60.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
 
     @Override

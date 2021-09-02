@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/typeaddbar"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="#FFEEC6"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="#884800"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeaddbar" />
+
+    <ImageView
+        android:id="@+id/addtype_back"
+        android:layout_width="45dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="@+id/typeaddbar"
+        app:layout_constraintStart_toStartOf="@+id/typeaddbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新增分類項目"
+        android:textColor="#884800"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/typeaddbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addtype_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="413dp"
+        android:layout_height="200dp"
+        android:background="#FFEEC6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view7"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/newtype_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="請輸入欲新增分類名稱"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeaddbar" />
+
+    <Button
+        android:id="@+id/addtype_ok"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="35dp"
+        android:background="#884800"
+        android:text="新增"
+        android:textColor="#FFEEC6"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newtype_input" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
