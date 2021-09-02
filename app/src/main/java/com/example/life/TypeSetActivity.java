@@ -48,10 +48,12 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.227.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.60.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.227.110/PHP_API/index.php/UserSetting/addtype";
+    private static String addurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/addtype";
     RequestQueue addrequestQueue;
+    private static String deleteurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/deletetype";
+    RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
     MyListAdapter myListAdapter;
@@ -77,7 +79,6 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         });
         GetKind();
-        recyclerViewAction(myRecyclerView,kindarrayList,myListAdapter);
     }
 
     //取得kind資料
@@ -103,6 +104,8 @@ public class TypeSetActivity extends AppCompatActivity {
                 myRecyclerView.addItemDecoration(new DividerItemDecoration(TypeSetActivity.this, DividerItemDecoration.VERTICAL));
                 myListAdapter = new MyListAdapter();
                 myRecyclerView.setAdapter(myListAdapter);
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                itemTouchHelper.attachToRecyclerView(myRecyclerView);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -153,39 +156,26 @@ public class TypeSetActivity extends AppCompatActivity {
             return kindarrayList.size();
         }
     }
+
     //側滑刪除功能
-    private void recyclerViewAction(RecyclerView recyclerView, final ArrayList<String> choose, final MyListAdapter myAdapter){
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
-            @Override
-            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                return makeMovementFlags(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);//僅左滑
-            }
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+            return false;
+       }
+       @Override
+       public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            switch(direction){
+                case ItemTouchHelper.LEFT:
 
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                //管理上下滑動
-                int position_dragged = viewHolder.getAdapterPosition();
-                int position_target = target.getAdapterPosition();
-                Collections.swap(choose, position_dragged, position_target);
-                myAdapter.notifyItemMoved(position_dragged, position_target);
-                return false;
-            }
 
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                //管理滑動情形
-                int position = viewHolder.getAdapterPosition();
-                switch (direction) {
-                    case ItemTouchHelper.LEFT:
-                    case ItemTouchHelper.RIGHT:
-                        choose.remove(position);
-                        myAdapter.notifyItemRemoved(position);
-                        break;
-                }
+                    kindarrayList.remove(position);
+                    myListAdapter.notifyItemRemoved(position);
+                    break;
             }
-        });
-        helper.attachToRecyclerView(recyclerView);
-    }
+       }
+    };
 
     public void AddType(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
@@ -210,6 +200,9 @@ public class TypeSetActivity extends AppCompatActivity {
                             if (response.equals("success")) {
                                 dialog.hide();
                                 Toast.makeText(TypeSetActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                                startActivity(intent);
                             } else if (response.equals("failure")) {
                                 Toast.makeText(TypeSetActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
                             }else if(response.equals("repetition")){
