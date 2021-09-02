@@ -43,8 +43,8 @@
 
     <View
         android:id="@+id/view4"
-        android:layout_width="413dp"
-        android:layout_height="390dp"
+        android:layout_width="0dp"
+        android:layout_height="450dp"
         android:background="#FFEEC6"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -157,21 +157,22 @@
         style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="7dp"
         android:background="#884800"
         android:text="新增"
         android:textColor="#FFEEC6"
         android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/locate_spinner" />
 
     <TextView
         android:id="@+id/refadd_quantity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="1dp"
         android:text="1"
         android:textColor="#000000"
         android:textSize="18dp"
@@ -180,7 +181,7 @@
 
     <EditText
         android:id="@+id/refadd_data_input"
-        android:layout_width="175dp"
+        android:layout_width="170dp"
         android:layout_height="45dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -193,13 +194,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6904762" />
+        app:layout_constraintGuide_percent="0.61" />
 
     <ImageView
         android:id="@+id/decrease_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="1dp"
         android:clickable="true"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toTopOf="@+id/guideline9"
@@ -210,13 +212,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.61" />
+        app:layout_constraintGuide_percent="0.54" />
 
     <ImageView
         android:id="@+id/increase_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="1dp"
         android:clickable="true"
         app:layout_constraintStart_toEndOf="@+id/refadd_quantity_text"
         app:layout_constraintTop_toTopOf="@+id/guideline9"
@@ -227,7 +230,7 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:clickable="true"
         app:layout_constraintStart_toEndOf="@+id/refadd_data_input"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
@@ -258,28 +261,24 @@
         android:id="@+id/locate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
         android:text="存放位置"
         android:textColor="#884800"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.123"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.963" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_kind" />
 
     <Spinner
         android:id="@+id/locate_spinner"
         android:layout_width="120dp"
         android:layout_height="33dp"
-        android:layout_marginStart="128dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/spinner_back"
         android:spinnerMode="dialog"
-        app:layout_constraintBottom_toBottomOf="@+id/view4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.983" />
+        app:layout_constraintStart_toStartOf="@+id/guideline10"
+        app:layout_constraintTop_toBottomOf="@+id/kind_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
