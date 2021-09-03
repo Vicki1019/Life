@@ -2,6 +2,7 @@ package com.example.life;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -36,7 +38,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,15 +45,16 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 public class TypeSetActivity extends AppCompatActivity {
     Button type_back_setting;
-    String sEmail;
+    String sEmail, deletetype;
+    int editclick=0;
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.60.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/addtype";
+    private static String addurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/addtype";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/deletetype";
+    private static String deleteurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/deletetype";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
@@ -155,6 +157,8 @@ public class TypeSetActivity extends AppCompatActivity {
         public int getItemCount() {
             return kindarrayList.size();
         }
+
+
     }
 
     //側滑刪除功能
@@ -162,21 +166,59 @@ public class TypeSetActivity extends AppCompatActivity {
         @Override
         public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
             return false;
-       }
-       @Override
-       public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+        }
+        @Override
+        public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
+            deletetype = kindarrayList.get(position);
             switch(direction){
                 case ItemTouchHelper.LEFT:
-
+                    DeleteType();
 
                     kindarrayList.remove(position);
                     myListAdapter.notifyItemRemoved(position);
                     break;
             }
-       }
+        }
     };
 
+    //刪除Type
+    public void DeleteType(){
+        deleterequestQueue = Volley.newRequestQueue(this);
+        StringRequest deletestrRequest = new StringRequest(Request.Method.POST, deleteurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    Toast.makeText(TypeSetActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                    startActivity(intent);
+                } else if (response.equals("failure")) {
+                    Toast.makeText(TypeSetActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                data.put("deletetype", deletetype);
+                return data;
+            }
+        };
+        deleterequestQueue.add(deletestrRequest);
+    }
+
+
+    //新增Type
     public void AddType(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
         View typeview = getLayoutInflater().inflate(R.layout.type_add_layout,null);//嵌入View
