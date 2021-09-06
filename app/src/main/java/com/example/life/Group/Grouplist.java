@@ -1,27 +1,21 @@
-package com.example.life;
+package com.example.life.Group;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import com.example.life.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Reflist#newInstance} factory method to
+ * Use the {@link Grouplist#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Reflist extends Fragment {
-    String str;
+public class Grouplist extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +26,7 @@ public class Reflist extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Reflist() {
+    public Grouplist() {
         // Required empty public constructor
     }
 
@@ -42,11 +36,11 @@ public class Reflist extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Reflist.
+     * @return A new instance of fragment Grouplist.
      */
     // TODO: Rename and change types and number of parameters
-    public static Reflist newInstance(String param1, String param2) {
-        Reflist fragment = new Reflist();
+    public static Grouplist newInstance(String param1, String param2) {
+        Grouplist fragment = new Grouplist();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,16 +56,11 @@ public class Reflist extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_reflist, container, false);
-        TextView myref = (TextView) view.findViewById(R.id.myref);
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            str = bundle.getString("emaildata");
-        }
-        return view;
+        return inflater.inflate(R.layout.fragment_grouplist, container, false);
     }
 }

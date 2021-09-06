@@ -1,9 +1,8 @@
-package com.example.life;
+package com.example.life.Setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +24,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
+import com.example.life.R;
+import com.example.life.Manager.SessionManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +38,8 @@ public class Userset extends AppCompatActivity {
    public String newName;
    Button account_back_setting, editname_ok;
    //Volley
-   private static String editnameurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/updatename";
-   private static String editpassurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/updatepass";
+   private static String editnameurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/updatename";
+   private static String editpassurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/updatepass";
    //Session
    SessionManager sessionManager;
 

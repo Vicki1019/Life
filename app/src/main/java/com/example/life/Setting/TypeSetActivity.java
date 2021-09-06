@@ -1,8 +1,7 @@
-package com.example.life;
+package com.example.life.Setting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,6 +29,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
+import com.example.life.R;
+import com.example.life.Manager.SessionManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -41,8 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
-
 public class TypeSetActivity extends AppCompatActivity {
     Button type_back_setting;
     String sEmail, deletetype;
@@ -50,11 +49,11 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/addtype";
+    private static String addurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/addtype";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.15.110/PHP_API/index.php/UserSetting/deletetype";
+    private static String deleteurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/deletetype";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;

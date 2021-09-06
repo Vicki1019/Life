@@ -1,30 +1,22 @@
 package com.example.life;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
-import android.util.JsonReader;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,33 +26,32 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.Group.Grouplist;
+import com.example.life.Manager.SessionManager;
+import com.example.life.Refrigerator.Reflist;
+import com.example.life.Scan.Scan;
+import com.example.life.Setting.Setting;
+import com.example.life.ShopList.Shoplist;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText name,date;
-    private TextView quantity;
+    private EditText name;
+    private TextView quantity,date;
     private Spinner unit,kind,locate;
    // private  String refadd_name,refadd_date,refadd_quantity,refadd_unit,refadd_kind,refadd_locate;
    // private ProgressBar loading;
@@ -70,22 +61,22 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.15.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //切換fragment
@@ -149,12 +140,12 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        name = findViewById(R.id. refadd_name_input);
+        /*name = findViewById(R.id. refadd_name_input);
         date = findViewById(R.id. refadd_data_input);
         quantity = findViewById(R.id. refadd_quantity_text);
         unit = (Spinner)findViewById(R.id. unit_spinner);
         kind = (Spinner)findViewById(R.id. kind_spinner);
-        locate = (Spinner)findViewById(R.id. locate_spinner);
+        locate = (Spinner)findViewById(R.id. locate_spinner);*/
     }
 
     private void setMain() {
@@ -330,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
         //日期選擇
         ImageView calendar_btn = refview.findViewById(R.id.calendar_btn); //選擇日期的Button
-        EditText date_input = refview.findViewById(R.id.refadd_data_input); //顯示日期
+        TextView date_input =(TextView) refview.findViewById(R.id.refadd_data_input); //顯示日期
         calendar_btn .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -467,13 +458,14 @@ public class MainActivity extends AppCompatActivity {
                     if(refadd_name.equals("")){
                         if(refadd_date.equals("")){
                             name_input.setError("請輸入食品名稱");
-                            date_input.setError("請輸入有效日期");
+                            date_input.setError("請選擇日期");
                         }else{
                             name_input.setError("請輸入食品名稱");
+                            date_input.setError("請選擇日期");
                         }
                     }else{
                         if(refadd_date.equals("")){
-                            date_input.setError("請輸入有效日期");
+                            date_input.setError("請選擇日期");
                         }
                     }
                 }
