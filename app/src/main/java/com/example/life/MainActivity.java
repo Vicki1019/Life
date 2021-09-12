@@ -34,7 +34,7 @@ import com.example.life.Manager.SessionManager;
 import com.example.life.Refrigerator.Reflist;
 import com.example.life.Scan.Scan;
 import com.example.life.Setting.Setting;
-import com.example.life.Setting.TypeSetActivity;
+import com.example.life.Setting.KindSetActivity;
 import com.example.life.ShopList.Shoplist;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -56,14 +56,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText name;
-    private TextView quantity,date;
-    private Spinner unit,kind,locate;
-   // private  String refadd_name,refadd_date,refadd_quantity,refadd_unit,refadd_kind,refadd_locate;
-   // private ProgressBar loading;
     String sEmail;
     FloatingActionMenu addmenu;
-    private int i=1;//預設新增冰箱清單中商品數量為1
+    private int i;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
 
     //GET Unit
@@ -178,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
         ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
         TextView quantity = refview.findViewById(R.id.refadd_quantity_text); //數量顯示
+        i = 1;
         increase_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    unitlist.clear();
                     JSONObject unitjsonObject = new JSONObject(response);
                     JSONArray unitjsonArray = unitjsonObject.getJSONArray("unit");
                     for(int j=0;j<unitjsonArray.length();j++) {
@@ -257,15 +254,16 @@ public class MainActivity extends AppCompatActivity {
         Spinner kindsp = (Spinner) refview.findViewById(R.id.kind_spinner); //單位下拉選單
         kindrequestQueue = Volley.newRequestQueue(this);
 
-        StringRequest typestrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
+        StringRequest kindstrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    kindlist.clear();
                     JSONObject kindjsonObject = new JSONObject(response);
                     JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
                     for(int k=0;k<kindjsonArray.length();k++){
                         JSONObject jsonObject= kindjsonArray.getJSONObject(k);
-                        String kind_cn = jsonObject.optString("type_cn");
+                        String kind_cn = jsonObject.optString("kind_cn");
                         kindlist.add(kind_cn);
                     }
                 } catch (JSONException e) {
@@ -288,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 return data;
             }
         };
-        kindrequestQueue.add(typestrRequest);
+        kindrequestQueue.add(kindstrRequest);
 
         //locate下拉選單
         Spinner locatesp = (Spinner) refview.findViewById(R.id.locate_spinner); //單位下拉選單
@@ -298,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    locatelist.clear();
                     JSONObject locatejsonObject = new JSONObject(response);
                     JSONArray locatejsonArray = locatejsonObject.getJSONArray("locate");
                     for(int l=0;l<locatejsonArray.length();l++){
@@ -362,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
                             data.put("quantity", refadd_quantity);
                             data.put("unit", refadd_unit);
                             data.put("expdate", refadd_date);
-                            data.put("type", refadd_kind);
+                            data.put("kind", refadd_kind);
                             data.put("locate", refadd_locate);
                             return data;
                         }

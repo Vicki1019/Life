@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFEEC6"
-    tools:context=".Setting.TypeSetActivity">
+    tools:context=".Setting.KindSetActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,10 +26,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/typetitle" />
+            app:layout_constraintTop_toBottomOf="@+id/kindtitle" />
 
         <TextView
-            android:id="@+id/typetitle"
+            android:id="@+id/kindtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/type_back_setting"
+            android:id="@+id/kind_back_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -76,14 +76,14 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_type"
+            android:id="@+id/add_kind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="#FFFBF7"
             android:clickable="true"
-            android:onClick="AddType"
+            android:onClick="AddKind"
             app:backgroundTint="#884800"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

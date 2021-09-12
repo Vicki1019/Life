@@ -97,7 +97,7 @@ public class Setting extends Fragment {
         typeset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TypeSetActivity.class);
+                Intent intent = new Intent(getActivity(), KindSetActivity.class);
                 startActivity(intent);
             }
         });

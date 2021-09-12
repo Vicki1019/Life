@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
-        <activity android:name=".Setting.TypeSetActivity"></activity>
+        <activity android:name=".Setting.KindSetActivity"/>
         <activity android:name=".EditpassActivity" />
         <activity android:name=".Setting.Userset" />
         <activity android:name=".ShopaddActivity" />

@@ -28,7 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Setting.TypeSetActivity;
+import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -122,7 +122,7 @@ public class Reflist extends Fragment {
     public class MyListAdapter extends RecyclerView.Adapter<Reflist.MyListAdapter.ViewHolder>{
         public class ViewHolder extends RecyclerView.ViewHolder{
             TextView ref_user, ref_food, ref_quantity, ref_day;
-            View statebg;
+            View statebg, reflistview;
             public ViewHolder(@NonNull @NotNull View itemView) {
                 super(itemView);
                 statebg = itemView.findViewById(R.id.Reflist_view);
@@ -130,6 +130,7 @@ public class Reflist extends Fragment {
                 ref_food = itemView.findViewById(R.id.reflist_food);
                 ref_quantity = itemView.findViewById(R.id.reflist_quantity);
                 ref_day = itemView.findViewById(R.id.reflist_day);
+                reflistview = itemView;
             }
         }
 
@@ -149,33 +150,41 @@ public class Reflist extends Fragment {
             if(statearrayList.get(position).equals("0")){
                 //未過期
                 holder.statebg.setBackgroundResource(R.drawable.notexpshape);
-                holder.ref_food.setTextColor(Color.parseColor("#884800"));
+               /* holder.ref_food.setTextColor(Color.parseColor("#884800"));
                 holder.ref_quantity.setTextColor(Color.parseColor("#884800"));
-                holder.ref_day.setTextColor(Color.parseColor("#884800"));
+                holder.ref_day.setTextColor(Color.parseColor("#884800"));*/
                 holder.ref_food.setText(foodarrayList.get(position));
                 holder.ref_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
                 holder.ref_day.setText("剩餘"+dayarrayList.get(position)+"天");
             }else if(statearrayList.get(position).equals("-1")){
                 //即將過期
                 holder.statebg.setBackgroundResource(R.drawable.willexpshape);
-                holder.ref_food.setTextColor(Color.parseColor("#884800"));
+                holder.ref_user.setBackgroundResource(R.drawable.yellowshape);
+               /* holder.ref_food.setTextColor(Color.parseColor("#884800"));
                 holder.ref_quantity.setTextColor(Color.parseColor("#884800"));
-                holder.ref_day.setTextColor(Color.parseColor("#884800"));
+                holder.ref_day.setTextColor(Color.parseColor("#884800"));*/
                 holder.ref_food.setText(foodarrayList.get(position));
                 holder.ref_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
                 holder.ref_day.setText("剩餘"+dayarrayList.get(position)+"天");
             }else if(statearrayList.get(position).equals("1")){
                 //已過期
                 holder.statebg.setBackgroundResource(R.drawable.expshape);
-                holder.ref_food.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.ref_user.setBackgroundResource(R.drawable.redshape);
+                /*holder.ref_food.setTextColor(Color.parseColor("#FFFFFF"));
                 holder.ref_quantity.setTextColor(Color.parseColor("#FFFFFF"));
-                holder.ref_day.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.ref_day.setTextColor(Color.parseColor("#FFFFFF"));*/
                 holder.ref_food.setText(foodarrayList.get(position));
                 holder.ref_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
                 holder.ref_day.setText("已過期");
             }else{
                 holder.statebg.setVisibility(View.GONE);
             }
+            holder.reflistview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getContext(), "Test!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         //取得顯示數量

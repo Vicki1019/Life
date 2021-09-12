@@ -42,18 +42,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TypeSetActivity extends AppCompatActivity {
-    Button type_back_setting;
-    String sEmail, deletetype;
-    int editclick=0;
+public class KindSetActivity extends AppCompatActivity {
+    Button kind_back_setting;
+    String sEmail, deletekind;
+    //int editclick=0;
     //Session
     SessionManager sessionManager;
     //Volley
     private static String kindurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/addtype";
+    private static String addurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/addkind";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/deletetype";
+    private static String deleteurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/deletekind";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
@@ -64,18 +64,18 @@ public class TypeSetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_type_set);
+        setContentView(R.layout.activity_kind_set);
 
         sessionManager = new SessionManager(this);
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
 
-        type_back_setting = (Button) findViewById(R.id.type_back_setting);
-        type_back_setting.setOnClickListener(new View.OnClickListener() {
+        kind_back_setting = (Button) findViewById(R.id.kind_back_setting);
+        kind_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(TypeSetActivity.this, MainActivity.class);
+                intent.setClass(KindSetActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -85,7 +85,7 @@ public class TypeSetActivity extends AppCompatActivity {
     //取得kind資料
     public void GetKind(){
         kindrequestQueue = Volley.newRequestQueue(this);
-        StringRequest typestrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
+        StringRequest kindstrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -93,7 +93,7 @@ public class TypeSetActivity extends AppCompatActivity {
                     JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
                     for(int k=0;k<kindjsonArray.length();k++){
                         JSONObject jsonObject= kindjsonArray.getJSONObject(k);
-                        String kind_cn = jsonObject.getString("type_cn");
+                        String kind_cn = jsonObject.getString("kind_cn");
                         kindarrayList.add(kind_cn);
                     }
                 } catch (JSONException e) {
@@ -101,8 +101,8 @@ public class TypeSetActivity extends AppCompatActivity {
                 }
                 //設置RecyclerView
                 myRecyclerView = findViewById(R.id.recycleview);
-                myRecyclerView.setLayoutManager(new LinearLayoutManager(TypeSetActivity.this));
-                myRecyclerView.addItemDecoration(new DividerItemDecoration(TypeSetActivity.this, DividerItemDecoration.VERTICAL));
+                myRecyclerView.setLayoutManager(new LinearLayoutManager(KindSetActivity.this));
+                myRecyclerView.addItemDecoration(new DividerItemDecoration(KindSetActivity.this, DividerItemDecoration.VERTICAL));
                 myListAdapter = new MyListAdapter();
                 myRecyclerView.setAdapter(myListAdapter);
                 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
@@ -111,7 +111,7 @@ public class TypeSetActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(KindSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -121,18 +121,18 @@ public class TypeSetActivity extends AppCompatActivity {
                 return data;
             }
         };
-        kindrequestQueue.add(typestrRequest);
+        kindrequestQueue.add(kindstrRequest);
     }
 
     //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-            private TextView typename;
+            private TextView kindname;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                typename = itemView.findViewById(R.id.typeset_name);
+                kindname = itemView.findViewById(R.id.kindset_name);
             }
         }
 
@@ -141,14 +141,14 @@ public class TypeSetActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.typeset_list_layout,parent,false);
+                    .inflate(R.layout.kindset_list_layout,parent,false);
             return new ViewHolder(view);
         }
 
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-            holder.typename.setText(kindarrayList.get(position));
+            holder.kindname.setText(kindarrayList.get(position));
         }
 
         //取得顯示數量
@@ -169,10 +169,10 @@ public class TypeSetActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            deletetype = kindarrayList.get(position);
+            deletekind = kindarrayList.get(position);
             switch(direction){
                 case ItemTouchHelper.LEFT:
-                    DeleteType();
+                    DeleteKind();
 
                     kindarrayList.remove(position);
                     myListAdapter.notifyItemRemoved(position);
@@ -181,35 +181,35 @@ public class TypeSetActivity extends AppCompatActivity {
         }
     };
 
-    //刪除Type
-    public void DeleteType(){
+    //刪除Kind
+    public void DeleteKind(){
         deleterequestQueue = Volley.newRequestQueue(this);
         StringRequest deletestrRequest = new StringRequest(Request.Method.POST, deleteurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
-                    Toast.makeText(TypeSetActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KindSetActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
-                    intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                    intent.setClass(KindSetActivity.this, KindSetActivity.class);
                     startActivity(intent);
                 } else if (response.equals("failure")) {
-                    Toast.makeText(TypeSetActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KindSetActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
-                    intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                    intent.setClass(KindSetActivity.this, KindSetActivity.class);
                     startActivity(intent);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(KindSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> data = new HashMap<>();
                 data.put("email", sEmail);
-                data.put("deletetype", deletetype);
+                data.put("deletekind", deletekind);
                 return data;
             }
         };
@@ -217,57 +217,57 @@ public class TypeSetActivity extends AppCompatActivity {
     }
 
 
-    //新增Type
-    public void AddType(View view) {
+    //新增Kind
+    public void AddKind(View view) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View typeview = getLayoutInflater().inflate(R.layout.type_add_layout,null);//嵌入View
-        ImageView backDialog = typeview.findViewById(R.id.addtype_back);//連結關閉視窗的Button
-        mBuilder.setView(typeview);//設置View
+        View kindview = getLayoutInflater().inflate(R.layout.kind_add_layout,null);//嵌入View
+        ImageView backDialog = kindview.findViewById(R.id.addkind_back);//連結關閉視窗的Button
+        mBuilder.setView(kindview);//設置View
         AlertDialog dialog = mBuilder.create();
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
 
         addrequestQueue = Volley.newRequestQueue(this);
-        Button addtype_ok = typeview.findViewById(R.id.addtype_ok);
-        EditText typeinput = (EditText) typeview.findViewById(R.id.newtype_input);
-        addtype_ok.setOnClickListener(new View.OnClickListener() {
+        Button addkind_ok = kindview.findViewById(R.id.addkind_ok);
+        EditText kindinput = (EditText) kindview.findViewById(R.id.newkind_input);
+        addkind_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newtype = typeinput.getText().toString().trim();
-                if(!newtype.equals("")){
+                String newkind = kindinput.getText().toString().trim();
+                if(!newkind.equals("")){
                     StringRequest addstringRequest = new StringRequest(Request.Method.POST, addurl, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             if (response.equals("success")) {
                                 dialog.hide();
-                                Toast.makeText(TypeSetActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(KindSetActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent();
-                                intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
+                                intent.setClass(KindSetActivity.this, KindSetActivity.class);
                                 startActivity(intent);
                             } else if (response.equals("failure")) {
-                                Toast.makeText(TypeSetActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(KindSetActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
                             }else if(response.equals("repetition")){
-                                typeinput.setError("已有該分類項目");
-                                //Toast.makeText(TypeSetActivity.this, "已有該分類項目", Toast.LENGTH_SHORT).show();
+                                kindinput.setError("已有該分類項目");
+                                //Toast.makeText(KindSetActivity.this, "已有該分類項目", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(KindSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
                         }
                     }){
                         @Override
                         protected Map<String, String> getParams() throws AuthFailureError {
                             Map<String, String> data = new HashMap<>();
                             data.put("email", sEmail);
-                            data.put("newtype", newtype);
+                            data.put("newkind", newkind);
                             return data;
                         }
                     };
                     addrequestQueue.add(addstringRequest);
                 }else{
-                    typeinput.setError("請輸入分類名稱");
+                    kindinput.setError("請輸入分類名稱");
                 }
             }
         });
