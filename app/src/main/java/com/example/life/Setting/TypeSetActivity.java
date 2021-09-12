@@ -49,11 +49,11 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/addtype";
+    private static String addurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/addtype";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.46.110/PHP_API/index.php/UserSetting/deletetype";
+    private static String deleteurl = "http://192.168.72.110/PHP_API/index.php/UserSetting/deletetype";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
@@ -111,7 +111,7 @@ public class TypeSetActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -127,7 +127,7 @@ public class TypeSetActivity extends AppCompatActivity {
     //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
-        class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView typename;
 
             public ViewHolder(@NonNull View itemView) {

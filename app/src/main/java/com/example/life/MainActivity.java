@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,13 +34,18 @@ import com.example.life.Manager.SessionManager;
 import com.example.life.Refrigerator.Reflist;
 import com.example.life.Scan.Scan;
 import com.example.life.Setting.Setting;
+import com.example.life.Setting.TypeSetActivity;
 import com.example.life.ShopList.Shoplist;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,22 +67,22 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.46.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //切換fragment
@@ -139,13 +145,6 @@ public class MainActivity extends AppCompatActivity {
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        /*name = findViewById(R.id. refadd_name_input);
-        date = findViewById(R.id. refadd_data_input);
-        quantity = findViewById(R.id. refadd_quantity_text);
-        unit = (Spinner)findViewById(R.id. unit_spinner);
-        kind = (Spinner)findViewById(R.id. kind_spinner);
-        locate = (Spinner)findViewById(R.id. locate_spinner);*/
     }
 
     private void setMain() {
@@ -165,91 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
     //新增冰箱清單Dialog與功能
     public void Refadd(View view) {
-        /*refadd_name = name.getText().toString().trim();
-        refadd_date = date.getText().toString().trim();
-        refadd_quantity = quantity.getText().toString().trim();
-        refadd_unit = unit.getSelectedItem().toString().trim();
-        refadd_kind = kind.getSelectedItem().toString().trim();
-        refadd_locate = locate.getSelectedItem().toString().trim();
-        loading.setVisibility(View.VISIBLE);
-        if(!refadd_name.equals("") && !refadd_date.equals("") && !refadd_quantity.equals("") && !refadd_unit.equals("") && !refadd_kind.equals("") && !refadd_locate.equals(""))
-        {
-            if(refadd_name.length()>10)
-            {
-                name.setError("名字長度不得大於10");
-                loading.setVisibility(View.GONE);
-            }
-            else if(refadd_name.length()<1)
-            {
-                name.setError("請輸入名稱");
-                loading.setVisibility(View.GONE);
-            }
-            else
-            {
-                if(refadd_date.equals(""))
-                {
-                    date.setError("請輸入日期");
-                    loading.setVisibility(View.GONE);
-                }
-                if(refadd_quantity.equals(""))
-                {
-                    quantity.setError("請輸入數量");
-                    loading.setVisibility(View.GONE);
-                }
-                if(refadd_unit == null)
-                {
-                    System.out.println("請輸入數量");
-                }
-                if(refadd_date == null)
-                {
-                    System.out.println("請輸入日期");
-                }
-                if(refadd_kind == null)
-                {
-                    System.out.println("請輸入種類");
-                }
-                if(refadd_locate == null)
-                {
-                    System.out.println("請輸入存放位置");
-                }
-                else
-                {
-                    loading.setVisibility(View.GONE);
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.equals("success")) {
-                                Intent intent = new Intent(MainActivity.this, Reflist.class);
-                                startActivity(intent);
-                                finish();
-                                Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
-                            } else if (response.equals("failure")) {
-                                Toast.makeText(MainActivity.this, "新增不成功，請重新一次", Toast.LENGTH_SHORT).show();
-                            }
-                        }}, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> data = new HashMap<>();
-                            data.put("name", refadd_name);
-                            data.put("date", refadd_date);
-                            data.put("quantity", refadd_quantity);
-                            data.put("unit", refadd_unit);
-                            data.put("kind", refadd_kind);
-                            data.put("locate" , refadd_locate);
-                            return data;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    requestQueue.add(stringRequest);
-                }
-            }
-        }*/
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this); //創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null); //嵌入View
@@ -307,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
