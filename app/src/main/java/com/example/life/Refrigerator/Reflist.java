@@ -1,20 +1,21 @@
 package com.example.life.Refrigerator;
 
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -50,7 +49,7 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String refurl = "http://192.168.72.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String refurl = "http://192.168.187.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue refrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -183,6 +182,21 @@ public class Reflist extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(getContext(), "Test!", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+                    View refdetailview = getLayoutInflater().inflate(R.layout.reflist_detail_layout,null);//嵌入View
+                    ImageView backDialog = refdetailview.findViewById(R.id.refdetail_back);//連結關閉視窗的Button
+                    mBuilder.setView(refdetailview);//設置View
+                    AlertDialog dialog = mBuilder.create();
+                    //關閉視窗的監聽事件
+                    backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
+
+                    dialog.show();
+                    DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+                    dm = getResources().getDisplayMetrics();
+                    //getContext().getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+                    dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
         }

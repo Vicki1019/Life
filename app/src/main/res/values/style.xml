@@ -5,4 +5,8 @@
         <item name="android:colorPrimaryDark">@color/calendar</item>
         <item name="android:colorAccent">@color/calendar</item>
     </style>
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">#884800</item>
+    </style>
 </resources>

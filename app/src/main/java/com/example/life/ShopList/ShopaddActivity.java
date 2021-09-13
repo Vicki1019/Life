@@ -1,8 +1,10 @@
-package com.example.life;
+package com.example.life.ShopList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.life.R;
 
 public class ShopaddActivity extends AppCompatActivity {
 

@@ -8,11 +8,12 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="100dp"
         android:background="#FFEEC6"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,15 +30,15 @@
     <View
         android:id="@+id/view15"
         android:layout_width="wrap_content"
-        android:layout_height="500dp"
+        android:layout_height="480dp"
         android:background="#FFEEC6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view14" />
 
     <ImageView
-        android:id="@+id/reflist_back"
+        android:id="@+id/refdetail_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
@@ -49,7 +50,7 @@
         app:srcCompat="@drawable/back" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/refdetail_photo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
@@ -59,5 +60,125 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view14"
         app:srcCompat="@drawable/camara" />
+
+    <TextView
+        android:id="@+id/refdetail_title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="食物名稱"
+        android:textColor="#884800"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/view14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/refdetail_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/refdetail_title_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="數量"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_photo" />
+
+    <TextView
+        android:id="@+id/refdetail_title_expdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="剩餘天數"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_title_quantity" />
+
+    <TextView
+        android:id="@+id/refdetail_title_kind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="分類項目"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_title_expdate" />
+
+    <TextView
+        android:id="@+id/refdetail_title_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="擁有者"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_title_kind" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape"
+        android:text="刪 除"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view15"
+        app:layout_constraintStart_toStartOf="@+id/guideline19" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName2"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="textPersonName"
+        android:text="000+單位"
+        android:textAlignment="center"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:theme="@style/MyEditText"
+        app:layout_constraintStart_toEndOf="@+id/refdetail_title_quantity"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_photo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50121653" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape"
+        android:text="修 改"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view15"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,11 @@
-package com.example.life;
+package com.example.life.Setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.os.Bundle;
+
+import com.example.life.R;
 
 
 public class EditpassActivity extends AppCompatActivity {
