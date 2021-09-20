@@ -406,4 +406,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
+
+    // Disable back button
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }
