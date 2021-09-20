@@ -50,7 +50,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, day, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, day, kind, state;
     //Session
     SessionManager sessionManager;
     //Get Reflist
@@ -68,6 +68,7 @@ public class Reflist extends Fragment {
     ArrayList<String> quantityarrayList = new ArrayList<>();
     ArrayList<String> unitarrayList = new ArrayList<>();
     ArrayList<String> dayarrayList = new ArrayList<>();
+    ArrayList<String> kindarrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
 
 
@@ -209,6 +210,8 @@ public class Reflist extends Fragment {
                     }else{
                         refdetail_input_day.setText(dayarrayList.get(position)+"天");
                     }
+                    EditText refdetail_input_kind = refdetailview.findViewById(R.id.refdetail_input_kind);
+                    refdetail_input_kind.setText(kindarrayList.get(position));
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
                     Button reflist_delete = refdetailview.findViewById(R.id.reflist_delete);
@@ -272,6 +275,7 @@ public class Reflist extends Fragment {
                             quantity = jsonObject.getString("quantity").trim();
                             unit = jsonObject.getString("unit").trim();
                             day = jsonObject.getString("day").trim();
+                            kind = jsonObject.getString("kind").trim();
                             state = jsonObject.getString("state").trim();
 
                             refnoarrayList.add(refno);
@@ -280,6 +284,7 @@ public class Reflist extends Fragment {
                             quantityarrayList.add(quantity);
                             unitarrayList.add(unit);
                             dayarrayList.add(day);
+                            kindarrayList.add(kind);
                             statearrayList.add(state);
 
                         }else if(result.equals("failure")){
