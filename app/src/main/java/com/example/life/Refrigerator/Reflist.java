@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Setting.KindSetActivity;
 import com.example.life.Setting.Userset;
 
 import org.jetbrains.annotations.NotNull;
@@ -214,6 +215,15 @@ public class Reflist extends Fragment {
                     refdetail_input_kind.setText(kindarrayList.get(position));
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
+                    Button reflist_edit = refdetailview.findViewById(R.id.reflist_edit);
+                    reflist_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setClass(getContext(), EditReflistActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     Button reflist_delete = refdetailview.findViewById(R.id.reflist_delete);
                     reflist_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
