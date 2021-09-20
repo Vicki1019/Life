@@ -85,7 +85,7 @@ public class Userset extends AppCompatActivity {
                                     Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
                                 } else if (response.equals("failure")) {
                                     if(newName.equals(editName)){
-                                        Toast.makeText(Userset.this, "您的暱稱為；"+editName, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Userset.this, "您的暱稱為："+editName, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -223,5 +223,13 @@ public class Userset extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
         dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
+
+    // Disable back button
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(Userset.this, MainActivity.class);
+        startActivity(intent);
     }
 }
