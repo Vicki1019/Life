@@ -234,6 +234,7 @@ public class Reflist extends Fragment {
                                 }
                             });
                             dialog.show();
+                            dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
                             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                         }
                     });
