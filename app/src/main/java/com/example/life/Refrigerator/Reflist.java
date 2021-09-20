@@ -1,6 +1,7 @@
 package com.example.life.Refrigerator;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +29,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Setting.Userset;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -45,16 +50,20 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, food, quantity, unit, day, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, day, state;
     //Session
     SessionManager sessionManager;
-    //Volley
-    private static String refurl = "http://192.168.187.110/PHP_API/index.php/Refrigerator/getreflist";
-    RequestQueue refrequestQueue;
+    //Get Reflist
+    private static String getrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getreflist";
+    RequestQueue getrefrequestQueue;
+    // Delete Reflist
+    private static String delrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
     Reflist.MyListAdapter myListAdapter;
     ArrayList<String> refnoarrayList = new ArrayList<>();
+    ArrayList<String> ownerarrayList = new ArrayList<>();
     ArrayList<String> foodarrayList = new ArrayList<>();
     ArrayList<String> quantityarrayList = new ArrayList<>();
     ArrayList<String> unitarrayList = new ArrayList<>();
@@ -145,7 +154,7 @@ public class Reflist extends Fragment {
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-            holder.ref_user.setText(sName);
+            holder.ref_user.setText(ownerarrayList.get(position));
             if(statearrayList.get(position).equals("0")){
                 //未過期
                 holder.statebg.setBackgroundResource(R.drawable.notexpshape);
@@ -190,12 +199,47 @@ public class Reflist extends Fragment {
                     //關閉視窗的監聽事件
                     backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
 
+                    TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
+                    refdetail_title_name.setText(foodarrayList.get(position));
+                    EditText refdetail_input_quantity = refdetailview.findViewById(R.id.refdetail_input_quantity);
+                    refdetail_input_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
+                    EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_day);
+                    if(statearrayList.get(position).equals("1")){
+                        refdetail_input_day.setText("已過期");
+                    }else{
+                        refdetail_input_day.setText(dayarrayList.get(position)+"天");
+                    }
+                    EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
+                    refdetail_input_owner.setText(ownerarrayList.get(position));
+                    Button reflist_delete = refdetailview.findViewById(R.id.reflist_delete);
+                    reflist_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+                            View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
+                            Button cancelDelete = refdeleteckview.findViewById(R.id.reflist_delete_cancel);//連結關閉視窗的Button
+                            mBuilder.setView(refdeleteckview);//設置View
+                            AlertDialog dialog = mBuilder.create();
+                            //關閉視窗的監聽事件
+                            cancelDelete.setOnClickListener(v1 -> {dialog.dismiss();});
+
+                            Button refdelete_ok = refdeleteckview.findViewById(R.id.reflist_delete_ok);
+                            refdelete_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DelRefList(refnoarrayList.get(position));
+                                }
+                            });
+                            dialog.show();
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                        }
+                    });
 
                     dialog.show();
                     DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
                     dm = getResources().getDisplayMetrics();
                     //getContext().getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-                    dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+                    //dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
@@ -208,9 +252,10 @@ public class Reflist extends Fragment {
         }
     }
 
+    //取得冰箱清單
     public void GetRefList(){
-        refrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        StringRequest refstrRequest = new StringRequest(Request.Method.POST, refurl, new Response.Listener<String>() {
+        getrefrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest getrefstrRequest = new StringRequest(Request.Method.POST, getrefurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
@@ -222,6 +267,7 @@ public class Reflist extends Fragment {
                         if (result.equals("success")) {
                             //取得冰箱清單資訊
                             refno = jsonObject.getString("refno").trim();
+                            owner = jsonObject.getString("owner").trim();
                             food = jsonObject.getString("food").trim();
                             quantity = jsonObject.getString("quantity").trim();
                             unit = jsonObject.getString("unit").trim();
@@ -229,6 +275,7 @@ public class Reflist extends Fragment {
                             state = jsonObject.getString("state").trim();
 
                             refnoarrayList.add(refno);
+                            ownerarrayList.add(owner);
                             foodarrayList.add(food);
                             quantityarrayList.add(quantity);
                             unitarrayList.add(unit);
@@ -261,6 +308,38 @@ public class Reflist extends Fragment {
                 return data;
             }
         };
-        refrequestQueue.add(refstrRequest);
+        getrefrequestQueue.add(getrefstrRequest);
+    }
+
+    //刪除冰箱清單
+    public void DelRefList(String refno){
+        delrefrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest delrefstrRequest = new StringRequest(Request.Method.POST, delrefurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(getContext(), MainActivity.class);
+                    startActivity(intent);
+                } else if (response.equals("failure")) {
+                    Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                data.put("refre_list_no",refno);
+                return data;
+            }
+        };
+        delrefrequestQueue.add(delrefstrRequest);
     }
 }
