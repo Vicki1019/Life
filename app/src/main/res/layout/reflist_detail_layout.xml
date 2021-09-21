@@ -2,36 +2,28 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="#FFEEC6"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_layout">
 
     <View
         android:id="@+id/view14"
         android:layout_width="0dp"
         android:layout_height="2dp"
+        android:layout_marginTop="80dp"
         android:background="#884800"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view15"
         android:layout_width="wrap_content"
-        android:layout_height="480dp"
+        android:layout_height="520dp"
+        android:layout_marginBottom="20dp"
         android:background="#FFEEC6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +33,7 @@
         android:id="@+id/refdetail_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="25dp"
         android:clickable="true"
         android:contentDescription="TODO"
         app:layout_constraintBottom_toTopOf="@+id/view14"
@@ -71,7 +63,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view14"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/refdetail_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -91,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="剩餘天數"
+        android:text="有效期限"
         android:textColor="#884800"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -122,39 +114,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline18"
         app:layout_constraintTop_toBottomOf="@+id/refdetail_title_kind" />
 
-    <Button
-        android:id="@+id/reflist_delete"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/shape"
-        android:text="刪 除"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view15"
-        app:layout_constraintStart_toStartOf="@+id/guideline19" />
-
-    <EditText
-        android:id="@+id/refdetail_input_quantity"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
-        android:ems="10"
-        android:focusable="false"
-        android:cursorVisible="false"
-        android:clickable="false"
-        android:inputType="textPersonName"
-        android:text="000+單位"
-        android:textAlignment="center"
-        android:textColor="#884800"
-        android:textSize="20dp"
-        android:theme="@style/MyEditText"
-        app:layout_constraintStart_toStartOf="@+id/guideline18"
-        app:layout_constraintTop_toBottomOf="@+id/refdetail_photo" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline18"
         android:layout_width="wrap_content"
@@ -168,6 +127,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.50121653" />
+
+    <Button
+        android:id="@+id/reflist_delete"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape"
+        android:text="刪 除"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view15"
+        app:layout_constraintStart_toStartOf="@+id/guideline19" />
 
     <Button
         android:id="@+id/reflist_edit"
@@ -184,17 +157,36 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline19" />
 
     <EditText
-        android:id="@+id/refdetail_input_day"
+        android:id="@+id/refdetail_input_quantity"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="textPersonName"
+        android:text="000+單位"
+        android:textAlignment="center"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:theme="@style/MyEditText"
+        app:layout_constraintStart_toStartOf="@+id/guideline18"
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_photo" />
+
+    <EditText
+        android:id="@+id/refdetail_input_expdate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:cursorVisible="false"
         android:ems="10"
         android:focusable="false"
-        android:cursorVisible="false"
-        android:clickable="false"
         android:inputType="textPersonName"
-        android:text="000天"
+        android:text="0000/00/00"
         android:textAlignment="center"
         android:textColor="#884800"
         android:textSize="20dp"
@@ -208,10 +200,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:cursorVisible="false"
         android:ems="10"
         android:focusable="false"
-        android:cursorVisible="false"
-        android:clickable="false"
         android:inputType="textPersonName"
         android:text="分類名稱"
         android:textAlignment="center"
@@ -219,7 +211,7 @@
         android:textSize="20dp"
         android:theme="@style/MyEditText"
         app:layout_constraintStart_toStartOf="@+id/guideline18"
-        app:layout_constraintTop_toBottomOf="@+id/refdetail_input_day" />
+        app:layout_constraintTop_toBottomOf="@+id/refdetail_input_expdate" />
 
     <EditText
         android:id="@+id/refdetail_input_owner"
@@ -227,10 +219,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:cursorVisible="false"
         android:ems="10"
         android:focusable="false"
-        android:cursorVisible="false"
-        android:clickable="false"
         android:inputType="textPersonName"
         android:text="擁有者名稱"
         android:textAlignment="center"

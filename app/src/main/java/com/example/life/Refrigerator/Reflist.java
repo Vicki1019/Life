@@ -15,7 +15,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,8 +31,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Setting.KindSetActivity;
-import com.example.life.Setting.Userset;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -51,14 +48,14 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, day, kind, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, state;
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -68,6 +65,7 @@ public class Reflist extends Fragment {
     ArrayList<String> foodarrayList = new ArrayList<>();
     ArrayList<String> quantityarrayList = new ArrayList<>();
     ArrayList<String> unitarrayList = new ArrayList<>();
+    ArrayList<String> expdatearrayList = new ArrayList<>();
     ArrayList<String> dayarrayList = new ArrayList<>();
     ArrayList<String> kindarrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
@@ -205,11 +203,11 @@ public class Reflist extends Fragment {
                     refdetail_title_name.setText(foodarrayList.get(position));
                     EditText refdetail_input_quantity = refdetailview.findViewById(R.id.refdetail_input_quantity);
                     refdetail_input_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
-                    EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_day);
+                    EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_expdate);
                     if(statearrayList.get(position).equals("1")){
                         refdetail_input_day.setText("已過期");
                     }else{
-                        refdetail_input_day.setText(dayarrayList.get(position)+"天");
+                        refdetail_input_day.setText(expdatearrayList.get(position));
                     }
                     EditText refdetail_input_kind = refdetailview.findViewById(R.id.refdetail_input_kind);
                     refdetail_input_kind.setText(kindarrayList.get(position));
@@ -252,8 +250,7 @@ public class Reflist extends Fragment {
                     dialog.show();
                     DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
                     dm = getResources().getDisplayMetrics();
-                    //getContext().getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-                    //dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+                    dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
@@ -285,6 +282,7 @@ public class Reflist extends Fragment {
                             food = jsonObject.getString("food").trim();
                             quantity = jsonObject.getString("quantity").trim();
                             unit = jsonObject.getString("unit").trim();
+                            expdate = jsonObject.getString("expdate").trim();
                             day = jsonObject.getString("day").trim();
                             kind = jsonObject.getString("kind").trim();
                             state = jsonObject.getString("state").trim();
@@ -294,6 +292,7 @@ public class Reflist extends Fragment {
                             foodarrayList.add(food);
                             quantityarrayList.add(quantity);
                             unitarrayList.add(unit);
+                            expdatearrayList.add(expdate);
                             dayarrayList.add(day);
                             kindarrayList.add(kind);
                             statearrayList.add(state);

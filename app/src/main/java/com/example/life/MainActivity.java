@@ -62,22 +62,22 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.156.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //切換fragment
@@ -385,10 +385,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();//顯示Dialog
+        dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dm = getResources().getDisplayMetrics();
+        dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
@@ -402,8 +402,8 @@ public class MainActivity extends AppCompatActivity {
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dm = getResources().getDisplayMetrics();
+        dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
