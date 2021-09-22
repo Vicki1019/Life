@@ -33,6 +33,7 @@
         android:id="@+id/kindsettitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
         android:text="新增分類項目"
         android:textColor="#884800"
         android:textSize="30dp"
