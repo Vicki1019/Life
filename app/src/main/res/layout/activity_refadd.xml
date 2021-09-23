@@ -14,7 +14,7 @@
         android:layout_marginEnd="25dp"
         android:text="新增冰箱清單"
         android:textColor="#884800"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +77,7 @@
         android:layout_marginEnd="10dp"
         android:text="名稱"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_photo" />
@@ -89,10 +89,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textColor="#000000"
-        android:textColorHighlight="#884800"
-        android:textColorLink="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:theme="@style/MyEditText"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_photo" />
@@ -112,7 +109,7 @@
         android:layout_marginEnd="10dp"
         android:text="數量"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_name" />
@@ -125,7 +122,7 @@
         android:layout_marginEnd="10dp"
         android:text="有效期限"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_quantity" />
@@ -138,7 +135,7 @@
         android:layout_marginEnd="10dp"
         android:text="分類項目"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_data" />
@@ -151,7 +148,7 @@
         android:background="#884800"
         android:text="新增"
         android:textColor="#FFEEC6"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/view4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,7 +162,7 @@
         android:layout_marginTop="1dp"
         android:text="1"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/decrease_btn"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
@@ -175,7 +172,7 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         android:textAlignment="center"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
@@ -253,7 +250,7 @@
         android:layout_marginEnd="10dp"
         android:text="存放位置"
         android:textColor="#884800"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toBottomOf="@+id/refadd_kind" />
