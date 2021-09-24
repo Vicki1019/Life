@@ -48,14 +48,14 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state;
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.131.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.131.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -68,6 +68,7 @@ public class Reflist extends Fragment {
     ArrayList<String> expdatearrayList = new ArrayList<>();
     ArrayList<String> dayarrayList = new ArrayList<>();
     ArrayList<String> kindarrayList = new ArrayList<>();
+    ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
 
 
@@ -199,29 +200,46 @@ public class Reflist extends Fragment {
                     //關閉視窗的監聽事件
                     backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
 
+                    //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
                     refdetail_title_name.setText(foodarrayList.get(position));
+                    //數量、單位
                     EditText refdetail_input_quantity = refdetailview.findViewById(R.id.refdetail_input_quantity);
                     refdetail_input_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
+                    //有效期限
                     EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_expdate);
-                    if(statearrayList.get(position).equals("1")){
-                        refdetail_input_day.setText("已過期");
-                    }else{
-                        refdetail_input_day.setText(expdatearrayList.get(position));
-                    }
+                    refdetail_input_day.setText(expdatearrayList.get(position));
+                    //分類
                     EditText refdetail_input_kind = refdetailview.findViewById(R.id.refdetail_input_kind);
-                    refdetail_input_kind.setText(kindarrayList.get(position));
+                    if(!kindarrayList.get(position).equals("null")){
+                        refdetail_input_kind.setText(kindarrayList.get(position));
+                    }else{
+                        refdetail_input_kind.setText("暫無分類");
+                    }
+                    //擁有者
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
+
+                    //修改清單(利用Bundle傳值給EditReflistActivity)
                     Button reflist_edit = refdetailview.findViewById(R.id.reflist_edit);
                     reflist_edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("refno",refnoarrayList.get(position));
+                            bundle.putString("oldfoodname",foodarrayList.get(position));
+                            bundle.putString("oldquantity",quantityarrayList.get(position));
+                            bundle.putString("oldunit",unitarrayList.get(position));
+                            bundle.putString("oldexpdate",expdatearrayList.get(position));
+                            bundle.putString("oldkind",kindarrayList.get(position));
+                            bundle.putString("oldlocate",locatearrayList.get(position));
+                            intent.putExtras(bundle);
                             intent.setClass(getContext(), EditReflistActivity.class);
                             startActivity(intent);
                         }
                     });
+                    //清單刪除功能
                     Button reflist_delete = refdetailview.findViewById(R.id.reflist_delete);
                     reflist_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -285,6 +303,7 @@ public class Reflist extends Fragment {
                             expdate = jsonObject.getString("expdate").trim();
                             day = jsonObject.getString("day").trim();
                             kind = jsonObject.getString("kind").trim();
+                            locate = jsonObject.getString("locate").trim();
                             state = jsonObject.getString("state").trim();
 
                             refnoarrayList.add(refno);
@@ -295,6 +314,7 @@ public class Reflist extends Fragment {
                             expdatearrayList.add(expdate);
                             dayarrayList.add(day);
                             kindarrayList.add(kind);
+                            locatearrayList.add(locate);
                             statearrayList.add(state);
 
                         }else if(result.equals("failure")){

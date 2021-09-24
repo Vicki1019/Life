@@ -22,6 +22,7 @@
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_marginStart="25dp"
+      android:clickable="true"
       app:layout_constraintBottom_toTopOf="@+id/view19"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -152,6 +153,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
       android:layout_marginTop="25dp"
+      android:clickable="true"
       app:layout_constraintStart_toEndOf="@+id/refedit_input_quantity"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
       app:srcCompat="@drawable/dincrease" />
@@ -162,6 +164,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
       android:layout_marginTop="25dp"
+      android:clickable="true"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
       app:srcCompat="@drawable/decrease" />
@@ -184,6 +187,7 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="20dp"
+      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
       app:layout_constraintStart_toEndOf="@+id/refedit_increase_btn"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
@@ -194,6 +198,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
       android:layout_marginTop="35dp"
+      android:clickable="true"
       app:layout_constraintStart_toEndOf="@+id/refedit_input_expdate"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_quantity"
       app:srcCompat="@drawable/calender" />
@@ -214,6 +219,7 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="30dp"
+      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
       app:layout_constraintTop_toBottomOf="@+id/refedit_calendar_btn" />
@@ -224,6 +230,7 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="25dp"
+      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_kind" />
