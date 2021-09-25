@@ -52,10 +52,10 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -196,9 +196,9 @@ public class Reflist extends Fragment {
                     View refdetailview = getLayoutInflater().inflate(R.layout.reflist_detail_layout,null);//嵌入View
                     ImageView backDialog = refdetailview.findViewById(R.id.refdetail_back);//連結關閉視窗的Button
                     mBuilder.setView(refdetailview);//設置View
-                    AlertDialog dialog = mBuilder.create();
+                    AlertDialog refdetail_dialog = mBuilder.create();
                     //關閉視窗的監聽事件
-                    backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+                    backDialog.setOnClickListener(v1 -> {refdetail_dialog.dismiss();});
 
                     //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
@@ -225,6 +225,7 @@ public class Reflist extends Fragment {
                     reflist_edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            refdetail_dialog.dismiss();;
                             Intent intent = new Intent();
                             Bundle bundle = new Bundle();
                             bundle.putString("refno",refnoarrayList.get(position));
@@ -248,9 +249,9 @@ public class Reflist extends Fragment {
                             View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
                             Button cancelDelete = refdeleteckview.findViewById(R.id.reflist_delete_cancel);//連結關閉視窗的Button
                             mBuilder.setView(refdeleteckview);//設置View
-                            AlertDialog dialog = mBuilder.create();
+                            AlertDialog delref_dialog = mBuilder.create();
                             //關閉視窗的監聽事件
-                            cancelDelete.setOnClickListener(v1 -> {dialog.dismiss();});
+                            cancelDelete.setOnClickListener(v1 -> {delref_dialog.dismiss();});
 
                             Button refdelete_ok = refdeleteckview.findViewById(R.id.reflist_delete_ok);
                             refdelete_ok.setOnClickListener(new View.OnClickListener() {
@@ -259,17 +260,18 @@ public class Reflist extends Fragment {
                                     DelRefList(refnoarrayList.get(position));
                                 }
                             });
-                            dialog.show();
-                            dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                            delref_dialog.show();
+                            delref_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+                            delref_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                         }
                     });
 
-                    dialog.show();
+                    refdetail_dialog.show();
+                    refdetail_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
                     DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
                     dm = getResources().getDisplayMetrics();
-                    dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                    refdetail_dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+                    refdetail_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
         }

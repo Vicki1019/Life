@@ -62,22 +62,22 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //切換fragment
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
+
 
     private void setMain() {
         Reflist reflistfragment = new Reflist();

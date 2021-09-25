@@ -122,16 +122,16 @@
 
   <Button
       android:id="@+id/reflist_edit_ok"
-      android:layout_width="180dp"
+      android:layout_width="120dp"
       android:layout_height="50dp"
-      android:layout_marginTop="50dp"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="60dp"
       android:background="@drawable/shape"
       android:text="確定修改"
       android:textColor="#FFFFFF"
       android:textSize="20sp"
       android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/guideline15"
       app:layout_constraintTop_toBottomOf="@+id/refedit_locate" />
 
   <EditText
@@ -187,8 +187,8 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="20dp"
-      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
       app:layout_constraintStart_toEndOf="@+id/refedit_increase_btn"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
 
@@ -219,8 +219,8 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="30dp"
-      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
       app:layout_constraintTop_toBottomOf="@+id/refedit_calendar_btn" />
 
@@ -230,9 +230,30 @@
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
       android:layout_marginTop="25dp"
-      android:spinnerMode="dialog"
       android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
       app:layout_constraintTop_toBottomOf="@+id/refedit_input_kind" />
+
+  <Button
+      android:id="@+id/reflist_edit_cancel"
+      android:layout_width="100dp"
+      android:layout_height="50dp"
+      android:layout_marginTop="60dp"
+      android:layout_marginEnd="25dp"
+      android:background="@drawable/shape"
+      android:text="取消"
+      android:textColor="#FFFFFF"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline15"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_locate" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline15"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

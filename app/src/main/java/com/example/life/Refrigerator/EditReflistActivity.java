@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Setting.KindSetActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,27 +43,27 @@ public class EditReflistActivity extends AppCompatActivity {
     TextView refedit_input_quantity, refedit_input_expdate;
     Spinner unitsp, kindsp, locatesp;
     ImageView reflist_edit_back, refedit_increase_btn, refedit_decrease_btn, refedit_calendar_btn;
-    Button reflist_edit_ok;
+    Button reflist_edit_cancel, reflist_edit_ok;
     int i;
     //SESSION
     SessionManager sessionManager;
     //GET Unit
-    private static String uniturl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //Edit RefList
-    private static String editrefurl = "http://192.168.55.110/PHP_API/index.php/Refrigerator/update_ref_item";
+    private static String editrefurl = "http://192.168.45.110/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
 
     @Override
@@ -88,7 +89,9 @@ public class EditReflistActivity extends AppCompatActivity {
         reflist_edit_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent();
+                intent.setClass(EditReflistActivity.this, MainActivity.class);
+                startActivity(intent);
             }
 
         });
@@ -104,6 +107,16 @@ public class EditReflistActivity extends AppCompatActivity {
         GetExpdate();
         GetKind();
         GetLocate();
+
+        reflist_edit_cancel = (Button)findViewById(R.id.reflist_edit_cancel);
+        reflist_edit_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(EditReflistActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         reflist_edit_ok = (Button)findViewById(R.id.reflist_edit_ok);
         reflist_edit_ok.setOnClickListener(new View.OnClickListener() {
@@ -310,7 +323,9 @@ public class EditReflistActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     if (response.equals("success")) {
                         Toast.makeText(EditReflistActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent intent = new Intent();
+                        intent.setClass(EditReflistActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }else if(response.equals("failure")){
                         if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate)){
                             Toast.makeText(EditReflistActivity.this, "您沒有做任何修改", Toast.LENGTH_SHORT).show();
@@ -336,6 +351,11 @@ public class EditReflistActivity extends AppCompatActivity {
                     data.put("expdate",editexpdate);
                     data.put("kind",editkind);
                     data.put("locate",editlocate);
+                    if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate)){
+                        data.put("todo","cancel");
+                    }else{
+                        data.put("todo","edit");
+                    }
                     return data;
                 }
             };
