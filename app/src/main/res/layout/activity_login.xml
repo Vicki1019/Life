@@ -68,7 +68,7 @@
             android:hint="請輸入E-mail"
             android:inputType="textPersonName"
             android:text=""
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/accountbg"
             app:layout_constraintEnd_toEndOf="@+id/accountbg"
             app:layout_constraintTop_toTopOf="@+id/accountbg" />
@@ -82,7 +82,7 @@
             android:ems="10"
             android:inputType="textPassword"
             android:text=""
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/passwdbg"
             app:layout_constraintEnd_toEndOf="@+id/passwdbg"
             app:layout_constraintTop_toTopOf="@+id/passwdbg" />
@@ -130,7 +130,7 @@
             android:clickable="true"
             android:text="忘記密碼"
             android:textColor="#884800"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintStart_toEndOf="@+id/login" />

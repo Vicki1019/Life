@@ -31,7 +31,7 @@
     <View
         android:id="@+id/view5"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="20dp"
         android:background="#FFEEC6"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
         android:layout_marginEnd="25dp"
         android:text="新增購物清單"
         android:textColor="#884800"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,15 +57,25 @@
         android:id="@+id/shopadd_ok"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:background="#884800"
         android:text="新增"
         android:textColor="#FFEEC6"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/view5"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/shoplist_choose_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="請選擇日期"
+        android:textColor="#884800"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

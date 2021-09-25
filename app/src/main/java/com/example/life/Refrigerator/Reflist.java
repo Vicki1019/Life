@@ -247,13 +247,13 @@ public class Reflist extends Fragment {
                         public void onClick(View v) {
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
                             View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
-                            Button cancelDelete = refdeleteckview.findViewById(R.id.reflist_delete_cancel);//連結關閉視窗的Button
+                            Button cancelDelete = refdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
                             mBuilder.setView(refdeleteckview);//設置View
                             AlertDialog delref_dialog = mBuilder.create();
                             //關閉視窗的監聽事件
                             cancelDelete.setOnClickListener(v1 -> {delref_dialog.dismiss();});
 
-                            Button refdelete_ok = refdeleteckview.findViewById(R.id.reflist_delete_ok);
+                            Button refdelete_ok = refdeleteckview.findViewById(R.id.check_ok);
                             refdelete_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
