@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    >
+    <!-- 圓角幅度設定值 -->
+    <corners
+        android:radius="10dip" />
+
+    <!-- 框內底部顏色 -->
+    <solid
+        android:color="#FFEEC6" />
+
+    <!-- 畫面顏色漸層、角度 -->
+    <gradient
+        android:startColor="#FFF9E9"
+        android:endColor="#FFF9E9"
+        android:angle="315" />
+</shape>
