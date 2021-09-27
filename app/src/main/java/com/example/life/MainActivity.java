@@ -70,19 +70,19 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //POST Reflist
-    private static String url = "http://192.168.64.110/PHP_API/index.php/Refrigerator/list"; //API URL(register.php)
+    private static String url = "http://192.168.43.251/PHP_API/index.php/Refrigerator/list"; //API URL(register.php)
     //GET Unit
-    private static String uniturl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getUnit"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.43.251/PHP_API/index.php/Refrigerator/getUnit"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getKind"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.43.251/PHP_API/index.php/Refrigerator/getKind"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getLocate"; //API URL(getlocate.php)
+    private static String locateurl = "http://192.168.43.251/PHP_API/index.php/Refrigerator/getLocate"; //API URL(getlocate.php)
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
