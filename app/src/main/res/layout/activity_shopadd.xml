@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/round_layout"
+    android:layout_height="match_parent"
+    android:background="#FFEEC6"
     tools:context=".ShopList.ShopaddActivity">
 
     <View
@@ -23,7 +23,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/view5"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
@@ -42,19 +42,6 @@
         app:layout_constraintStart_toEndOf="@+id/shopadd_back"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view5"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        android:background="#FFEEC6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.0" />
-
     <TextView
         android:id="@+id/shoplist_date_hint"
         android:layout_width="wrap_content"
@@ -72,7 +59,7 @@
         android:id="@+id/shoplist_date_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:background="#FFF9E9"
         app:layout_constraintEnd_toStartOf="@+id/guideline20"
         app:layout_constraintStart_toStartOf="@+id/guideline17"
@@ -105,53 +92,33 @@
             app:srcCompat="@drawable/calender" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/shoplist_add_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="20dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/guideline20"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
-
     <Button
         android:id="@+id/shoplist_add_cancel"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:background="@drawable/shape"
         android:text="取消"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline21"
         app:layout_constraintStart_toStartOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/shoplist_add_recyclerview" />
+        app:layout_constraintTop_toTopOf="@+id/guideline16" />
 
     <Button
         android:id="@+id/shoplist_add_ok"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:background="@drawable/shape"
         android:text="新增"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline20"
         app:layout_constraintStart_toStartOf="@+id/guideline21"
-        app:layout_constraintTop_toBottomOf="@+id/shoplist_add_recyclerview" />
+        app:layout_constraintTop_toTopOf="@+id/guideline16" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline17"
@@ -165,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9270073" />
+        app:layout_constraintGuide_percent="0.96" />
 
     <TextView
         android:id="@+id/textView4"
@@ -177,7 +144,7 @@
         android:textColor="#884800"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guideline16"
+        app:layout_constraintEnd_toStartOf="@+id/guideline21"
         app:layout_constraintStart_toStartOf="@+id/guideline17"
         app:layout_constraintTop_toBottomOf="@+id/shoplist_date_view" />
 
@@ -191,7 +158,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline20"
-        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
         app:layout_constraintTop_toBottomOf="@+id/shoplist_date_view" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -199,11 +166,69 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" /><![CDATA[
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <Button
+        android:id="@+id/add_view_btn"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notexpshape"
+        android:text="+ 新增欄位"
+        android:textAlignment="center"
+        android:textColor="#884800"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline20"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline16"
+        app:layout_constraintEnd_toStartOf="@+id/guideline20"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
+        app:layout_constraintTop_toBottomOf="@+id/add_view_btn">
+
+        <LinearLayout
+            android:id="@+id/shoplist_add_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView><![CDATA[
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
     />
+
+
+
+
+
 
 
 

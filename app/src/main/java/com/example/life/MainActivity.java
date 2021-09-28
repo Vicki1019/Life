@@ -35,7 +35,9 @@ import com.example.life.Refrigerator.Reflist;
 import com.example.life.Scan.Scan;
 import com.example.life.Setting.Setting;
 import com.example.life.Setting.KindSetActivity;
+import com.example.life.ShopList.ShopaddActivity;
 import com.example.life.ShopList.Shoplist;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -62,27 +64,24 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.99.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.99.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.99.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.99.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
-    //ShopList ADD RecyclerView
-    RecyclerView shopaddRecyclerView;
-    MainActivity.MyListAdapter myListAdapter;
-    //ArrayList<String> kindarrayList = new ArrayList<>();
+
 
     //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -144,6 +143,17 @@ public class MainActivity extends AppCompatActivity {
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //跳轉新增購物清單介面
+        FloatingActionButton button_shopadd = (FloatingActionButton) findViewById(R.id.button_shopadd);
+        button_shopadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ShopaddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -395,84 +405,6 @@ public class MainActivity extends AppCompatActivity {
         dm = getResources().getDisplayMetrics();
         dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
-    }
-
-    //新增購物清單Dialog與功能
-    public void Shopadd(View view) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View shopview = getLayoutInflater().inflate(R.layout.activity_shopadd,null);//嵌入View
-        ImageView backDialog = shopview.findViewById(R.id.shopadd_back);//連結關閉視窗的Button
-        mBuilder.setView(shopview);//設置View
-        AlertDialog dialog = mBuilder.create();
-        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
-
-        //推播日期
-        TextView shoplist_choose_date = (TextView)shopview.findViewById(R.id.shoplist_choose_date);
-        ImageView shoplist_choose_calender = (ImageView)shopview.findViewById(R.id.shoplist_choose_calender);
-        shoplist_choose_calender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int date = calendar.get(Calendar.DAY_OF_MONTH);
-                new DatePickerDialog(v.getContext(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int date) {
-                        String shop_notifyTime = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(date);
-                        shoplist_choose_date.setText(shop_notifyTime);
-                    }
-                }, year, month, date).show();
-            }
-        });
-
-        //To Do List
-        shopaddRecyclerView = shopview.findViewById(R.id.shoplist_add_recyclerview);
-        shopaddRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        //shopaddRecyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
-        myListAdapter = new MainActivity.MyListAdapter();
-        shopaddRecyclerView.setAdapter(myListAdapter);
-
-        dialog.show();
-        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        dm = getResources().getDisplayMetrics();
-        dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
-    }
-
-    //建立分類RecyclerView
-    public class MyListAdapter extends RecyclerView.Adapter<MainActivity.MyListAdapter.ViewHolder>{
-
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            //private TextView kindname;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                //kindname = itemView.findViewById(R.id.kindset_name);
-            }
-        }
-
-        //連接layout檔案，Return一個view
-        @NonNull
-        @Override
-        public MainActivity.MyListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shoplist_add_layout,parent,false);
-            return new MainActivity.MyListAdapter.ViewHolder(view);
-        }
-
-        //取得物件的控制
-        @Override
-        public void onBindViewHolder(@NonNull @NotNull MainActivity.MyListAdapter.ViewHolder holder, int position) {
-            //holder.kindname.setText(kindarrayList.get(position));
-        }
-
-        //取得顯示數量
-        @Override
-        public int getItemCount() {
-            return 5;
-        }
-
     }
 
     // Disable back button
