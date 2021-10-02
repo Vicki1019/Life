@@ -20,6 +20,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 
 
 import org.json.JSONArray;
@@ -31,11 +36,16 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int RC_SIGN_IN = 0;
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
+    private SignInButton google_signin_btn;
+    //POST LOGIN
     private static String url = "http://192.168.218.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
+    //Google
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,23 @@ public class LoginActivity extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         email = findViewById(R.id.account);
         passwd = findViewById(R.id.passwd);
+        //Google登入
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        
+        google_signin_btn= findViewById(R.id.google_signin_btn);
+        google_signin_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
 
         sessionManager = new SessionManager(this);
 
@@ -60,7 +87,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-     public void login(View view){
+    protected void onStart() {
+        super.onStart();
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+
+    }
+
+    public void login(View view){
         lemail = email.getText().toString().trim();
         lpasswd = passwd.getText().toString().trim();
         loading.setVisibility(View.VISIBLE);
@@ -130,5 +169,9 @@ public class LoginActivity extends AppCompatActivity {
                 passwd.setError("請輸入密碼");
             }
         }
+    }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 }
