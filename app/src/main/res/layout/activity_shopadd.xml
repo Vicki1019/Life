@@ -72,7 +72,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:text="請選擇日期"
+            android:text="請選擇日期　"
             android:textColor="#884800"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
