@@ -165,7 +165,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
-            app:buttonSize="icon_only"
+            android:clickable="true"
+            app:buttonSize="standard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/other" />
     </androidx.constraintlayout.widget.ConstraintLayout>

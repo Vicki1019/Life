@@ -1,4 +1,5 @@
 <resources>
+    <string name="server_client_id">766002549118-02cq7d4du6t38hpb2b38u1sf9gog9nn6.apps.googleusercontent.com</string>
     <string name="app_name">生活冰館</string>
     <string name="title_reflist">我的冰箱</string>
     <string name="title_shoplist">購物清單</string>

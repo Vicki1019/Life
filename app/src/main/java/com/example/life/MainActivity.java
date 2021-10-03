@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ import com.example.life.ShopList.ShopaddActivity;
 import com.example.life.ShopList.Shoplist;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -64,22 +67,22 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     //GET Unit
-    private static String uniturl = "http://192.168.218.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.218.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.218.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.218.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
 
@@ -139,6 +142,17 @@ public class MainActivity extends AppCompatActivity {
         sessionManager.checkLogin(); //檢查是否登入
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
+
+        //取得Google登入使用者資料
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+        }
 
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
