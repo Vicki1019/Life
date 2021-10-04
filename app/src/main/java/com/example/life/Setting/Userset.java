@@ -37,8 +37,8 @@ public class Userset extends AppCompatActivity {
    public String newName;
    Button account_back_setting, editname_ok;
    //Volley
-   private static String editnameurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/updatename";
-   private static String editpassurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/updatepass";
+   private static String editnameurl = "http://192.168.64.110/PHP_API/index.php/UserSetting/updatename";
+   private static String editpassurl = "http://192.168.64.110/PHP_API/index.php/UserSetting/updatepass";
    //Session
    SessionManager sessionManager;
 
@@ -91,7 +91,7 @@ public class Userset extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+
                             }
                         }){
                             @Override

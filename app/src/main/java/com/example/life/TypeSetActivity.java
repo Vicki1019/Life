@@ -7,20 +7,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,12 +40,8 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.227.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/addtype";
-    RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.60.110/PHP_API/index.php/UserSetting/deletetype";
-    RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
     MyListAdapter myListAdapter;
@@ -79,6 +67,7 @@ public class TypeSetActivity extends AppCompatActivity {
             }
         });
         GetKind();
+        recyclerViewAction(myRecyclerView,kindarrayList,myListAdapter);
     }
 
     //取得kind資料
@@ -104,8 +93,6 @@ public class TypeSetActivity extends AppCompatActivity {
                 myRecyclerView.addItemDecoration(new DividerItemDecoration(TypeSetActivity.this, DividerItemDecoration.VERTICAL));
                 myListAdapter = new MyListAdapter();
                 myRecyclerView.setAdapter(myListAdapter);
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-                itemTouchHelper.attachToRecyclerView(myRecyclerView);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -122,7 +109,6 @@ public class TypeSetActivity extends AppCompatActivity {
         };
         kindrequestQueue.add(typestrRequest);
     }
-
     //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
 
@@ -156,85 +142,32 @@ public class TypeSetActivity extends AppCompatActivity {
             return kindarrayList.size();
         }
     }
-
     //側滑刪除功能
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-            return false;
-       }
-       @Override
-       public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-
-
-                    kindarrayList.remove(position);
-                    myListAdapter.notifyItemRemoved(position);
-                    break;
-            }
-       }
-    };
-
-    public void AddType(View view) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View typeview = getLayoutInflater().inflate(R.layout.type_add_layout,null);//嵌入View
-        ImageView backDialog = typeview.findViewById(R.id.addtype_back);//連結關閉視窗的Button
-        mBuilder.setView(typeview);//設置View
-        AlertDialog dialog = mBuilder.create();
-        //關閉視窗的監聽事件
-        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
-
-        addrequestQueue = Volley.newRequestQueue(this);
-        Button addtype_ok = typeview.findViewById(R.id.addtype_ok);
-        EditText typeinput = (EditText) typeview.findViewById(R.id.newtype_input);
-        addtype_ok.setOnClickListener(new View.OnClickListener() {
+    private void recyclerViewAction(RecyclerView recyclerView, final ArrayList<String> choose, final MyListAdapter myAdapter){
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
-            public void onClick(View v) {
-                String newtype = typeinput.getText().toString().trim();
-                if(!newtype.equals("")){
-                    StringRequest addstringRequest = new StringRequest(Request.Method.POST, addurl, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.equals("success")) {
-                                dialog.hide();
-                                Toast.makeText(TypeSetActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent();
-                                intent.setClass(TypeSetActivity.this, TypeSetActivity.class);
-                                startActivity(intent);
-                            } else if (response.equals("failure")) {
-                                Toast.makeText(TypeSetActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
-                            }else if(response.equals("repetition")){
-                                typeinput.setError("已有該分類項目");
-                                //Toast.makeText(TypeSetActivity.this, "已有該分類項目", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(TypeSetActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> data = new HashMap<>();
-                            data.put("email", sEmail);
-                            data.put("newtype", newtype);
-                            return data;
-                        }
-                    };
-                    addrequestQueue.add(addstringRequest);
-                }else{
-                    typeinput.setError("請輸入分類名稱");
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);//僅左滑
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;//管理上下滑動
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                //管理滑動情形
+                int position = viewHolder.getAdapterPosition();
+                switch (direction) {
+                    case ItemTouchHelper.LEFT:
+                    case ItemTouchHelper.RIGHT:
+                        choose.remove(position);
+                        myAdapter.notifyItemRemoved(position);
+                        break;
                 }
             }
         });
-
-        dialog.show();
-        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        helper.attachToRecyclerView(recyclerView);
     }
 }

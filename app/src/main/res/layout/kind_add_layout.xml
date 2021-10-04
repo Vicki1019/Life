@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/typeaddbar"
+        android:id="@+id/kindaddbar"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="#FFEEC6"
@@ -24,31 +24,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeaddbar" />
+        app:layout_constraintTop_toBottomOf="@+id/kindaddbar" />
 
     <ImageView
-        android:id="@+id/addtype_back"
+        android:id="@+id/addkind_back"
         android:layout_width="45dp"
         android:layout_height="38dp"
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:contentDescription="TODO"
-        app:layout_constraintBottom_toBottomOf="@+id/typeaddbar"
-        app:layout_constraintStart_toStartOf="@+id/typeaddbar"
+        app:layout_constraintBottom_toBottomOf="@+id/kindaddbar"
+        app:layout_constraintStart_toStartOf="@+id/kindaddbar"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/kindsettitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="新增分類項目"
         android:textColor="#884800"
         android:textSize="30dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/typeaddbar"
+        app:layout_constraintBottom_toBottomOf="@+id/kindaddbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addtype_back"
+        app:layout_constraintStart_toEndOf="@+id/addkind_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -64,7 +64,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/newtype_input"
+        android:id="@+id/newkind_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -74,10 +74,10 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeaddbar" />
+        app:layout_constraintTop_toBottomOf="@+id/kindaddbar" />
 
     <Button
-        android:id="@+id/addtype_ok"
+        android:id="@+id/addkind_ok"
         style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="70dp"
         android:layout_height="40dp"
@@ -89,6 +89,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newtype_input" />
+        app:layout_constraintTop_toBottomOf="@+id/newkind_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

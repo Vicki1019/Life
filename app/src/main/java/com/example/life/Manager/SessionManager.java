@@ -1,8 +1,12 @@
-package com.example.life;
+package com.example.life.Manager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.life.Login.LoginActivity;
+import com.example.life.MainActivity;
+
 import java.util.HashMap;
 
 //可透過SharedPreferences在Activity中呼叫getSharedPreferences取得物件

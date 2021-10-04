@@ -72,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
     //POST Reflist
     private static String url = "http://192.168.64.110/PHP_API/index.php/Refrigerator/list"; //API URL(register.php)
     //GET Unit
-    private static String uniturl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getUnit"; //API URL(getunit.php)
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.64.110/PHP_API/index.php/Refrigerator/getKind"; //API URL(getkind.php)
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;

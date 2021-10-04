@@ -6,12 +6,12 @@
     app:startDestination="@id/reflist">
     <fragment
         android:id="@+id/setting"
-        android:name="com.example.life.Setting"
+        android:name="com.example.life.Setting.Setting"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/reflist"
-        android:name="com.example.life.Reflist"
+        android:name="com.example.life.Refrigerator.Reflist"
         android:label="fragment_reflist"
         tools:layout="@layout/fragment_reflist" />
 </navigation>

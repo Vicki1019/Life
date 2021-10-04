@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Shoplist">
+    tools:context=".ShopList.Shoplist">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,8 +13,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/shoptitle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_width="409dp"
+            android:layout_height="72dp"
             android:background="#FFF9E9"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
@@ -37,12 +37,12 @@
 
         <CalendarView
             android:id="@+id/calendarView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="330dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shoptitle" />
+            app:layout_constraintTop_toBottomOf="@+id/view11" />
 
         <TextView
             android:id="@+id/getdate"
@@ -79,6 +79,15 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:background="#884800"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shoptitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
