@@ -178,6 +178,9 @@ public class Shoplist extends Fragment {
 
     //取得購物清單
     public void GetShop(String date){
+        shopnoarrayList.clear();
+        namearrayList.clear();
+        quantityerarrayList.clear();
         shoprequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest getshopstrRequest = new StringRequest(Request.Method.POST, shopurl, new Response.Listener<String>() {
             @Override
