@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="購物清單"
             android:textColor="#884800"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/shoptitle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +37,7 @@
 
         <CalendarView
             android:id="@+id/calendarView"
+            style="@android:style/Widget.DeviceDefault.CalendarView"
             android:layout_width="0dp"
             android:layout_height="330dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,39 +47,19 @@
 
         <TextView
             android:id="@+id/getdate"
-            android:layout_width="385dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:background="#FFF9E9"
             android:hint="請選擇日期"
+            android:textAlignment="center"
             android:textColor="#854800"
             android:textColorHint="#B3884800"
-            android:textSize="18dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView" />
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="370dp"
-            android:layout_height="277dp"
-            android:layout_marginTop="5dp"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/getdate">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="CheckBox" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
 
         <View
             android:id="@+id/view11"
@@ -88,6 +69,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shoptitle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shoplist_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/getdate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

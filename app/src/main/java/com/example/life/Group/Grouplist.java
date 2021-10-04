@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +19,10 @@ import com.example.life.R;
  * create an instance of this fragment.
  */
 public class Grouplist extends Fragment {
+    String sEmail;
+    //Session
+    SessionManager sessionManager;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,5 +69,9 @@ public class Grouplist extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_grouplist, container, false);
+
+        /*sessionManager = new SessionManager(getActivity());
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        sEmail = user.get(SessionManager.EMAIL);*/
     }
 }

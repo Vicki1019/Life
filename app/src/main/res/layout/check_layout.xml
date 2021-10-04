@@ -15,13 +15,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/check_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:text="確定要刪除嗎？"
         android:textColor="#884800"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:background="#884800"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/check_msg" />
 
     <View
         android:id="@+id/view18"
@@ -48,14 +48,14 @@
         app:layout_constraintTop_toBottomOf="@+id/view17" />
 
     <Button
-        android:id="@+id/reflist_delete_ok"
+        android:id="@+id/check_ok"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
         android:background="#00FFFFFF"
         android:text="確定"
         android:textColor="#884800"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/view16"
         app:layout_constraintEnd_toStartOf="@+id/view18"
@@ -64,13 +64,13 @@
         app:layout_constraintTop_toTopOf="@+id/view18" />
 
     <Button
-        android:id="@+id/reflist_delete_cancel"
+        android:id="@+id/check_cancel"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#00FFFFFF"
         android:text="取消"
         android:textColor="#884800"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/view16"
         app:layout_constraintEnd_toEndOf="parent"

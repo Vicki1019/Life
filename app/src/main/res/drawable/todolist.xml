@@ -5,7 +5,7 @@
     >
     <!-- 圓角幅度設定值 -->
     <corners
-        android:radius="20dip" />
+        android:radius="10dip" />
 
     <!-- 框內底部顏色 -->
     <solid
@@ -13,7 +13,7 @@
 
     <!-- 畫面顏色漸層、角度 -->
     <gradient
-        android:startColor="#FFEEC6"
-        android:endColor="#FFEEC6"
+        android:startColor="#FFF9E9"
+        android:endColor="#FFF9E9"
         android:angle="315" />
 </shape>

@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="註冊帳號"
             android:textColor="#884800"
-            android:textSize="45dp"
+            android:textSize="45sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
             android:ems="10"
             android:hint="您的暱稱"
             android:inputType="textPersonName"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView4" />
@@ -71,7 +71,7 @@
             android:ems="10"
             android:hint="請輸入E-mail"
             android:inputType="textPersonName"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nickname" />
@@ -84,7 +84,7 @@
             android:ems="10"
             android:hint="請輸入密碼 (長度5~10)"
             android:inputType="textPassword"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/myemail" />
@@ -97,7 +97,7 @@
             android:ems="10"
             android:hint="再次確認密碼"
             android:inputType="textPassword"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />
