@@ -25,10 +25,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
 
@@ -61,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.account);
         passwd = findViewById(R.id.passwd);
         //Google登入
-        
+
         google_signin_btn= findViewById(R.id.google_signin_btn);
         google_signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void login(View view){
+     public void login(View view){
         lemail = email.getText().toString().trim();
         lpasswd = passwd.getText().toString().trim();
         loading.setVisibility(View.VISIBLE);
