@@ -59,10 +59,10 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.202.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.109.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.202.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.109.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -345,7 +345,7 @@ public class Reflist extends Fragment {
                 }
                 //設置RecyclerView
                 refRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-               // refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+                //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 myListAdapter = new MyListAdapter();
                 refRecyclerView.setAdapter(myListAdapter);
             }
