@@ -68,10 +68,12 @@ public class Grouplist extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_grouplist, container, false);
+        View v = inflater.inflate(R.layout.fragment_grouplist, container, false);
 
-        /*sessionManager = new SessionManager(getActivity());
+        sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetail();
-        sEmail = user.get(SessionManager.EMAIL);*/
+        sEmail = user.get(SessionManager.EMAIL);
+
+        return v;
     }
 }

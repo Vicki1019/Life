@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
-        <activity android:name=".Refrigerator.EditReflistActivity"></activity>
+        <activity android:name=".GroupDetailActivity"></activity>
+        <activity android:name=".Refrigerator.EditReflistActivity" />
         <activity android:name=".Setting.KindSetActivity" />
         <activity android:name=".Setting.EditpassActivity" />
         <activity android:name=".Setting.Userset" />
