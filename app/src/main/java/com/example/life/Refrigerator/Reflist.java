@@ -2,8 +2,10 @@ package com.example.life.Refrigerator;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,12 +33,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,14 +55,14 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo;
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.202.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.188.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.202.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -70,6 +77,7 @@ public class Reflist extends Fragment {
     ArrayList<String> kindarrayList = new ArrayList<>();
     ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
+    ArrayList<String> photoarrayList = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -80,6 +88,7 @@ public class Reflist extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Instant Glide;
 
     public Reflist() {
         // Required empty public constructor
@@ -200,6 +209,12 @@ public class Reflist extends Fragment {
                     //關閉視窗的監聽事件
                     backDialog.setOnClickListener(v1 -> {refdetail_dialog.dismiss();});
 
+                    //食物照片
+                    ImageView refdetail_photo;
+                    refdetail_photo = refdetailview.findViewById(R.id.refdetail_photo);
+                    Uri uri = Uri.parse(photoarrayList.get(position));
+                    //Toast.makeText(getContext(), photoarrayList.get(position), Toast.LENGTH_SHORT).show();
+                    Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_photo);
                     //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
                     refdetail_title_name.setText(foodarrayList.get(position));
@@ -307,6 +322,7 @@ public class Reflist extends Fragment {
                             kind = jsonObject.getString("kind").trim();
                             locate = jsonObject.getString("locate").trim();
                             state = jsonObject.getString("state").trim();
+                            photo = jsonObject.getString("photo").trim();
 
                             refnoarrayList.add(refno);
                             ownerarrayList.add(owner);
@@ -318,6 +334,7 @@ public class Reflist extends Fragment {
                             kindarrayList.add(kind);
                             locatearrayList.add(locate);
                             statearrayList.add(state);
+                            photoarrayList.add(photo);
 
                         }else if(result.equals("failure")){
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
