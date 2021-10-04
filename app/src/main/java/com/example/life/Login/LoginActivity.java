@@ -1,4 +1,4 @@
-package com.example.life.Login;
+package com.example.life;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,9 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.MainActivity;
-import com.example.life.R;
-import com.example.life.Manager.SessionManager;
 
 
 import org.json.JSONArray;
@@ -34,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
-    private static String url = "http://192.168.209.110/PHP_API/index.php/Login/login";
+    private static String url = "http://192.168.64.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
 
     @Override
