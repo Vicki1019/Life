@@ -68,21 +68,21 @@
             android:hint="請輸入E-mail"
             android:inputType="textPersonName"
             android:text=""
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/accountbg"
             app:layout_constraintEnd_toEndOf="@+id/accountbg"
             app:layout_constraintTop_toTopOf="@+id/accountbg" />
 
         <EditText
             android:id="@+id/passwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="236dp"
+            android:layout_height="45dp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="#00FFFFFF"
             android:ems="10"
             android:inputType="textPassword"
             android:text=""
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/passwdbg"
             app:layout_constraintEnd_toEndOf="@+id/passwdbg"
             app:layout_constraintTop_toTopOf="@+id/passwdbg" />
@@ -116,8 +116,8 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="236dp"
+            android:layout_height="45dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.61" />
 
@@ -130,7 +130,7 @@
             android:clickable="true"
             android:text="忘記密碼"
             android:textColor="#884800"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintStart_toEndOf="@+id/login" />
@@ -158,6 +158,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwdbg" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_signin_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            app:buttonSize="standard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/other" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

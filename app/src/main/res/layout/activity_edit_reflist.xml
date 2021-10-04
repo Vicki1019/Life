@@ -1,10 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFEEC6"
     tools:context=".Refrigerator.EditReflistActivity">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+  <View
+      android:id="@+id/view19"
+      android:layout_width="0dp"
+      android:layout_height="2dp"
+      android:layout_marginTop="80dp"
+      android:background="#884800"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <ImageView
+      android:id="@+id/reflist_edit_back"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="25dp"
+      android:clickable="true"
+      app:layout_constraintBottom_toTopOf="@+id/view19"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/back" />
+
+  <TextView
+      android:id="@+id/reflist_edit_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="25dp"
+      android:text="修改冰箱清單"
+      android:textColor="#884800"
+      android:textSize="30sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/view19"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/reflist_edit_back"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline14"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.3" />
+
+  <ImageView
+      android:id="@+id/refedit_photo"
+      android:layout_width="130dp"
+      android:layout_height="130dp"
+      android:layout_marginTop="35dp"
+      android:background="#FFFFFF"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/view19"
+      app:srcCompat="@drawable/add_photo" />
+
+  <TextView
+      android:id="@+id/refedit_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:text="名稱"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_photo" />
+
+  <TextView
+      android:id="@+id/refedit_quantity"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:text="數量"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_name" />
+
+  <TextView
+      android:id="@+id/refedit_expdate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:text="有效期限"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_quantity" />
+
+  <TextView
+      android:id="@+id/refedit_kind"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:text="分類項目"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_expdate" />
+
+  <TextView
+      android:id="@+id/refedit_locate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:text="存放位置"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_kind" />
+
+  <Button
+      android:id="@+id/reflist_edit_ok"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="60dp"
+      android:background="@drawable/shape"
+      android:text="確定修改"
+      android:textColor="#FFFFFF"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="@+id/guideline15"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_locate" />
+
+  <EditText
+      android:id="@+id/refedit_input_name"
+      android:layout_width="200dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="35dp"
+      android:ems="10"
+      android:inputType="textPersonName"
+      android:textSize="20sp"
+      android:theme="@style/MyEditText"
+      app:layout_constraintStart_toEndOf="@+id/refedit_name"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_photo" />
+
+  <ImageView
+      android:id="@+id/refedit_increase_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="25dp"
+      android:clickable="true"
+      app:layout_constraintStart_toEndOf="@+id/refedit_input_quantity"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
+      app:srcCompat="@drawable/dincrease" />
+
+  <ImageView
+      android:id="@+id/refedit_decrease_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="25dp"
+      android:clickable="true"
+      app:layout_constraintStart_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
+      app:srcCompat="@drawable/decrease" />
+
+  <TextView
+      android:id="@+id/refedit_input_quantity"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="22dp"
+      android:text="1"
+      android:textColor="#884800"
+      android:textSize="20sp"
+      app:layout_constraintStart_toEndOf="@+id/refedit_decrease_btn"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
+
+  <Spinner
+      android:id="@+id/refedit_input_unit"
+      android:layout_width="60dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="20dp"
+      android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
+      app:layout_constraintStart_toEndOf="@+id/refedit_increase_btn"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
+
+  <ImageView
+      android:id="@+id/refedit_calendar_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:layout_marginTop="35dp"
+      android:clickable="true"
+      app:layout_constraintStart_toEndOf="@+id/refedit_input_expdate"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_quantity"
+      app:srcCompat="@drawable/calender" />
+
+  <TextView
+      android:id="@+id/refedit_input_expdate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="35dp"
+      android:textSize="20sp"
+      app:layout_constraintStart_toEndOf="@+id/refedit_expdate"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_decrease_btn" />
+
+  <Spinner
+      android:id="@+id/refedit_input_kind"
+      android:layout_width="120dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="30dp"
+      android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
+      app:layout_constraintStart_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_calendar_btn" />
+
+  <Spinner
+      android:id="@+id/refedit_input_locate"
+      android:layout_width="120dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="25dp"
+      android:background="@drawable/spinner_back"
+      android:spinnerMode="dialog"
+      app:layout_constraintStart_toStartOf="@+id/guideline14"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_input_kind" />
+
+  <Button
+      android:id="@+id/reflist_edit_cancel"
+      android:layout_width="100dp"
+      android:layout_height="50dp"
+      android:layout_marginTop="60dp"
+      android:layout_marginEnd="25dp"
+      android:background="@drawable/shape"
+      android:text="取消"
+      android:textColor="#FFFFFF"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/guideline15"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_locate" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline15"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

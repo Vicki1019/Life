@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="我的群組"
             android:textColor="#884800"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/grouptitle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +44,60 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/grouptitle" />
+
+        <TextView
+            android:id="@+id/mygroup_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/shape"
+            android:gravity="center"
+            android:text="　　我的邀請碼　　"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grouptitle" />
+
+        <EditText
+            android:id="@+id/group_no_copy"
+            android:layout_width="0dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/notexpshape"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:textAlignment="center"
+            android:textColor="#884800"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mygroup_no_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_member_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/todolist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_no_copy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
