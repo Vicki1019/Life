@@ -52,7 +52,7 @@ public class Shoplist extends Fragment {
     CalendarView calendarview;
     TextView getdate;
     // POST SHOPLIST
-    private static String shopurl = "http://192.168.109.110/PHP_API/index.php/Shopping/get_shopping_list";
+    private static String shopurl = "http://192.168.201.110/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
@@ -114,6 +114,7 @@ public class Shoplist extends Fragment {
 
         shoplist_recyclerview = v.findViewById(R.id.shoplist_recyclerview);
 
+
         //行事曆
         getdate = (TextView) v.findViewById(R.id.getdate);
         Calendar calendar = Calendar.getInstance();
@@ -173,7 +174,6 @@ public class Shoplist extends Fragment {
         public int getItemCount() {
             return shopnoarrayList.size();
         }
-
     }
 
     //取得購物清單
