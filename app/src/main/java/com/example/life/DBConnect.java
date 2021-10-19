@@ -16,7 +16,7 @@ public class DBConnect {
         HttpURLConnection urlConnection=null;
         InputStream is =null;
         try {
-            java.net.URL url=new URL("http://192.168.43.251/app_link/abc.php");   //php的位置
+            java.net.URL url=new URL("http://10.0.51.9/app_link/abc.php");   //php的位置
             urlConnection=(HttpURLConnection) url.openConnection();//對資                料庫打開連結
             urlConnection.setRequestMethod("POST");
             urlConnection.connect();//接通資料庫

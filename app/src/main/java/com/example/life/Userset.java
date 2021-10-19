@@ -37,8 +37,8 @@ public class Userset extends AppCompatActivity {
    public String newName;
    Button account_back_setting, editname_ok;
    //Volley
-   private static String editnameurl = "http://192.168.43.251/PHP_API/index.php/UserSetting/updatename";
-   private static String editpassurl = "http://192.168.43.251/PHP_API/index.php/UserSetting/updatepass";
+   private static String editnameurl = "http://10.0.51.9/PHP_API/index.php/UserSetting/updatename";
+   private static String editpassurl = "http://10.0.51.9/PHP_API/index.php/UserSetting/updatepass";
    //Session
    SessionManager sessionManager;
 
