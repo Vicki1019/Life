@@ -47,7 +47,7 @@ public class Grouplist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get GroupList
-    private static String getgroupurl = "http://192.168.201.110/PHP_API/index.php/Group/get_allGroup_totalMember";
+    private static String getgroupurl = "http://172.16.1.36/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
