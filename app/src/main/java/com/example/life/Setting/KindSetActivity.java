@@ -49,11 +49,11 @@ public class KindSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.109.110/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://192.168.209.110/PHP_API/index.php/UserSetting/addkind";
+    private static String addurl = "http://192.168.109.110/PHP_API/index.php/UserSetting/addkind";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://192.168.209.110/PHP_API/index.php/UserSetting/deletekind";
+    private static String deleteurl = "http://192.168.109.110/PHP_API/index.php/UserSetting/deletekind";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
@@ -156,7 +156,6 @@ public class KindSetActivity extends AppCompatActivity {
         public int getItemCount() {
             return kindarrayList.size();
         }
-
 
     }
 
@@ -275,7 +274,7 @@ public class KindSetActivity extends AppCompatActivity {
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-200, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 

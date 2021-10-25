@@ -60,7 +60,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="auto"
-            android:onClick="Shopadd"
             android:src="@drawable/shoplist"
             app:fab_colorNormal="#FFFFFF"
             app:fab_colorPressed="#FFFFFF"

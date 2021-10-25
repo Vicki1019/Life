@@ -1,30 +1,29 @@
 package com.example.life;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,58 +33,66 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.Group.Grouplist;
+import com.example.life.Manager.SessionManager;
+import com.example.life.Refrigerator.Reflist;
+import com.example.life.Scan.Scan;
+import com.example.life.Setting.Setting;
+import com.example.life.Setting.KindSetActivity;
+import com.example.life.ShopList.ShopaddActivity;
+import com.example.life.ShopList.Shoplist;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText name,date;
-    private TextView quantity;
-    private Spinner unit,kind,locate;
-    private  String refadd_name,refadd_date,refadd_quantity,refadd_unit,refadd_kind,refadd_locate;
-    private ProgressBar loading;
-    String sEmail;
+    String sEmail, photo;
     FloatingActionMenu addmenu;
-    private int i=1;//預設新增冰箱清單中商品數量為1
+    private int i;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
+    private Bitmap bitmap;
+    ImageView refadd_photo;
 
-    //POST Reflist
-    private static String url = "http://10.0.48.174/PHP_API/index.php/Refrigerator/list"; //API URL(register.php)
     //GET Unit
-    private static String uniturl = "http://10.0.48.174/PHP_API/index.php/Refrigerator/getUnit"; //API URL(getunit.php)
+    private static String uniturl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://10.0.48.174/PHP_API/index.php/Refrigerator/getKind"; //API URL(getkind.php)
+    private static String kindurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://10.0.48.174/PHP_API/index.php/Refrigerator/getLocate"; //API URL(getlocate.php)
+    private static String locateurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
+    //ADD Reflist
+    private static String refaddurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/refadd";
+    RequestQueue refaddrequestQueue;
+
 
     //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -144,16 +151,31 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
 
+        //取得Google登入使用者資料
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+        }
+
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        name = findViewById(R.id. refadd_name_input);
-        date = findViewById(R.id. refadd_data_input);
-        quantity = findViewById(R.id. refadd_quantity_text);
-        unit = (Spinner)findViewById(R.id. unit_spinner);
-        kind = (Spinner)findViewById(R.id. kind_spinner);
-        locate = (Spinner)findViewById(R.id. locate_spinner);
+        //跳轉新增購物清單介面
+        FloatingActionButton button_shopadd = (FloatingActionButton) findViewById(R.id.button_shopadd);
+        button_shopadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ShopaddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setMain() {
@@ -173,91 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
     //新增冰箱清單Dialog與功能
     public void Refadd(View view) {
-        refadd_name = name.getText().toString().trim();
-        refadd_date = date.getText().toString().trim();
-        refadd_quantity = quantity.getText().toString().trim();
-        refadd_unit = unit.getSelectedItem().toString().trim();
-        refadd_kind = kind.getSelectedItem().toString().trim();
-        refadd_locate = locate.getSelectedItem().toString().trim();
-        loading.setVisibility(View.VISIBLE);
-        if(!refadd_name.equals("") && !refadd_date.equals("") && !refadd_quantity.equals("") && !refadd_unit.equals("") && !refadd_kind.equals("") && !refadd_locate.equals(""))
-        {
-            if(refadd_name.length()>10)
-            {
-                name.setError("名字長度不得大於10");
-                loading.setVisibility(View.GONE);
-            }
-            else if(refadd_name.length()<1)
-            {
-                name.setError("請輸入名稱");
-                loading.setVisibility(View.GONE);
-            }
-            else
-            {
-                if(refadd_date.equals(""))
-                {
-                    date.setError("請輸入日期");
-                    loading.setVisibility(View.GONE);
-                }
-                if(refadd_quantity.equals(""))
-                {
-                    quantity.setError("請輸入數量");
-                    loading.setVisibility(View.GONE);
-                }
-                if(refadd_unit == null)
-                {
-                    System.out.println("請輸入數量");
-                }
-                if(refadd_date == null)
-                {
-                    System.out.println("請輸入日期");
-                }
-                if(refadd_kind == null)
-                {
-                    System.out.println("請輸入種類");
-                }
-                if(refadd_locate == null)
-                {
-                    System.out.println("請輸入存放位置");
-                }
-                else
-                {
-                    loading.setVisibility(View.GONE);
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.equals("success")) {
-                                Intent intent = new Intent(MainActivity.this, Reflist.class);
-                                startActivity(intent);
-                                finish();
-                                Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
-                            } else if (response.equals("failure")) {
-                                Toast.makeText(MainActivity.this, "新增不成功，請重新一次", Toast.LENGTH_SHORT).show();
-                            }
-                        }}, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> data = new HashMap<>();
-                            data.put("name", refadd_name);
-                            data.put("date", refadd_date);
-                            data.put("quantity", refadd_quantity);
-                            data.put("unit", refadd_unit);
-                            data.put("kind", refadd_kind);
-                            data.put("locate" , refadd_locate);
-                            return data;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    requestQueue.add(stringRequest);
-                }
-            }
-        }
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this); //創建AlertDialog.Builder
         View refview = getLayoutInflater().inflate(R.layout.activity_refadd,null); //嵌入View
         ImageView backDialog = refview.findViewById(R.id.refadd_back); //連結關閉視窗的Button
@@ -266,10 +204,22 @@ public class MainActivity extends AppCompatActivity {
 
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
+        //新增照片
+        Button reflist_upload_photo = (Button) refview.findViewById(R.id.reflist_upload_photo);
+        refadd_photo = (ImageView) refview.findViewById(R.id.refadd_photo);
+        reflist_upload_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImg();
+            }
+        });
+
         //增減數量的監聽事件
         ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
         ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
         TextView quantity = refview.findViewById(R.id.refadd_quantity_text); //數量顯示
+        i = 1;
         increase_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    unitlist.clear();
                     JSONObject unitjsonObject = new JSONObject(response);
                     JSONArray unitjsonArray = unitjsonObject.getJSONArray("unit");
                     for(int j=0;j<unitjsonArray.length();j++) {
@@ -313,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -327,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         //日期選擇
         ImageView calendar_btn = refview.findViewById(R.id.calendar_btn); //選擇日期的Button
-        EditText date_input = refview.findViewById(R.id.refadd_data_input); //顯示日期
+        TextView date_input =(TextView) refview.findViewById(R.id.refadd_data_input); //顯示日期
         calendar_btn .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,15 +300,16 @@ public class MainActivity extends AppCompatActivity {
         Spinner kindsp = (Spinner) refview.findViewById(R.id.kind_spinner); //單位下拉選單
         kindrequestQueue = Volley.newRequestQueue(this);
 
-        StringRequest typestrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
+        StringRequest kindstrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    kindlist.clear();
                     JSONObject kindjsonObject = new JSONObject(response);
                     JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
                     for(int k=0;k<kindjsonArray.length();k++){
                         JSONObject jsonObject= kindjsonArray.getJSONObject(k);
-                        String kind_cn = jsonObject.optString("type_cn");
+                        String kind_cn = jsonObject.optString("kind_cn");
                         kindlist.add(kind_cn);
                     }
                 } catch (JSONException e) {
@@ -370,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -380,22 +332,23 @@ public class MainActivity extends AppCompatActivity {
                 return data;
             }
         };
-        kindrequestQueue.add(typestrRequest);
+        kindrequestQueue.add(kindstrRequest);
 
         //locate下拉選單
         Spinner locatesp = (Spinner) refview.findViewById(R.id.locate_spinner); //單位下拉選單
         locaterequestQueue = Volley.newRequestQueue(this);
 
-        StringRequest locatestrRequest = new StringRequest(Request.Method.POST, locateurl, new Response.Listener<String>() {
+        StringRequest locatestrRequest = new StringRequest(Request.Method.GET, locateurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    locatelist.clear();
                     JSONObject locatejsonObject = new JSONObject(response);
                     JSONArray locatejsonArray = locatejsonObject.getJSONArray("locate");
-                    for(int s=0;s<locatejsonArray.length();s++){
-                        JSONObject jsonObject= locatejsonArray.getJSONObject(s);
-                        String locate_cn = jsonObject.optString("type_cn");
-                        kindlist.add(locate_cn);
+                    for(int l=0;l<locatejsonArray.length();l++){
+                        JSONObject jsonObject= locatejsonArray.getJSONObject(l);
+                        String locate_cn = jsonObject.optString("locate_cn");
+                        locatelist.add(locate_cn);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -407,22 +360,77 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> data = new HashMap<>();
-                data.put("email", sEmail);
-                return data;
-            }
-        };
-        locaterequestQueue.add(typestrRequest);
+        });
+        locaterequestQueue.add(locatestrRequest);
 
-        //確定新增reflist
+        //新增冰箱清單
+        TextView name_input = refview.findViewById(R.id.refadd_name_input);
         Button refadd_ok = (Button) refview.findViewById(R.id.refadd_ok);
-        refadd_ok.setOnClickListener(v1 -> {dialog.dismiss();}); // [暫時]按下新增後關閉dialog
-
+        refaddrequestQueue = Volley.newRequestQueue(this);
+        refadd_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String refadd_name = name_input.getText().toString().trim(); //取得食品名稱
+                String refadd_quantity = quantity.getText().toString().trim(); //取得數量
+                String refadd_unit = unitsp.getSelectedItem().toString().trim(); //取得單位
+                String refadd_date = date_input.getText().toString().trim(); //取得有效期限
+                String refadd_kind = kindsp.getSelectedItem().toString().trim(); //取得分類
+                String refadd_locate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
+                //Toast.makeText(MainActivity.this, refadd_name+"\n"+refadd_quantity+"\n"+refadd_unit+"\n"+refadd_date+"\n"+refadd_kind+"\n"+refadd_locate, Toast.LENGTH_SHORT).show();
+                if(!refadd_name.equals("") && !refadd_date.equals("")){
+                    StringRequest refaddstrRequest = new StringRequest(Request.Method.POST, refaddurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            dialog.hide();
+                            if (response.equals("success")) {
+                                Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.setClass(MainActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            } else if (response.equals("failure")) {
+                                Toast.makeText(MainActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email", sEmail);
+                            data.put("foodname", refadd_name);
+                            data.put("quantity", refadd_quantity);
+                            data.put("unit", refadd_unit);
+                            data.put("expdate", refadd_date);
+                            data.put("kind", refadd_kind);
+                            data.put("locate", refadd_locate);
+                            data.put("photo", photo);
+                            return data;
+                        }
+                    };
+                    refaddrequestQueue.add(refaddstrRequest);
+                }else{
+                    if(refadd_name.equals("")){
+                        if(refadd_date.equals("")){
+                            name_input.setError("請輸入食品名稱");
+                            date_input.setError("請選擇日期");
+                        }else{
+                            name_input.setError("請輸入食品名稱");
+                            date_input.setError("請選擇日期");
+                        }
+                    }else{
+                        if(refadd_date.equals("")){
+                            date_input.setError("請選擇日期");
+                        }
+                    }
+                }
+            }
+        });
 
         dialog.show();//顯示Dialog
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
@@ -441,8 +449,60 @@ public class MainActivity extends AppCompatActivity {
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dm = getResources().getDisplayMetrics();
+        dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
+    //從手機相簿取得圖片
+    public void SelectImg(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData(); //獲得圖片的uri
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                refadd_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            photo = getStringImage(bitmap);
+            //UploadPicture(sEmail, getStringImage(bitmap));
+        }
+    }
+
+    //獲取圖片的路徑
+    private String getStringImage(Bitmap bitmap) {
+
+       /* String[] photoArray = {MediaStore.Images.Media.DATA}; //圖片路徑
+        Cursor cursor =  getContentResolver().query(filePath, photoArray, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String path = cursor.getString(column_index);
+        return path;*/
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+        byte[] imageByteArray = byteArrayOutputStream.toByteArray();
+        String encodedeImg = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
+
+        return  encodedeImg;
+    }
+
+   /* public void UploadPicture(String email, String photo){
+
+    }*/
+
+    // Disable back button
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

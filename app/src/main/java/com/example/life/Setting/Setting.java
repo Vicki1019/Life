@@ -1,6 +1,9 @@
 package com.example.life.Setting;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -107,7 +111,28 @@ public class Setting extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sessionManager.logout();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+                View logoutckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
+                Button logout_check_cancel = logoutckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
+                mBuilder.setView(logoutckview);//設置View
+                AlertDialog logout_dialog = mBuilder.create();
+                //關閉視窗的監聽事件
+                logout_check_cancel.setOnClickListener(v1 -> {logout_dialog.dismiss();});
+
+                Button logout_check_ok = logoutckview.findViewById(R.id.check_ok);
+                logout_check_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sessionManager.logout();
+                    }
+                });
+
+                TextView logout_msg = logoutckview.findViewById(R.id.check_msg);
+                logout_msg.setText("您確定要登出嗎?");
+
+                logout_dialog.show();
+                logout_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+                logout_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
             }
         });
 
