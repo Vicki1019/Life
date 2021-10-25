@@ -22,7 +22,6 @@ public class InvoiceActivity extends AppCompatActivity {
     String ranswer;
     String url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?version=0.5&cardType=3J0002&cardNo=/ZKCUTV4&expTimeStamp=2147483647&action=carrierInvDetail&timeStamp=1633417707&invNum=RV41163142&invDate=2021/10/05&uuid=0000000001&sellerName=&amount=&appID=EINV7202107209712&cardEncrypt=3rfv5yhN";
     //String url = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invapp/InvApp?version=0.5&type=Barcode&invNum=RW57863514&action=qryInvDetail&generation=V2&invTerm=11010&invDate=2021/10/09&encrypt=&sellerID=91065430&UUID=000000001&randomNumber=0000&appID=EINV7202107209712";
-    //String einvoiceurl = "http://255.255.248.0/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -40,7 +40,7 @@ public class TypeSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://10.0.51.9/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://10.0.48.174/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;
