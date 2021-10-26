@@ -83,7 +83,7 @@ public class Setting extends Fragment {
         String sRefName = user.get(sessionManager.MEMBER_NIKINAME);
         String sName = user.get(sessionManager.MEMBER_NIKINAME);
         String sEmail = user.get(sessionManager.EMAIL);
-        refname.setText(sRefName+"的冰箱");
+        refname.setText(sRefName);
         username.setText(sName);
         useremail.setText(sEmail);
 
@@ -112,6 +112,16 @@ public class Setting extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NotifySetActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //載具設定
+        ImageView carrierset = (ImageView) view.findViewById(R.id.setcarrier);
+        carrierset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CarrierSetActivity.class);
                 startActivity(intent);
             }
         });
