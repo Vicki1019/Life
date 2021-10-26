@@ -38,8 +38,8 @@ public class Userset extends AppCompatActivity {
    public String newName;
    Button account_back_setting, editname_ok;
    //Volley
-   private static String editnameurl = "http://192.168.209.110/PHP_API/index.php/UserSetting/updatename";
-   private static String editpassurl = "http://192.168.209.110/PHP_API/index.php/UserSetting/updatepass";
+   private static String editnameurl = "http://10.0.48.174/PHP_API/index.php/UserSetting/updatename";
+   private static String editpassurl = "http://10.0.48.174/PHP_API/index.php/UserSetting/updatepass";
    //Session
    SessionManager sessionManager;
 
@@ -221,7 +221,7 @@ public class Userset extends AppCompatActivity {
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dialog.getWindow().setLayout(dm.widthPixels-200, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 

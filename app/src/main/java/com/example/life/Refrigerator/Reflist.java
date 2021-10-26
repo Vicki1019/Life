@@ -2,8 +2,10 @@ package com.example.life.Refrigerator;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +17,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,14 +33,17 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Setting.KindSetActivity;
-import com.example.life.Setting.Userset;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,14 +55,14 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, day, kind, state;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo;
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;
@@ -68,9 +72,12 @@ public class Reflist extends Fragment {
     ArrayList<String> foodarrayList = new ArrayList<>();
     ArrayList<String> quantityarrayList = new ArrayList<>();
     ArrayList<String> unitarrayList = new ArrayList<>();
+    ArrayList<String> expdatearrayList = new ArrayList<>();
     ArrayList<String> dayarrayList = new ArrayList<>();
     ArrayList<String> kindarrayList = new ArrayList<>();
+    ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
+    ArrayList<String> photoarrayList = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -81,6 +88,7 @@ public class Reflist extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Instant Glide;
 
     public Reflist() {
         // Required empty public constructor
@@ -197,64 +205,88 @@ public class Reflist extends Fragment {
                     View refdetailview = getLayoutInflater().inflate(R.layout.reflist_detail_layout,null);//嵌入View
                     ImageView backDialog = refdetailview.findViewById(R.id.refdetail_back);//連結關閉視窗的Button
                     mBuilder.setView(refdetailview);//設置View
-                    AlertDialog dialog = mBuilder.create();
+                    AlertDialog refdetail_dialog = mBuilder.create();
                     //關閉視窗的監聽事件
-                    backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+                    backDialog.setOnClickListener(v1 -> {refdetail_dialog.dismiss();});
 
+                    //食物照片
+                    ImageView refdetail_photo;
+                    refdetail_photo = refdetailview.findViewById(R.id.refdetail_photo);
+                    Uri uri = Uri.parse(photoarrayList.get(position));
+                    //Toast.makeText(getContext(), photoarrayList.get(position), Toast.LENGTH_SHORT).show();
+                    Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_photo);
+                    //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
                     refdetail_title_name.setText(foodarrayList.get(position));
+                    //數量、單位
                     EditText refdetail_input_quantity = refdetailview.findViewById(R.id.refdetail_input_quantity);
                     refdetail_input_quantity.setText(quantityarrayList.get(position)+" "+unitarrayList.get(position));
-                    EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_day);
-                    if(statearrayList.get(position).equals("1")){
-                        refdetail_input_day.setText("已過期");
-                    }else{
-                        refdetail_input_day.setText(dayarrayList.get(position)+"天");
-                    }
+                    //有效期限
+                    EditText refdetail_input_day = refdetailview.findViewById(R.id.refdetail_input_expdate);
+                    refdetail_input_day.setText(expdatearrayList.get(position));
+                    //分類
                     EditText refdetail_input_kind = refdetailview.findViewById(R.id.refdetail_input_kind);
-                    refdetail_input_kind.setText(kindarrayList.get(position));
+                    if(!kindarrayList.get(position).equals("null")){
+                        refdetail_input_kind.setText(kindarrayList.get(position));
+                    }else{
+                        refdetail_input_kind.setText("暫無分類");
+                    }
+                    //擁有者
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
+
+                    //修改清單(利用Bundle傳值給EditReflistActivity)
                     Button reflist_edit = refdetailview.findViewById(R.id.reflist_edit);
                     reflist_edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            refdetail_dialog.dismiss();;
                             Intent intent = new Intent();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("refno",refnoarrayList.get(position));
+                            bundle.putString("oldfoodname",foodarrayList.get(position));
+                            bundle.putString("oldquantity",quantityarrayList.get(position));
+                            bundle.putString("oldunit",unitarrayList.get(position));
+                            bundle.putString("oldexpdate",expdatearrayList.get(position));
+                            bundle.putString("oldkind",kindarrayList.get(position));
+                            bundle.putString("oldlocate",locatearrayList.get(position));
+                            intent.putExtras(bundle);
                             intent.setClass(getContext(), EditReflistActivity.class);
                             startActivity(intent);
                         }
                     });
+                    //清單刪除功能
                     Button reflist_delete = refdetailview.findViewById(R.id.reflist_delete);
                     reflist_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
                             View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
-                            Button cancelDelete = refdeleteckview.findViewById(R.id.reflist_delete_cancel);//連結關閉視窗的Button
+                            Button cancelDelete = refdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
                             mBuilder.setView(refdeleteckview);//設置View
-                            AlertDialog dialog = mBuilder.create();
+                            AlertDialog delref_dialog = mBuilder.create();
                             //關閉視窗的監聽事件
-                            cancelDelete.setOnClickListener(v1 -> {dialog.dismiss();});
+                            cancelDelete.setOnClickListener(v1 -> {delref_dialog.dismiss();});
 
-                            Button refdelete_ok = refdeleteckview.findViewById(R.id.reflist_delete_ok);
+                            Button refdelete_ok = refdeleteckview.findViewById(R.id.check_ok);
                             refdelete_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     DelRefList(refnoarrayList.get(position));
                                 }
                             });
-                            dialog.show();
-                            dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                            delref_dialog.show();
+                            delref_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+                            delref_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                         }
                     });
 
-                    dialog.show();
+                    refdetail_dialog.show();
+                    refdetail_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
                     DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
                     dm = getResources().getDisplayMetrics();
-                    //getContext().getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-                    //dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                    refdetail_dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+                    refdetail_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
         }
@@ -285,18 +317,24 @@ public class Reflist extends Fragment {
                             food = jsonObject.getString("food").trim();
                             quantity = jsonObject.getString("quantity").trim();
                             unit = jsonObject.getString("unit").trim();
+                            expdate = jsonObject.getString("expdate").trim();
                             day = jsonObject.getString("day").trim();
                             kind = jsonObject.getString("kind").trim();
+                            locate = jsonObject.getString("locate").trim();
                             state = jsonObject.getString("state").trim();
+                            photo = jsonObject.getString("photo").trim();
 
                             refnoarrayList.add(refno);
                             ownerarrayList.add(owner);
                             foodarrayList.add(food);
                             quantityarrayList.add(quantity);
                             unitarrayList.add(unit);
+                            expdatearrayList.add(expdate);
                             dayarrayList.add(day);
                             kindarrayList.add(kind);
+                            locatearrayList.add(locate);
                             statearrayList.add(state);
+                            photoarrayList.add(photo);
 
                         }else if(result.equals("failure")){
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
@@ -307,7 +345,7 @@ public class Reflist extends Fragment {
                 }
                 //設置RecyclerView
                 refRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-               // refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+                //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 myListAdapter = new MyListAdapter();
                 refRecyclerView.setAdapter(myListAdapter);
             }

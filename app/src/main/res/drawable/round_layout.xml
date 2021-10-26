@@ -9,11 +9,11 @@
 
     <!-- 框內底部顏色 -->
     <solid
-        android:color="#000000" />
+        android:color="#FFEEC6" />
 
     <!-- 畫面顏色漸層、角度 -->
     <gradient
-        android:startColor="#FFFFFF"
-        android:endColor="#FFFFFF"
+        android:startColor="#FFEEC6"
+        android:endColor="#FFEEC6"
         android:angle="315" />
 </shape>

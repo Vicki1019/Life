@@ -3,10 +3,16 @@ package com.example.life;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,8 +41,12 @@ import com.example.life.Refrigerator.Reflist;
 import com.example.life.Scan.Scan;
 import com.example.life.Setting.Setting;
 import com.example.life.Setting.KindSetActivity;
+import com.example.life.ShopList.ShopaddActivity;
 import com.example.life.ShopList.Shoplist;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -50,35 +60,39 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    String sEmail;
+    String sEmail, photo;
     FloatingActionMenu addmenu;
     private int i;//預設新增冰箱清單中商品數量為1
     SessionManager sessionManager;
+    private Bitmap bitmap;
+    ImageView refadd_photo;
 
     //GET Unit
-    private static String uniturl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.209.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
+
 
     //切換fragment
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -137,9 +151,31 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
 
+        //取得Google登入使用者資料
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+        }
+
         setMain(); //設置主畫面
         BottomNavigationView navigation = findViewById(R.id.nav_view);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //跳轉新增購物清單介面
+        FloatingActionButton button_shopadd = (FloatingActionButton) findViewById(R.id.button_shopadd);
+        button_shopadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ShopaddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setMain() {
@@ -168,6 +204,16 @@ public class MainActivity extends AppCompatActivity {
 
         //關閉視窗的監聽事件
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
+
+        //新增照片
+        Button reflist_upload_photo = (Button) refview.findViewById(R.id.reflist_upload_photo);
+        refadd_photo = (ImageView) refview.findViewById(R.id.refadd_photo);
+        reflist_upload_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImg();
+            }
+        });
 
         //增減數量的監聽事件
         ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
@@ -363,6 +409,7 @@ public class MainActivity extends AppCompatActivity {
                             data.put("expdate", refadd_date);
                             data.put("kind", refadd_kind);
                             data.put("locate", refadd_locate);
+                            data.put("photo", photo);
                             return data;
                         }
                     };
@@ -402,10 +449,56 @@ public class MainActivity extends AppCompatActivity {
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        dialog.getWindow().setLayout(dm.widthPixels-230, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        dm = getResources().getDisplayMetrics();
+        dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
+    //從手機相簿取得圖片
+    public void SelectImg(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData(); //獲得圖片的uri
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                refadd_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            photo = getStringImage(bitmap);
+            //UploadPicture(sEmail, getStringImage(bitmap));
+        }
+    }
+
+    //獲取圖片的路徑
+    private String getStringImage(Bitmap bitmap) {
+
+       /* String[] photoArray = {MediaStore.Images.Media.DATA}; //圖片路徑
+        Cursor cursor =  getContentResolver().query(filePath, photoArray, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String path = cursor.getString(column_index);
+        return path;*/
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+        byte[] imageByteArray = byteArrayOutputStream.toByteArray();
+        String encodedeImg = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
+
+        return  encodedeImg;
+    }
+
+   /* public void UploadPicture(String email, String photo){
+
+    }*/
 
     // Disable back button
     @Override
