@@ -106,6 +106,16 @@ public class Setting extends Fragment {
             }
         });
 
+        //推播設定
+        ImageView notifyset = (ImageView) view.findViewById(R.id.setnotify);
+        notifyset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NotifySetActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //登出設定
         ImageView logout = (ImageView) view.findViewById(R.id.setlogout);
         logout.setOnClickListener(new View.OnClickListener() {
