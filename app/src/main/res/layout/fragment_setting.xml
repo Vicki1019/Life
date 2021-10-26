@@ -36,12 +36,12 @@
             android:id="@+id/refname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:text="冰箱名稱"
             android:textColor="#FFFFFF"
             android:textSize="35sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/settitle"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/settitle"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,7 +73,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:textColor="#884800"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -107,7 +107,7 @@
             app:layout_constraintTop_toBottomOf="@+id/setaccount" />
 
         <ImageView
-            android:id="@+id/setcode"
+            android:id="@+id/setcarrier"
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_marginTop="2dp"
@@ -126,7 +126,7 @@
             android:src="@drawable/settype"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setcode" />
+            app:layout_constraintTop_toBottomOf="@+id/setcarrier" />
 
         <ImageView
             android:id="@+id/setlogout"
