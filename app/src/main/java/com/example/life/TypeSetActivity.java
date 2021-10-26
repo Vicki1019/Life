@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.Manager.SessionManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -51,13 +52,13 @@ public class TypeSetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_type_set);
+        setContentView(R.layout.activity_kind_set);
 
         sessionManager = new SessionManager(this);
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
 
-        type_back_setting = (Button) findViewById(R.id.type_back_setting);
+        type_back_setting = (Button) findViewById(R.id.kind_back_setting);
         type_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
