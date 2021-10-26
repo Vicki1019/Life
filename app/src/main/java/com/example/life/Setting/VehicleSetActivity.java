@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.android.volley.RequestQueue;
 import com.example.life.R;
 
-public class CarrierSetActivity extends AppCompatActivity {
+public class VehicleSetActivity extends AppCompatActivity {
     //Volley
     private static String carrierurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue carrierrequestQueue;
@@ -19,7 +19,7 @@ public class CarrierSetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carrier_set);
+        setContentView(R.layout.activity_vehicle_set);
 
         //忘記載具條碼
         Button carrier_forget = (Button) findViewById(R.id.carrier_forget);

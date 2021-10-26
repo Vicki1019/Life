@@ -121,7 +121,7 @@ public class Setting extends Fragment {
         carrierset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CarrierSetActivity.class);
+                Intent intent = new Intent(getActivity(), VehicleSetActivity.class);
                 startActivity(intent);
             }
         });
