@@ -30,6 +30,6 @@ public class NotifySetActivity extends AppCompatActivity {
         /*WebView webview = (WebView) findViewById(R.id.notify);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient()); //不調用系統瀏覽器
-        webview.loadUrl("http://10.0.9.9/PHP_API/index.php/LineNotify/LineAuthorize");
+        webview.loadUrl("http://10.0.9.9/PHP_API/index.php/LineNotify/LineAuthorize");*/
     }
 }
