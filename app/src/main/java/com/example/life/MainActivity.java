@@ -410,7 +410,9 @@ public class MainActivity extends AppCompatActivity {
                             data.put("expdate", refadd_date);
                             data.put("kind", refadd_kind);
                             data.put("locate", refadd_locate);
-                            data.put("photo", photo);
+                            if(photo != null){
+                                data.put("photo", photo);
+                            }
                             return data;
                         }
                     };

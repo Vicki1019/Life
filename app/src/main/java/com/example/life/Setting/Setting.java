@@ -14,11 +14,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
+import com.example.life.Refrigerator.EditReflistActivity;
+import com.example.life.Vehicle.MyVehicleActivity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +42,10 @@ import java.util.HashMap;
 public class Setting extends Fragment {
     TextView useremail, username,refname;
     SessionManager sessionManager;
+
+    // POST VEHICLE
+    private static String vehicleurl = "http://172.16.1.44/PHP_API/index.php/Vehicle/vehicle_ck";
+    RequestQueue vehiclerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -121,8 +139,46 @@ public class Setting extends Fragment {
         carrierset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), VehicleSetActivity.class);
-                startActivity(intent);
+               vehiclerequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                StringRequest vehiclestrRequest = new StringRequest(Request.Method.POST, vehicleurl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject vehiclejsonObject = new JSONObject(response);
+                            JSONArray vehiclejsonArray = vehiclejsonObject.getJSONArray("vehicle");
+                            for(int i=0;i<vehiclejsonArray.length();i++) {
+                                JSONObject jsonObject = vehiclejsonArray.getJSONObject(i);
+                                String result = jsonObject.getString("response");
+                                if(result.equals("success")){
+                                    String barcode = jsonObject.getString("barcode").trim();
+                                    Intent intent = new Intent();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("barcode",barcode);
+                                    intent.setClass(getContext(), MyVehicleActivity.class);
+                                    startActivity(intent);
+                                }else if(result.equals("failure")){
+                                    Intent intent = new Intent(getActivity(), VehicleSetActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> data = new HashMap<>();
+                        data.put("email",sEmail);
+                        return data;
+                    }
+                };
+                vehiclerequestQueue.add(vehiclestrRequest);
             }
         });
 
