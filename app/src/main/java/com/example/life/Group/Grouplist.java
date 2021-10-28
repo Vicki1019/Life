@@ -1,6 +1,9 @@
 package com.example.life.Group;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,9 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +33,15 @@ import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
 import com.example.life.Refrigerator.Reflist;
+import com.example.life.Setting.KindSetActivity;
 import com.example.life.ShopList.Shoplist;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.FloatBuffer;
 import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,8 +57,11 @@ public class Grouplist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get GroupList
-    private static String getgroupurl = "http://10.0.9.9/PHP_API/index.php/Group/get_allGroup_totalMember";
+    private static String getgroupurl = "http://172.16.1.44/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
+    //POST JoinGroup
+    private static String joingroupurl = "http://172.16.1.44/PHP_API/index.php/Group/join_group";
+    RequestQueue joingroupquestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
     Grouplist.MyListAdapter myListAdapter;
@@ -108,6 +121,14 @@ public class Grouplist extends Fragment {
         sEmail = user.get(SessionManager.EMAIL);
 
         GetMyGroup();
+
+        FloatingActionButton join_btn = v.findViewById(R.id.joingroup);
+        join_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JoinGroup();
+            }
+        });
 
         return v;
     }
@@ -215,5 +236,65 @@ public class Grouplist extends Fragment {
             }
         };
         getgroupquestQueue.add(mygroupstrRequest);
+    }
+
+    //加入群組(邀請碼)
+    public void JoinGroup(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+        View joingroup_view = getLayoutInflater().inflate(R.layout.join_group_layout,null);//嵌入View
+        ImageView backDialog = joingroup_view.findViewById(R.id.joingroup_back);//連結關閉視窗的Button
+        mBuilder.setView(joingroup_view);//設置View
+        AlertDialog joingroup_dialog = mBuilder.create();
+        //關閉視窗的監聽事件
+        backDialog.setOnClickListener(v1 -> {joingroup_dialog.dismiss();});
+
+        joingroupquestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        EditText join_code = (EditText) joingroup_view.findViewById(R.id.join_code);
+        Button join_ok = (Button) joingroup_view.findViewById(R.id.join_ok);
+        join_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code = join_code.getText().toString().trim();
+                if(code.equals("")){
+                    join_code.setError("請輸入邀請碼");
+                }else{
+                    StringRequest joinstrRequest = new StringRequest(Request.Method.POST, joingroupurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("success")){
+                                joingroup_dialog.hide();
+                                Toast.makeText(getContext(), "新增成功", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.setClass(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            }else if(response.equals("failure")){
+                                join_code.setError("邀請碼錯誤");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email",sEmail);
+                            data.put("group_no",code);
+                            return data;
+                        }
+                    };
+                    joingroupquestQueue.add(joinstrRequest);
+                }
+            }
+        });
+
+        joingroup_dialog.show();
+        joingroup_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        dm = getResources().getDisplayMetrics();
+        joingroup_dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        joingroup_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 }

@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.grouplist:
 
                     addmenu = findViewById(R.id.floatingActionMenu);
-                    addmenu.setVisibility(View.VISIBLE);
+                    addmenu.setVisibility(View.GONE);
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main,new Grouplist()).commit();
                     return true;
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void setMain() {
         Reflist reflistfragment = new Reflist();
