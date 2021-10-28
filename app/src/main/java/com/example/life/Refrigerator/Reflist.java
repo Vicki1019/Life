@@ -59,10 +59,10 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://172.16.1.36/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //RecyclerView
     RecyclerView refRecyclerView;

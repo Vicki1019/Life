@@ -1,8 +1,10 @@
 package com.example.life.Scan;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -26,6 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.life.R;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,11 +76,10 @@ public class Scan extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        intent.putExtra("SCAN_MODE","QR_CODE_MODE");
+        getActivity().startActivityForResult(intent, 0);
     }
-
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,4 +87,18 @@ public class Scan extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_scan, container, false);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                //Toast.makeText(Scan.this, error.toString().trim(),Toast.LENGTH_LONG).show();
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+        }
+    }
+
 }

@@ -28,6 +28,24 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    /*repositories {
+        //maven {url"https://www.jitpack.io"}
+        maven {url"https://jitpack.io/private#auth"}
+    }
+    allprojects {
+        repositories {
+            google()
+            jcenter()
+            maven {
+                setUrl("https://jitpack.io")
+                credentials {
+                    username = "jp_abc123Token"
+                }
+            }
+        }
+    }*/
+
 }
 
 dependencies {
@@ -50,4 +68,9 @@ dependencies {
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
+    implementation 'com.google.zxing:core:3.4.1'
+    //implementation 'com.github.User:Repo:Tag'
+    //implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 }
