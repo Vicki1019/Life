@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.ChangeRefActivity;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
@@ -43,7 +44,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.Instant;
-import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,16 +55,17 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
-    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo;
+    TextView myref;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle;
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.126.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.126.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
-    //RecyclerView
+    //Reflist RecyclerView
     RecyclerView refRecyclerView;
     Reflist.MyListAdapter myListAdapter;
     ArrayList<String> refnoarrayList = new ArrayList<>();
@@ -78,7 +79,7 @@ public class Reflist extends Fragment {
     ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
     ArrayList<String> photoarrayList = new ArrayList<>();
-
+    ArrayList<String> reftitlearrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -125,8 +126,19 @@ public class Reflist extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_reflist, container, false);
-        refRecyclerView = v.findViewById(R.id.reflist);
+        myref = (TextView) v.findViewById(R.id.myref);
 
+        Button change_ref = (Button) v.findViewById(R.id.change_refrigerator);
+        change_ref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(), ChangeRefActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        refRecyclerView = v.findViewById(R.id.reflist);
 
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetail();
@@ -231,6 +243,9 @@ public class Reflist extends Fragment {
                     }else{
                         refdetail_input_kind.setText("暫無分類");
                     }
+                    //存放位置
+                    EditText refdetail_input_locate = refdetailview.findViewById(R.id.refdetail_input_locate);
+                    refdetail_input_locate.setText(locatearrayList.get(position));
                     //擁有者
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
@@ -323,6 +338,7 @@ public class Reflist extends Fragment {
                             locate = jsonObject.getString("locate").trim();
                             state = jsonObject.getString("state").trim();
                             photo = jsonObject.getString("photo").trim();
+                            reftitle = jsonObject.getString("locate_name").trim();
 
                             refnoarrayList.add(refno);
                             ownerarrayList.add(owner);
@@ -335,6 +351,10 @@ public class Reflist extends Fragment {
                             locatearrayList.add(locate);
                             statearrayList.add(state);
                             photoarrayList.add(photo);
+                            reftitlearrayList.add(reftitle);
+
+                            myref.setText("");
+                            myref.setText(reftitlearrayList.get(0));
 
                         }else if(result.equals("failure")){
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();

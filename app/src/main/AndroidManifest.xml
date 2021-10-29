@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
-        <activity android:name=".Vehicle.MyVehicleActivity"></activity>
+        <activity android:name=".ChangeRefActivity"></activity>
+        <activity android:name=".Vehicle.MyVehicleActivity" />
         <activity android:name=".Setting.VehicleSetActivity" />
         <activity android:name=".Setting.NotifySetActivity" />
         <activity android:name=".Group.GroupDetailActivity" />
