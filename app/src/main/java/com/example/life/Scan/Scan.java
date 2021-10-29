@@ -1,11 +1,14 @@
 package com.example.life.Scan;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +27,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.life.Group.Grouplist;
 import com.example.life.R;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -38,6 +43,14 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class Scan extends Fragment {
+    String invNum,invDate,sellerName,description,quantity,amount;
+    //get invoice info
+    private static String getinvoiceinfourl = "http://10.0.53.99/PHP_API/index.php/Scan/Scan";
+    RequestQueue getinvoiceinfoquestQueue;
+    //RecyclerView
+    RecyclerView groupRecyclerView;
+    Grouplist.MyListAdapter myListAdapter;
+    ArrayList<String> invoicearrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +93,8 @@ public class Scan extends Fragment {
         intent.putExtra("SCAN_MODE","QR_CODE_MODE");
         getActivity().startActivityForResult(intent, 0);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

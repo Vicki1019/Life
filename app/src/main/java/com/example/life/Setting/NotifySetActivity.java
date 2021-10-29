@@ -23,7 +23,7 @@ public class NotifySetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notify_set);
 
-        Uri notify_uri = Uri.parse("http://172.16.1.44/PHP_API/index.php/LineNotify/LineAuthorize");
+        Uri notify_uri = Uri.parse("http://120.110.81.88/PHP_API/index.php/LineNotify/LineAuthorize");
         Intent intent = new Intent(Intent.ACTION_VIEW, notify_uri);
         startActivity(intent);
 

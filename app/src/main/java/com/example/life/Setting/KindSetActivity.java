@@ -49,11 +49,11 @@ public class KindSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue kindrequestQueue;
-    private static String addurl = "http://10.0.9.9/PHP_API/index.php/UserSetting/addkind";
+    private static String addurl = "http://120.110.81.88/PHP_API/index.php/UserSetting/addkind";
     RequestQueue addrequestQueue;
-    private static String deleteurl = "http://10.0.9.9/PHP_API/index.php/UserSetting/deletekind";
+    private static String deleteurl = "http://120.110.81.88/PHP_API/index.php/UserSetting/deletekind";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView myRecyclerView;

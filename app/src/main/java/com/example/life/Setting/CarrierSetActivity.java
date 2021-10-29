@@ -13,7 +13,7 @@ import com.example.life.R;
 
 public class CarrierSetActivity extends AppCompatActivity {
     //Volley
-    private static String carrierurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getkind";
+    private static String carrierurl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/getkind";
     RequestQueue carrierrequestQueue;
 
     @Override

@@ -48,22 +48,22 @@ public class EditReflistActivity extends AppCompatActivity {
     //SESSION
     SessionManager sessionManager;
     //GET Unit
-    private static String uniturl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //Edit RefList
-    private static String editrefurl = "http://10.0.9.9/PHP_API/index.php/Refrigerator/update_ref_item";
+    private static String editrefurl = "http://120.110.81.88/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
 
     @Override
