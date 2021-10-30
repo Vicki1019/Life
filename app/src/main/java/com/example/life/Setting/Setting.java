@@ -44,7 +44,7 @@ public class Setting extends Fragment {
     SessionManager sessionManager;
 
     // POST VEHICLE
-    private static String vehicleurl = "http://192.168.126.110/PHP_API/index.php/Vehicle/vehicle_ck";
+    private static String vehicleurl = "http://192.168.90.110/PHP_API/index.php/Vehicle/vehicle_ck";
     RequestQueue vehiclerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -152,9 +152,11 @@ public class Setting extends Fragment {
                                 if(result.equals("success")){
                                     String barcode = jsonObject.getString("barcode").trim();
                                     Intent intent = new Intent();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("barcode",barcode);
-                                    intent.setClass(getContext(), MyVehicleActivity.class);
+                                    if(barcode.equals("null")){
+                                        intent = new Intent(getActivity(), VehicleSetActivity.class);
+                                    }else{
+                                        intent.setClass(getContext(), MyVehicleActivity.class);
+                                    }
                                     startActivity(intent);
                                 }else if(result.equals("failure")){
                                     Intent intent = new Intent(getActivity(), VehicleSetActivity.class);

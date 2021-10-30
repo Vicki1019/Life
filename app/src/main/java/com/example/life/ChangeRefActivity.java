@@ -39,7 +39,7 @@ public class ChangeRefActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //GET All My Refrigerator
-    private static String allrefrefurl = "http://192.168.126.110/PHP_API/index.php/Group/get_allGroup_totalMember";
+    private static String allrefrefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/get_all_locate";
     RequestQueue allrefrequestQueue;
     //RecyclerView
     RecyclerView allrefRecyclerView;
@@ -47,7 +47,7 @@ public class ChangeRefActivity extends AppCompatActivity {
     ArrayList<String> groupnoarrayList = new ArrayList<>();
     ArrayList<String> gnamearrayList = new ArrayList<>();
     // POST Change Refrigerator
-    private static String changerefurl = "http://192.168.126.110/PHP_API/index.php/Refrigerator/change_ref_locate";
+    private static String changerefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/change_ref_locate";
     RequestQueue changerefrequestQueue;
 
     @Override

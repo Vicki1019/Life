@@ -42,7 +42,7 @@ public class NotifySetActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true){
-                    Uri notify_uri = Uri.parse("http://192.168.214.110/PHP_API/index.php/LineNotify/LineAuthorize");
+                    Uri notify_uri = Uri.parse("http://192.168.90.110/PHP_API/index.php/LineNotify/LineAuthorize");
                     Intent intent = new Intent(Intent.ACTION_VIEW, notify_uri);
                     startActivity(intent);
                 }

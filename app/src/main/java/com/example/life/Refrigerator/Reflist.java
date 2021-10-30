@@ -60,10 +60,10 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.126.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.126.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
@@ -79,7 +79,7 @@ public class Reflist extends Fragment {
     ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
     ArrayList<String> photoarrayList = new ArrayList<>();
-    ArrayList<String> reftitlearrayList = new ArrayList<>();
+    //ArrayList<String> reftitlearrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -127,7 +127,7 @@ public class Reflist extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_reflist, container, false);
         myref = (TextView) v.findViewById(R.id.myref);
-
+        GetRefList();
         Button change_ref = (Button) v.findViewById(R.id.change_refrigerator);
         change_ref.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +145,6 @@ public class Reflist extends Fragment {
         sEmail = user.get(SessionManager.EMAIL);
         sName = user.get(SessionManager.MEMBER_NIKINAME);
 
-        GetRefList();
         return v;
     }
 
@@ -351,10 +350,11 @@ public class Reflist extends Fragment {
                             locatearrayList.add(locate);
                             statearrayList.add(state);
                             photoarrayList.add(photo);
-                            reftitlearrayList.add(reftitle);
+                            //reftitlearrayList.add(reftitle);
 
                             myref.setText("");
-                            myref.setText(reftitlearrayList.get(0));
+                            myref.setText(reftitle);
+                            //myref.setText(reftitlearrayList.get(0));
 
                         }else if(result.equals("failure")){
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
