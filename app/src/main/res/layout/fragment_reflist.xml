@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:text="我的冰箱"
+            android:text="阿彤"
             android:textColor="#884800"
             android:textSize="30sp"
             android:textStyle="bold"
