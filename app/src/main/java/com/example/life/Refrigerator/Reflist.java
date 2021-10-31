@@ -30,7 +30,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.ChangeRefActivity;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
@@ -60,10 +59,10 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //Get Reflist
-    private static String getrefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     // Delete Reflist
-    private static String delrefurl = "http://192.168.90.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //Reflist RecyclerView
     RecyclerView refRecyclerView;

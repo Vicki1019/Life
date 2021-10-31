@@ -14,17 +14,29 @@ import android.widget.Switch;
 
 import com.android.volley.RequestQueue;
 import com.example.life.MainActivity;
+import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
 
 public class NotifySetActivity extends AppCompatActivity {
     //Volley
    /* private static String notifyurl = "http://172.16.1.44/PHP_API/index.php/LineNotify/LineToken";
     RequestQueue notifyrequestQueue;*/
-
+    SessionManager sessionManager;
+    String sEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notify_set);
+
+        // SESSION
+        sessionManager = new SessionManager(this);
+        sessionManager.checkLogin(); //檢查是否登入
+        HashMap<String, String> user = sessionManager.getUserDetail();
+        sEmail = user.get(sessionManager.EMAIL);
 
         Button notify_back_btn = (Button) findViewById(R.id.notify_back_btn);
         notify_back_btn.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +54,7 @@ public class NotifySetActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true){
-                    Uri notify_uri = Uri.parse("http://192.168.90.110/PHP_API/index.php/LineNotify/LineAuthorize");
+                    Uri notify_uri = Uri.parse("http://192.168.2.110/PHP_API/index.php/LineNotify/LineAuthorize?email="+sEmail);
                     Intent intent = new Intent(Intent.ACTION_VIEW, notify_uri);
                     startActivity(intent);
                 }
