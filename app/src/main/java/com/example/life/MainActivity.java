@@ -75,22 +75,22 @@ public class MainActivity extends AppCompatActivity {
     ImageView refadd_photo;
 
     //GET Unit
-    private static String uniturl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.47/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.47/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.47/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.2.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://172.16.1.47/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
 
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView increase_btn = refview.findViewById(R.id.increase_btn); //增加數量的Button
         ImageView decrease_btn = refview.findViewById(R.id.decrease_btn); //減少數量的Button
         TextView quantity = refview.findViewById(R.id.refadd_quantity_text); //數量顯示
-        i = 1;
+        i = 0;
         increase_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

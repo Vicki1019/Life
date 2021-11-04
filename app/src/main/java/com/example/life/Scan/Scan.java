@@ -1,5 +1,6 @@
 package com.example.life.Scan;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.life.R;
+import com.example.life.Refrigerator.ChangeRefActivity;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +21,7 @@ import com.example.life.R;
  * create an instance of this fragment.
  */
 public class Scan extends Fragment {
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,12 +61,18 @@ public class Scan extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scan, container, false);
+        View v = inflater.inflate(R.layout.fragment_scan, container, false);
+        Intent intent = new Intent();
+        intent.setClass(getContext(), QRCodeScanActivity.class);
+        startActivity(intent);
+        return  v;
     }
+
 }
