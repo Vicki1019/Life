@@ -10,15 +10,17 @@ import android.widget.Toast;
 
 import com.example.life.MainActivity;
 import com.example.life.R;
-import com.example.life.Refrigerator.ChangeRefActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
 
 public class QRCodeScanActivity extends AppCompatActivity {
 
     ImageView scan_back;
+    ArrayList<String[]> ScanResult = new ArrayList<String[]>();
     IntentIntegrator scanIntegrator;
-
+    String[] scansplit, scanresult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +50,28 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(scanningResult.getContents() != null){
+            ScanResult.clear();
             String scanContent = scanningResult.getContents();
-            Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanContent, Toast.LENGTH_LONG).show();
+            scansplit = new String[scansplit.length];
+            scansplit = scanContent.split("\\*");
+            if(scansplit[0].equals("*")){
+                //Toast.makeText(QRCodeScanActivity.this,"家樂福版本: "+scanContent, Toast.LENGTH_LONG).show();
+                scanresult = new String[scanresult.length];
+                scanresult = scanContent.split(":");
+                ScanResult.add(scanresult);
+                for(int i=0;i<scanresult.length;i++){
+                    Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanresult[1]+scanresult[2], Toast.LENGTH_LONG).show();
+                }
+            }else{
+                //Toast.makeText(QRCodeScanActivity.this,"全聯超商版本: "+scanContent, Toast.LENGTH_LONG).show();
+                scanresult = new String[scanresult.length];
+                scanresult = scanContent.split(":");
+                ScanResult.add(scanresult);
+                for(int i=0;i<scanresult.length;i++){
+                    Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanresult[5]+scanresult[6], Toast.LENGTH_LONG).show();
+                }
+            }
+
         }else{
             //Toast.makeText(QRCodeScanActivity.this,"發生錯誤",Toast.LENGTH_LONG).show();
             Intent i = new Intent();
