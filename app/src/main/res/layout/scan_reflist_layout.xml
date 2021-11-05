@@ -31,7 +31,7 @@
                     android:layout_marginStart="30dp"
                     android:text="食品名稱"
                     android:textColor="#884800"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/guideline23"
                     app:layout_constraintStart_toStartOf="parent"

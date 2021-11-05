@@ -5,17 +5,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.life.Group.GroupDetailActivity;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
@@ -24,9 +34,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 public class QRCodeScanActivity extends AppCompatActivity {
 
@@ -41,6 +56,24 @@ public class QRCodeScanActivity extends AppCompatActivity {
     QRCodeScanActivity.MyListAdapter myListAdapter;
     Button scan_add_ok;
     int drop = 0;
+    //GET Unit
+    private static String uniturl = "http://192.168.88.110/PHP_API/index.php/Refrigerator/getunit";
+    ArrayList<String> unitlist = new ArrayList<>();
+    ArrayAdapter<String> unitAdapter;
+    RequestQueue unitrequestQueue;
+    //GET Kind
+    private static String kindurl = "http://192.168.88.110/PHP_API/index.php/Refrigerator/getkind";
+    ArrayList<String> kindlist = new ArrayList<>();
+    ArrayAdapter<String> kindAdapter;
+    RequestQueue kindrequestQueue;
+    //GET Locate
+    private static String locateurl = "http://192.168.88.110/PHP_API/index.php/Refrigerator/getlocate";
+    ArrayList<String> locatelist = new ArrayList<>();
+    ArrayAdapter<String> locateAdapter;
+    RequestQueue locaterequestQueue;
+    //ADD Reflist
+    private static String refaddurl = "http://192.168.88.110/PHP_API/index.php/Refrigerator/refadd";
+    RequestQueue refaddrequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +107,6 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
         //設置掃描結果清單
         refRecyclerView = findViewById(R.id.scan_add_reflist);
-
-        //確認新增冰箱清單
-        scan_add_ok = (Button) findViewById(R.id.scan_add_ok);
-        scan_add_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 
@@ -187,7 +211,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
             holder.drop_down_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(drop==0){
+                    if(drop==1){
                         holder.scan_title_quantity.setVisibility(View.VISIBLE);
                         holder.scan_input_quantity.setVisibility(View.VISIBLE);
                         holder.scan_input_unit.setVisibility(View.VISIBLE);
@@ -198,7 +222,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         holder.scan_input_kind.setVisibility(View.VISIBLE);
                         holder.scan_title_locate.setVisibility(View.VISIBLE);
                         holder.scan_input_locate.setVisibility(View.VISIBLE);
-                        drop = 1;
+                        drop = 0;
                     }else{
                         holder.scan_title_quantity.setVisibility(View.GONE);
                         holder.scan_input_quantity.setVisibility(View.GONE);
@@ -210,7 +234,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         holder.scan_input_kind.setVisibility(View.GONE);
                         holder.scan_title_locate.setVisibility(View.GONE);
                         holder.scan_input_locate.setVisibility(View.GONE);
-                        drop = 0;
+                        drop = 1;
                     }
                 }
             });
@@ -218,19 +242,55 @@ public class QRCodeScanActivity extends AppCompatActivity {
             holder.scan_food_name.setText(ScanName.get(position));
             holder.scan_input_quantity.setText(ScanQuantity.get(position));
 
+            //下拉選單
+            GetUnit(holder.scan_input_unit); //unit
+            GetKind(holder.scan_input_kind); //kind
+            GetLocate(holder.scan_input_locate); //locate
+
             //點擊刪除該項目
             holder.delete_scan_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ScanName.remove(position);
                     ScanQuantity.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    notifyDataSetChanged();
                 }
             });
             //點擊選擇有效期限
             holder.scan_expdate_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int date = calendar.get(Calendar.DAY_OF_MONTH);
+                    new DatePickerDialog(v.getContext(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int date) {
+                            String dateTime = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(date);
+                            holder.scan_input_expdate.setText(dateTime);
+                        }
+                    }, year, month, date).show();
+                }
+            });
+            //確認新增冰箱清單
+            scan_add_ok = (Button) findViewById(R.id.scan_add_ok);
+            scan_add_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String foodname = holder.scan_food_name.getText().toString();
+                    String quantity = holder.scan_input_quantity.getText().toString().trim(); //取得數量
+                    String unit = holder.scan_input_unit.getSelectedItem().toString().trim(); //取得單位
+                    String date = holder.scan_input_expdate.getText().toString().trim(); //取得有效期限
+                    String kind = holder.scan_input_kind.getSelectedItem().toString().trim(); //取得分類
+                    String locate = holder.scan_input_locate.getSelectedItem().toString().trim(); //取得存放位置
+                    if(!date.equals("")){
+                        AddScanlist(foodname, quantity, unit, date, kind, locate);
+                    }else{
+                        holder.scan_input_expdate.setError("請選擇有效日期");
+                    }
                 }
             });
         }
@@ -241,6 +301,152 @@ public class QRCodeScanActivity extends AppCompatActivity {
             return ScanName.size();
         }
 
+    }
+
+    //取得unit
+    public void GetUnit(Spinner unitsp){
+        unitrequestQueue = Volley.newRequestQueue(this);
+        StringRequest unitstrRequest = new StringRequest(Request.Method.POST, uniturl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    unitlist.clear();
+                    JSONObject unitjsonObject = new JSONObject(response);
+                    JSONArray unitjsonArray = unitjsonObject.getJSONArray("unit");
+                    for(int j=0;j<unitjsonArray.length();j++) {
+                        JSONObject jsonObject = unitjsonArray.getJSONObject(j);
+                        String unit_cn = jsonObject.optString("unit_cn");
+                        unitlist.add(unit_cn);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                unitAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, unitlist);
+                unitAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                unitsp.setAdapter(unitAdapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(QRCodeScanActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                return data;
+            }
+        };
+        unitrequestQueue.add(unitstrRequest);
+    }
+
+    //取得kind
+    public void GetKind(Spinner kindsp){
+        kindrequestQueue = Volley.newRequestQueue(this);
+
+        StringRequest kindstrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    kindlist.clear();
+                    JSONObject kindjsonObject = new JSONObject(response);
+                    JSONArray kindjsonArray = kindjsonObject.getJSONArray("kind");
+                    for(int k=0;k<kindjsonArray.length();k++){
+                        JSONObject jsonObject= kindjsonArray.getJSONObject(k);
+                        String kind_cn = jsonObject.optString("kind_cn");
+                        kindlist.add(kind_cn);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                kindAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, kindlist);
+                kindAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                kindsp.setAdapter(kindAdapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(QRCodeScanActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                return data;
+            }
+        };
+        kindrequestQueue.add(kindstrRequest);
+    }
+
+    //取得locate
+    public void GetLocate(Spinner locatesp){
+        locaterequestQueue = Volley.newRequestQueue(this);
+
+        StringRequest locatestrRequest = new StringRequest(Request.Method.GET, locateurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    locatelist.clear();
+                    JSONObject locatejsonObject = new JSONObject(response);
+                    JSONArray locatejsonArray = locatejsonObject.getJSONArray("locate");
+                    for(int l=0;l<locatejsonArray.length();l++){
+                        JSONObject jsonObject= locatejsonArray.getJSONObject(l);
+                        String locate_cn = jsonObject.optString("locate_cn");
+                        locatelist.add(locate_cn);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                locateAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, locatelist);
+                locateAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                locatesp.setAdapter(locateAdapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(QRCodeScanActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        locaterequestQueue.add(locatestrRequest);
+    }
+
+    //新增冰箱清單
+    public void AddScanlist(String foodname, String quantity, String unit, String expdate, String kind, String locate){
+        refaddrequestQueue = Volley.newRequestQueue(this);
+        StringRequest refaddstrRequest = new StringRequest(Request.Method.POST, refaddurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    Toast.makeText(QRCodeScanActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(QRCodeScanActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else if (response.equals("failure")) {
+                    Toast.makeText(QRCodeScanActivity.this, "新增失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(QRCodeScanActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                data.put("foodname", foodname);
+                data.put("quantity", quantity);
+                data.put("unit", unit);
+                data.put("expdate", expdate);
+                data.put("kind", kind);
+                data.put("locate", locate);
+                return data;
+            }
+        };
+        refaddrequestQueue.add(refaddstrRequest);
     }
 
     // Disable back button
