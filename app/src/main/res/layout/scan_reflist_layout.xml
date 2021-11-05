@@ -15,12 +15,12 @@
         app:cardElevation="0dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="340dp"
+                android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/notexpshape">
 
@@ -49,14 +49,14 @@
 
                 <TextView
                     android:id="@+id/scan_title_quantity"
-                    android:layout_width="3dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginStart="30dp"
                     android:text="數量："
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
@@ -69,7 +69,7 @@
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@+id/scan_title_quantity"
                     app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
@@ -87,7 +87,7 @@
                     android:layout_marginStart="40dp"
                     android:background="@drawable/spinner_back"
                     android:spinnerMode="dialog"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@+id/scan_input_quantity"
                     app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
@@ -101,7 +101,7 @@
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/scan_title_quantity" />
 
@@ -109,9 +109,10 @@
                     android:id="@+id/scan_expdate_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="25dp"
-                    android:visibility="gone"
+                    android:clickable="true"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@+id/scan_input_expdate"
                     app:layout_constraintTop_toBottomOf="@+id/scan_input_unit"
                     app:srcCompat="@drawable/calender" />
@@ -120,13 +121,13 @@
                     android:id="@+id/scan_input_expdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="30dp"
                     android:text="2021-11-05"
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@+id/scan_title_expdate"
                     app:layout_constraintTop_toBottomOf="@+id/scan_input_quantity" />
 
@@ -140,7 +141,7 @@
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/scan_title_expdate" />
 
@@ -152,7 +153,7 @@
                     android:layout_marginTop="30dp"
                     android:background="@drawable/spinner_back"
                     android:spinnerMode="dialog"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintStart_toEndOf="@+id/scan_title_kind"
                     app:layout_constraintTop_toBottomOf="@+id/scan_input_expdate" />
 
@@ -167,7 +168,7 @@
                     android:textColor="#884800"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/scan_title_kind" />
@@ -181,7 +182,7 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/spinner_back"
                     android:spinnerMode="dialog"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/scan_title_locate"
                     app:layout_constraintTop_toBottomOf="@+id/scan_input_kind" />
