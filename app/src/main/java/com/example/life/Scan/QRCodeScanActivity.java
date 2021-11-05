@@ -51,24 +51,25 @@ public class QRCodeScanActivity extends AppCompatActivity {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(scanningResult.getContents() != null){
             ScanResult.clear();
+            scanresult = null;
             String scanContent = scanningResult.getContents();
-            scansplit = new String[scansplit.length];
-            scansplit = scanContent.split("\\*");
-            if(scansplit[0].equals("*")){
-                //Toast.makeText(QRCodeScanActivity.this,"家樂福版本: "+scanContent, Toast.LENGTH_LONG).show();
-                scanresult = new String[scanresult.length];
-                scanresult = scanContent.split(":");
+            String scan_check = scanContent.substring(0,2);
+            String scan_substring = scanContent.substring(2);
+
+            //Toast.makeText(QRCodeScanActivity.this,"測試發票版本: "+scan_check, Toast.LENGTH_LONG).show();
+            if(scan_check.equals("**")){
+                //家樂福發票
+                //Toast.makeText(QRCodeScanActivity.this,"家樂福版本: "+scan_substring, Toast.LENGTH_LONG).show();
+                scanresult = scan_substring.split(":");
                 ScanResult.add(scanresult);
-                for(int i=0;i<scanresult.length;i++){
-                    Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanresult[1]+scanresult[2], Toast.LENGTH_LONG).show();
+                for(int i=0;i<scanresult.length;i+=3){
+                    Toast.makeText(QRCodeScanActivity.this,"家樂福版本: "+scanresult[i]+scanresult[i+1], Toast.LENGTH_LONG).show();
                 }
             }else{
-                //Toast.makeText(QRCodeScanActivity.this,"全聯超商版本: "+scanContent, Toast.LENGTH_LONG).show();
-                scanresult = new String[scanresult.length];
+                //全聯超商發票
                 scanresult = scanContent.split(":");
-                ScanResult.add(scanresult);
-                for(int i=0;i<scanresult.length;i++){
-                    Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanresult[5]+scanresult[6], Toast.LENGTH_LONG).show();
+                for(int i=5;i<scanresult.length;i+=3){
+                    Toast.makeText(QRCodeScanActivity.this,"全聯超商版本: "+scanresult[i]+scanresult[i+1], Toast.LENGTH_LONG).show();
                 }
             }
 

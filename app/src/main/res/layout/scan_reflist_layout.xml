@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="#00ECEBEB"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#00FFFFFF"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/notexpshape">
+
+                <TextView
+                    android:id="@+id/scan_food_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:text="食品名稱"
+                    android:textColor="#884800"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline23"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/drop_down_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline23"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/drop_down" />
+
+                <TextView
+                    android:id="@+id/scan_title_quantity"
+                    android:layout_width="3dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="30dp"
+                    android:text="數量："
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline23" />
+
+                <TextView
+                    android:id="@+id/scan_input_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:text="00"
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/scan_title_quantity"
+                    app:layout_constraintTop_toTopOf="@+id/guideline23" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="80dp" />
+
+                <Spinner
+                    android:id="@+id/scan_input_unit"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="40dp"
+                    android:background="@drawable/spinner_back"
+                    android:spinnerMode="dialog"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/scan_input_quantity"
+                    app:layout_constraintTop_toTopOf="@+id/guideline23" />
+
+                <TextView
+                    android:id="@+id/scan_title_expdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:text="有效期限："
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_title_quantity" />
+
+                <ImageView
+                    android:id="@+id/scan_expdate_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/scan_input_expdate"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_input_unit"
+                    app:srcCompat="@drawable/calender" />
+
+                <TextView
+                    android:id="@+id/scan_input_expdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:text="2021-11-05"
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/scan_title_expdate"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_input_quantity" />
+
+                <TextView
+                    android:id="@+id/scan_title_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:text="分類項目："
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_title_expdate" />
+
+                <Spinner
+                    android:id="@+id/scan_input_kind"
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/spinner_back"
+                    android:spinnerMode="dialog"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/scan_title_kind"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_input_expdate" />
+
+                <TextView
+                    android:id="@+id/scan_title_locate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="存放位置："
+                    android:textColor="#884800"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_title_kind" />
+
+                <Spinner
+                    android:id="@+id/scan_input_locate"
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/spinner_back"
+                    android:spinnerMode="dialog"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/scan_title_locate"
+                    app:layout_constraintTop_toBottomOf="@+id/scan_input_kind" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/delete_scan_item"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                app:srcCompat="@drawable/delete_red" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
