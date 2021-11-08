@@ -47,24 +47,30 @@ public class EditReflistActivity extends AppCompatActivity {
     int i;
     //SESSION
     SessionManager sessionManager;
-    //GET Unit
+    //POST Unit
     private static String uniturl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
-    //GET Kind
+    //POST Kind
     private static String kindurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
-    //GET Locate
+    //POST Locate
     private static String locateurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
-    //Edit RefList
+    //POST Edit RefList
     private static String editrefurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
+    //POST Token
+    private static String tokenurl = "http://10.0.34.231/PHP_API/index.php/LineNotify/get_line_token";
+    RequestQueue tokenrequestQueue;
+    //POST Notify
+    private static String notifyurl = "http://10.0.34.231/PHP_API/index.php/LineNotify/SendNotify";
+    RequestQueue notifyrequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,13 +372,16 @@ public class EditReflistActivity extends AppCompatActivity {
     }
 
     //零庫存通知
-    //先取得使用者的LINE Token，再傳送訊息
     private void ZeroNotify(String quantity) {
         //editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
+        //當使用者將數量修改為0時
         if(quantity.equals("0")){
+            //先取得使用者的LINE Token
+            tokenrequestQueue = Volley.newRequestQueue(this);
 
-        }else{
 
+            //再傳送訊息
+            notifyrequestQueue = Volley.newRequestQueue(this);
         }
     }
 }
