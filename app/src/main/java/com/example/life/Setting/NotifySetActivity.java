@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 public class NotifySetActivity extends AppCompatActivity {
     //Volley
-   /* private static String notifyurl = "http://172.16.1.44/PHP_API/index.php/LineNotify/LineToken";
+   /* private static String notifyurl = "http://10.0.51.99/PHP_API/index.php/LineNotify/LineToken";
     RequestQueue notifyrequestQueue;*/
     SessionManager sessionManager;
     String sEmail;
@@ -54,7 +54,7 @@ public class NotifySetActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked == true){
-                    Uri notify_uri = Uri.parse("http://192.168.88.110/PHP_API/index.php/LineNotify/LineAuthorize?email="+sEmail);
+                    Uri notify_uri = Uri.parse("http://10.0.34.231/PHP_API/index.php/LineNotify/LineAuthorize?email="+sEmail);
                     Intent intent = new Intent(Intent.ACTION_VIEW, notify_uri);
                     startActivity(intent);
                 }

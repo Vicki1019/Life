@@ -44,7 +44,7 @@ public class Setting extends Fragment {
     SessionManager sessionManager;
 
     // POST VEHICLE
-    private static String vehicleurl = "http://192.168.88.110/PHP_API/index.php/Vehicle/vehicle_ck";
+    private static String vehicleurl = "http://10.0.34.231/PHP_API/index.php/Vehicle/vehicle_ck";
     RequestQueue vehiclerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
