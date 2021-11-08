@@ -130,6 +130,7 @@ public class EditReflistActivity extends AppCompatActivity {
                 editlocate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
                 Toast.makeText(EditReflistActivity.this, refno+"\n"+editfoodname+"\n"+editquantity+"\n"+editunit+"\n"+editexpdate+"\n"+editkind+"\n"+editlocate, Toast.LENGTH_SHORT).show();*/
                 EditRefList();
+                //ZeroNotify();
             }
         });
     }
@@ -322,6 +323,7 @@ public class EditReflistActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     if (response.equals("success")) {
+                        ZeroNotify(editquantity);
                         Toast.makeText(EditReflistActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
                         intent.setClass(EditReflistActivity.this, MainActivity.class);
@@ -360,6 +362,17 @@ public class EditReflistActivity extends AppCompatActivity {
                 }
             };
             editrefrequestQueue.add(editrefstrRequest);
+        }
+    }
+
+    //零庫存通知
+    //先取得使用者的LINE Token，再傳送訊息
+    private void ZeroNotify(String quantity) {
+        //editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
+        if(quantity.equals("0")){
+
+        }else{
+
         }
     }
 }
