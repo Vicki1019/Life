@@ -52,7 +52,7 @@ public class Shoplist extends Fragment {
     CalendarView calendarview;
     TextView getdate;
     // POST SHOPLIST
-    private static String shopurl = "http://10.0.34.231/PHP_API/index.php/Shopping/get_shopping_list";
+    private static String shopurl = "http://172.16.1.53/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;

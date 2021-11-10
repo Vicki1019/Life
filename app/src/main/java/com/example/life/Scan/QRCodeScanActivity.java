@@ -57,22 +57,22 @@ public class QRCodeScanActivity extends AppCompatActivity {
     Button scan_add_ok;
     int drop = 0;
     //GET Unit
-    private static String uniturl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //GET Kind
-    private static String kindurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://10.0.34.231/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     @Override
