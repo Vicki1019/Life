@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.Login.RegisterActivity;
+import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
 
@@ -26,7 +27,7 @@ import java.util.Map;
 
 public class VehicleSetActivity extends AppCompatActivity {
     //Volley
-    private static String vehicleurl = "http://192.168.35.110/PHP_API/index.php/Vehicle/update_barcode";
+    private static String vehicleurl = "http://172.16.1.57/PHP_API/index.php/Vehicle/update_barcode";
     RequestQueue vehiclerequestQueue;
     //Session
     SessionManager sessionManager;
@@ -40,6 +41,16 @@ public class VehicleSetActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
+
+        Button vehicle_back_btn = (Button) findViewById(R.id.vehicle_back_btn);
+        vehicle_back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(VehicleSetActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //忘記載具條碼
         Button vehicle_forget = (Button) findViewById(R.id.vehicle_forget);
