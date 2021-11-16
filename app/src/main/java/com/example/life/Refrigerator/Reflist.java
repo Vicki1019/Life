@@ -59,13 +59,13 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //POST Reflist
-    private static String getrefurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     //POST Delete Reflist
-    private static String delrefurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //POST LINE Token
-    private static String tokenurl = "http://192.168.35.110/PHP_API/index.php/LineNotify/get_line_token";
+    private static String tokenurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/get_line_token";
     RequestQueue tokenrequestQueue;
 
     //Reflist RecyclerView

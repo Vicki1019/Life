@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="label">
-        <activity android:name=".Scan.QRCodeScanActivity"></activity>
+        <activity android:name=".LineNotifyActivity"></activity>
+        <activity android:name=".Scan.QRCodeScanActivity" />
         <activity android:name=".Refrigerator.ChangeRefActivity" />
         <activity android:name=".Vehicle.MyVehicleActivity" />
         <activity android:name=".Setting.VehicleSetActivity" />

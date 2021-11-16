@@ -56,11 +56,11 @@ public class Grouplist extends Fragment {
     String sEmail, group_no, group_name, total_member;
     //Session
     SessionManager sessionManager;
-    //Get GroupList
-    private static String getgroupurl = "http://192.168.35.110/PHP_API/index.php/Group/get_allGroup_totalMember";
+    //POST GroupList
+    private static String getgroupurl = "http://172.16.1.57/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
     //POST JoinGroup
-    private static String joingroupurl = "http://192.168.35.110/PHP_API/index.php/Group/join_group";
+    private static String joingroupurl = "http://172.16.1.57/PHP_API/index.php/Group/join_group";
     RequestQueue joingroupquestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;

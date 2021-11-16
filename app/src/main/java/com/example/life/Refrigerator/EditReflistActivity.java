@@ -48,28 +48,28 @@ public class EditReflistActivity extends AppCompatActivity {
     //SESSION
     SessionManager sessionManager;
     //POST Unit
-    private static String uniturl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //POST Kind
-    private static String kindurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //POST Locate
-    private static String locateurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //POST Edit RefList
-    private static String editrefurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/update_ref_item";
+    private static String editrefurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
     //POST Token
-    private static String tokenurl = "http://192.168.35.110/PHP_API/index.php/LineNotify/get_line_token";
+    private static String tokenurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/get_line_token";
     RequestQueue tokenrequestQueue;
     //POST Notify
-    private static String notifyurl = "http://192.168.35.110/PHP_API/index.php/LineNotify/SendNotify";
+    private static String notifyurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/SendNotify";
     RequestQueue notifyrequestQueue;
 
     @Override

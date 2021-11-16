@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.LineNotifyActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
 import com.example.life.Refrigerator.EditReflistActivity;
@@ -44,7 +45,7 @@ public class Setting extends Fragment {
     SessionManager sessionManager;
 
     // POST VEHICLE
-    private static String vehicleurl = "http://192.168.35.110/PHP_API/index.php/Vehicle/vehicle_ck";
+    private static String vehicleurl = "http://172.16.1.57/PHP_API/index.php/Vehicle/vehicle_ck";
     RequestQueue vehiclerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -130,6 +131,16 @@ public class Setting extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NotifySetActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //LINE Notify設定
+        ImageView linenotifyset = (ImageView) view.findViewById(R.id.setlinenotify);
+        linenotifyset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LineNotifyActivity.class);
                 startActivity(intent);
             }
         });
