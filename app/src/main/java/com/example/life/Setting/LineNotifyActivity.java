@@ -1,4 +1,4 @@
-package com.example.life;
+package com.example.life.Setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +19,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
+import com.example.life.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

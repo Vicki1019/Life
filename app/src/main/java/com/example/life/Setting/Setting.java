@@ -23,10 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.LineNotifyActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
-import com.example.life.Refrigerator.EditReflistActivity;
 import com.example.life.Vehicle.MyVehicleActivity;
 
 import org.json.JSONArray;
