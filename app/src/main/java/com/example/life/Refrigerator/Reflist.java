@@ -67,6 +67,11 @@ public class Reflist extends Fragment {
     //POST LINE Token
     private static String tokenurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/get_line_token";
     RequestQueue tokenrequestQueue;
+    //GET UPDATE FOOD STATE
+    private static String willstateurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/update_food_state_will";
+    RequestQueue willstaterequestQueue;
+    private static String gonestateurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/update_food_state_gone";
+    RequestQueue gonestaterequestQueue;
 
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
@@ -317,6 +322,15 @@ public class Reflist extends Fragment {
 
     //取得冰箱清單
     public void GetRefList(){
+        refnoarrayList.clear();
+        ownerarrayList.clear();
+        foodarrayList.clear();
+        quantityarrayList.clear();
+        locatearrayList.clear();
+        statearrayList.clear();
+        photoarrayList.clear();
+        FOODSTATE();
+
         getrefrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest getrefstrRequest = new StringRequest(Request.Method.POST, getrefurl, new Response.Listener<String>() {
             @Override
@@ -456,5 +470,44 @@ public class Reflist extends Fragment {
             }
         };
         tokenrequestQueue.add(tokenstrRequest);
+    }
+
+    //檢測食物新鮮度
+    public void FOODSTATE(){
+        willstaterequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest willstatestrRequest = new StringRequest(Request.Method.GET, willstateurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+
+                } else if (response.equals("failure")) {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        willstaterequestQueue.add(willstatestrRequest);
+
+        gonestaterequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest gonestatestrRequest = new StringRequest(Request.Method.GET, gonestateurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+
+                } else if (response.equals("failure")) {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        gonestaterequestQueue.add(gonestatestrRequest);
     }
 }
