@@ -55,15 +55,19 @@ import java.util.Map;
  */
 public class Reflist extends Fragment {
     TextView myref;
-    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle;
+    String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle,line_token;
     //Session
     SessionManager sessionManager;
-    //Get Reflist
-    private static String getrefurl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/getreflist";
+    //POST Reflist
+    private static String getrefurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
-    // Delete Reflist
-    private static String delrefurl = "http://172.16.1.53/PHP_API/index.php/Refrigerator/delete_ref_item";
+    //POST Delete Reflist
+    private static String delrefurl = "http://192.168.35.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
+    //POST LINE Token
+    private static String tokenurl = "http://192.168.35.110/PHP_API/index.php/LineNotify/get_line_token";
+    RequestQueue tokenrequestQueue;
+
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
     Reflist.MyListAdapter myListAdapter;
@@ -414,5 +418,43 @@ public class Reflist extends Fragment {
             }
         };
         delrefrequestQueue.add(delrefstrRequest);
+    }
+    
+    //取得使用者LINE Token
+    public void GetToken(){
+        tokenrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest tokenstrRequest = new StringRequest(Request.Method.POST, tokenurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject tokenjsonObject = new JSONObject(response);
+                    JSONArray tokenjsonArray = tokenjsonObject.getJSONArray("line_token");
+                    for(int t=0;t<tokenjsonArray.length();t++) {
+                        JSONObject jsonObject = tokenjsonArray.getJSONObject(t);
+                        String result = jsonObject.getString("token");
+                        if(response.equals("failure")){
+                            line_token = "";
+                        }else{
+                            line_token = result;
+                        }
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                return data;
+            }
+        };
+        tokenrequestQueue.add(tokenstrRequest);
     }
 }
