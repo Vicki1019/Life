@@ -142,6 +142,8 @@ public class NotifySetActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 if (response.equals("failure")) {
                     Toast.makeText(NotifySetActivity.this, "修改失敗", Toast.LENGTH_SHORT).show();
+                }else if(response.equals("success")){
+                    Toast.makeText(NotifySetActivity.this, "推播時間更新為"+choose_time.substring(0,5), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
