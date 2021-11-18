@@ -329,6 +329,7 @@ public class EditReflistActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     if (response.equals("success")) {
+                        ZERO_NOTIFY(refno);
                         Toast.makeText(EditReflistActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
                         intent.setClass(EditReflistActivity.this, MainActivity.class);
