@@ -38,8 +38,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,17 +58,17 @@ public class QRCodeScanActivity extends AppCompatActivity {
     QRCodeScanActivity.MyListAdapter myListAdapter;
     Button scan_add_ok;
     int drop = 0;
-    //GET Unit
+    //POST Unit
     private static String uniturl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
-    //GET Kind
+    //POST Kind
     private static String kindurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
-    //GET Locate
+    //POST Locate
     private static String locateurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
@@ -74,6 +76,12 @@ public class QRCodeScanActivity extends AppCompatActivity {
     //ADD Reflist
     private static String refaddurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
+
+    //POST 查詢發票明細
+    private static String qrcodeurl ="https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invapp/InvApp";
+    RequestQueue qrcoderequestQueue;
+    String invNum, invTerm, invDate, encrypt, sellerID, randomNumber;
+    String unitprice, quntity, rownum, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +107,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
         //設置掃描QR Code畫面
         scanIntegrator = new IntentIntegrator(QRCodeScanActivity.this); //Initialize intent integrator
-        //scanIntegrator.setPrompt("請掃描"); //Set prompt text
+        scanIntegrator.setPrompt("請對準發票左邊的QR Code進行掃描"); //Set prompt text
         scanIntegrator.setBeepEnabled(true); //Set Beep
         scanIntegrator.setOrientationLocked(false); //Set locked orientation
         //scanIntegrator.setCaptureActivity(QRCodeScanActivity.class); //Set capture activity
@@ -117,8 +125,24 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(scanningResult.getContents() != null){
+            //Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanningResult.getContents(), Toast.LENGTH_LONG).show();
+            String scanContent = scanningResult.getContents();
+            invNum = scanContent.substring(0,10); //發票號碼
+            invTerm = scanContent.substring(10,15); //發票期別
+            int year = Integer.parseInt(scanContent.substring(10,13))+1911;
+            String yyyy = String.valueOf(year);
+            invDate = yyyy+"/"+scanContent.substring(13,15)+"/"+scanContent.substring(15,17); //發票開立日期
+            encrypt = scanContent.substring(53,77); //發票檢驗碼
+            sellerID = scanContent.substring(45,53); //商家統編
+            randomNumber = scanContent.substring(17,21); //4位隨機碼
+            //Toast.makeText(QRCodeScanActivity.this, "發票號碼: "+invNum+"\n發票期別: "+invTerm+"\n發票開立日期: "+invDate+"\n發票檢驗碼: "+encrypt+"\n商家統編: "+sellerID+"\n4位隨機碼: "+randomNumber, Toast.LENGTH_LONG).show();
+            //qrcodeurl = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invapp/InvApp?version=0.5&type=QRCode&invNum="+invNum+"&action=qryInvDetail&generation=V2&invTerm="+invTerm+"&invDate="+invDate+"&encrypt="+encrypt+"&sellerID="+sellerID+"&UUID=1234567890987654&randomNumber="+randomNumber+"&appID=EINV7202107209712";
+
+            GetInvoice();
+
+
             //ScanResult.clear();
-            ScanName.clear();
+            /*ScanName.clear();
             ScanQuantity.clear();
             scanresult = null;
             String scanContent = scanningResult.getContents();
@@ -150,7 +174,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
             }
             refRecyclerView.setLayoutManager(new LinearLayoutManager(QRCodeScanActivity.this));
             myListAdapter = new QRCodeScanActivity.MyListAdapter();
-            refRecyclerView.setAdapter(myListAdapter);
+            refRecyclerView.setAdapter(myListAdapter);*/
         }else{
             //Toast.makeText(QRCodeScanActivity.this,"發生錯誤",Toast.LENGTH_LONG).show();
             Intent i = new Intent();
@@ -301,6 +325,51 @@ public class QRCodeScanActivity extends AppCompatActivity {
             return ScanName.size();
         }
 
+    }
+
+    public void GetInvoice(){
+        ScanName.clear();
+        ScanQuantity.clear();
+        qrcoderequestQueue = Volley.newRequestQueue(this);
+        StringRequest qrcodestrRequest = new StringRequest(Request.Method.POST, qrcodeurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject qrcodejsonObject = new JSONObject(response);
+                    JSONArray qrcodejsonArray = qrcodejsonObject.getJSONArray("details");
+                    for(int i=0;i<qrcodejsonArray.length();i++) {
+                        JSONObject jsonObject = qrcodejsonArray.getJSONObject(i);
+
+                        quntity = jsonObject.getString("quntity");
+                        description = jsonObject.getString("description");
+                        /*Toast.makeText(QRCodeScanActivity.this,quntity, Toast.LENGTH_LONG).show();
+                        Toast.makeText(QRCodeScanActivity.this,description, Toast.LENGTH_LONG).show();*/
+
+                        ScanName.add(description);
+                        ScanQuantity.add(quntity);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                refRecyclerView.setLayoutManager(new LinearLayoutManager(QRCodeScanActivity.this));
+                myListAdapter = new QRCodeScanActivity.MyListAdapter();
+                refRecyclerView.setAdapter(myListAdapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(QRCodeScanActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                return data;
+            }
+        };
+        qrcoderequestQueue.add(qrcodestrRequest);
     }
 
     //取得unit

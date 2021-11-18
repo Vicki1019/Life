@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.example.life.Login.RegisterActivity;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Scan.QRCodeScanActivity;
 import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +55,13 @@ public class ShopaddActivity extends AppCompatActivity {
     TextView shoplist_choose_date;
     EditText shoplist_input_name, shoplist_input_quantity;
     String sEmail, notifydate, shoplist_name, shoplist_quantity;
+    ArrayList<String> Namelist = new ArrayList<>();
+    ArrayList<String> Quantitylist = new ArrayList<>();
+    //int i=1;
     View shoplist_addview;
     LinearLayout shoplist_add_layout;
+    RecyclerView add_shoplist_recyclerview;
+    //ShopaddActivity.MyListAdapter myListAdapter;
     Button add_view_btn;
     int default_i = -1;
     //SESSION
@@ -82,13 +89,20 @@ public class ShopaddActivity extends AppCompatActivity {
             }
         });
 
+        //建置購物清單填寫欄位
+        /*add_shoplist_recyclerview = findViewById(R.id.add_shoplist_recyclerview);
+        add_shoplist_recyclerview.setLayoutManager(new LinearLayoutManager(ShopaddActivity.this));
+        myListAdapter = new ShopaddActivity.MyListAdapter();
+        add_shoplist_recyclerview.setAdapter(myListAdapter);*/
+        /*Namelist.clear();
+        Quantitylist.clear();*/
         Shopadd();
     }
 
     //新增購物清單欄位
     public void AddView() {
         shoplist_addview = getLayoutInflater().inflate(R.layout.shoplist_add_layout, null, false);
-
+        default_i = 0;
         ImageView shoplist_remove = (ImageView) shoplist_addview.findViewById(R.id.shoplist_remove);
         shoplist_remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +208,7 @@ public class ShopaddActivity extends AppCompatActivity {
                                     if(shoplist_quantity.equals("")){shoplist_input_quantity.setError("請輸入數量");}
                                 }
                             }
-                        } //for
+                        }
                     }
                 }
             }
@@ -238,7 +252,7 @@ public class ShopaddActivity extends AppCompatActivity {
         addshoprequestQueue.add(addshopstringRequest);
     }
 
-    public void Loading(int position){
+    /*public void Loading(int position){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
         View loadingview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
         mBuilder.setView(loadingview);//設置View
@@ -259,7 +273,7 @@ public class ShopaddActivity extends AppCompatActivity {
             startActivity(intent);
             Toast.makeText(ShopaddActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     // Disable back button
     @Override

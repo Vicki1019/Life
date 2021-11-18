@@ -66,11 +66,11 @@ public class EditReflistActivity extends AppCompatActivity {
     private static String editrefurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
     //POST Token
-    private static String tokenurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/get_line_token";
-    RequestQueue tokenrequestQueue;
-    //POST Notify
-    private static String notifyurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/SendNotify";
-    RequestQueue notifyrequestQueue;
+    //private static String tokenurl = "http://172.16.1.57/PHP_API/index.php/LineNotify/get_line_token";
+    //RequestQueue tokenrequestQueue;
+    //POST ZERO NOTIFY
+    private static String zerourl = "http://172.16.1.57/PHP_API/index.php/LineNotify/ZeroNotify";
+    RequestQueue zerorequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,7 +329,6 @@ public class EditReflistActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     if (response.equals("success")) {
-                        ZeroNotify(editquantity);
                         Toast.makeText(EditReflistActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
                         intent.setClass(EditReflistActivity.this, MainActivity.class);
@@ -372,16 +371,30 @@ public class EditReflistActivity extends AppCompatActivity {
     }
 
     //零庫存通知
-    private void ZeroNotify(String quantity) {
-        //editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
-        //當使用者將數量修改為0時
-        if(quantity.equals("0")){
-            //先取得使用者的LINE Token
-            tokenrequestQueue = Volley.newRequestQueue(this);
+    public void ZERO_NOTIFY(String refno){
+        zerorequestQueue = Volley.newRequestQueue(this);
+        StringRequest zerostrRequest = new StringRequest(Request.Method.POST, zerourl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
 
-
-            //再傳送訊息
-            notifyrequestQueue = Volley.newRequestQueue(this);
-        }
+                } else if (response.equals("failure")) {
+                    Toast.makeText(EditReflistActivity.this, "推播失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(EditReflistActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("refre_list_no",refno);
+                return data;
+            }
+        };
+        zerorequestQueue.add(zerostrRequest);
     }
 }

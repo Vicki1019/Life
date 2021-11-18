@@ -72,6 +72,9 @@ public class Reflist extends Fragment {
     RequestQueue willstaterequestQueue;
     private static String gonestateurl = "http://172.16.1.57/PHP_API/index.php/Refrigerator/update_food_state_gone";
     RequestQueue gonestaterequestQueue;
+    //POST ZERO NOTIFY
+    private static String zerourl = "http://172.16.1.57/PHP_API/index.php/LineNotify/ZeroNotify";
+    RequestQueue zerorequestQueue;
 
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
@@ -413,6 +416,7 @@ public class Reflist extends Fragment {
                     Intent intent = new Intent();
                     intent.setClass(getContext(), MainActivity.class);
                     startActivity(intent);
+                    ZERO_NOTIFY(refno);
                 } else if (response.equals("failure")) {
                     Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
                 }
@@ -432,10 +436,41 @@ public class Reflist extends Fragment {
             }
         };
         delrefrequestQueue.add(delrefstrRequest);
+
+
+    }
+
+    //零庫存通知
+    public void ZERO_NOTIFY(String refno){
+        zerorequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest zerostrRequest = new StringRequest(Request.Method.POST, zerourl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+
+                } else if (response.equals("failure")) {
+                    Toast.makeText(getContext(), "推播失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                data.put("refre_list_no",refno);
+                return data;
+            }
+        };
+        zerorequestQueue.add(zerostrRequest);
     }
     
     //取得使用者LINE Token
-    public void GetToken(){
+    /*public void GetToken(){
         tokenrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest tokenstrRequest = new StringRequest(Request.Method.POST, tokenurl, new Response.Listener<String>() {
             @Override
@@ -470,7 +505,7 @@ public class Reflist extends Fragment {
             }
         };
         tokenrequestQueue.add(tokenstrRequest);
-    }
+    }*/
 
     //檢測食物新鮮度
     public void FOODSTATE(){
