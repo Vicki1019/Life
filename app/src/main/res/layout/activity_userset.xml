@@ -98,7 +98,7 @@
             android:id="@+id/editname_ok"
             android:layout_width="185dp"
             android:layout_height="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/shape"
             android:clickable="true"
             android:text="完成"
