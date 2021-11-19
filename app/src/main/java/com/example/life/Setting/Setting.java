@@ -10,10 +10,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
 import com.example.life.Vehicle.MyVehicleActivity;
@@ -45,8 +48,9 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Setting extends Fragment {
-    TextView useremail, username,refname;
+    TextView useremail, username,refrename;
     SessionManager sessionManager;
+    Button edit_refname_btn;
     String sRefName, sName, sEmail;
     ImageView user_photo;
     // POST VEHICLE
@@ -55,6 +59,9 @@ public class Setting extends Fragment {
     // POST USER INFO
     private static String userurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/getUserInfo";
     RequestQueue userrequestQueue;
+    // POST Edit RefName
+    private static String refnameurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/update_refname";
+    RequestQueue refnamerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,20 +110,27 @@ public class Setting extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         //取得使用者暱稱與信箱
-        refname = (TextView) view.findViewById(R.id.refname);
+        refrename = (TextView) view.findViewById(R.id.refname);
         username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
         HashMap<String, String> user = sessionManager.getUserDetail();
         sRefName = user.get(sessionManager.MEMBER_NIKINAME);
         sName = user.get(sessionManager.MEMBER_NIKINAME);
         sEmail = user.get(sessionManager.EMAIL);
-        refname.setText(sRefName);
+        refrename.setText(sRefName);
         username.setText(sName);
         useremail.setText(sEmail);
 
         GetUserInfo();
         user_photo = (ImageView) view.findViewById(R.id.user_photo);
 
+        edit_refname_btn = (Button) view.findViewById(R.id.edit_refname_btn);
+        edit_refname_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditRefName();
+            }
+        });
 
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
@@ -240,6 +254,68 @@ public class Setting extends Fragment {
         return view;
     }
 
+    //修改冰箱名稱
+    public void EditRefName(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+        View refnameview = getLayoutInflater().inflate(R.layout.edit_refname_layout,null);//嵌入View
+        ImageView backDialog = refnameview.findViewById(R.id.edit_refname_back);//連結關閉視窗的Button
+        mBuilder.setView(refnameview);//設置View
+        AlertDialog refname_dialog = mBuilder.create();
+        //關閉視窗的監聽事件
+        backDialog.setOnClickListener(v1 -> {refname_dialog.dismiss();});
+
+        EditText new_refname = (EditText) refnameview.findViewById(R.id.input_new_refname);
+        Button edit_refname_ok = (Button) refnameview.findViewById(R.id.edit_refname_ok);
+        edit_refname_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(new_refname.getText().equals("")){
+                    new_refname.setError("請輸入冰箱名稱");
+                }else{
+                    if(new_refname.getText().length()>8){
+                        new_refname.setError("不得超過8個字");
+                    }else{
+                        refnamerequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+                        StringRequest refnamestrRequest = new StringRequest(Request.Method.POST, refnameurl, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if(response.equals("success")){
+                                    refname_dialog.hide();
+                                    Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent();
+                                    intent.setClass(getContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> data = new HashMap<>();
+                                data.put("email", sEmail);
+                                data.put("refname", new_refname.getText().toString());
+                                return data;
+                            }
+                        };
+                        refnamerequestQueue.add(refnamestrRequest);
+                    }
+                }
+            }
+        });
+
+        refname_dialog.show();
+        refname_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        dm = getResources().getDisplayMetrics();
+        refname_dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        refname_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
+
+    //取得使用者頭貼
     public void GetUserInfo(){
         userrequestQueue =  Volley.newRequestQueue(getContext().getApplicationContext());
         StringRequest userstrRequest = new StringRequest(Request.Method.POST, userurl, new Response.Listener<String>() {
