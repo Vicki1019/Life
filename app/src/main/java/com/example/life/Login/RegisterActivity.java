@@ -77,52 +77,57 @@ public class RegisterActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
 
         if(!rnickname.equals("") && !remail.equals("") && !rpasswd.equals("") && !rpasswdck.equals("")){
-            if(rpasswd.length()< 5) {
-                passwd.setError("密碼長度不得小於5");
+            if(rnickname.length()>8){
                 loading.setVisibility(View.GONE);
-            }else if(rpasswd.length() >10){
-                passwd.setError("密碼長度不得大於10");
-                loading.setVisibility(View.GONE);
-            }else {
-                if (!rpasswd.equals(rpasswdck)) {
+                nickname.setError("暱稱不得超過8個字");
+            }else{
+                if(rpasswd.length()< 5) {
+                    passwd.setError("密碼長度不得小於5");
                     loading.setVisibility(View.GONE);
-                    passwdck.setError("輸入密碼不一致");
-                } else {
+                }else if(rpasswd.length() >10){
+                    passwd.setError("密碼長度不得大於10");
                     loading.setVisibility(View.GONE);
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.equals("success")) {
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                                Toast.makeText(RegisterActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
-                            } else if (response.equals("failure")) {
-                                Toast.makeText(RegisterActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                }else {
+                    if (!rpasswd.equals(rpasswdck)) {
+                        loading.setVisibility(View.GONE);
+                        passwdck.setError("輸入密碼不一致");
+                    } else {
+                        loading.setVisibility(View.GONE);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.equals("success")) {
+                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Toast.makeText(RegisterActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                                } else if (response.equals("failure")) {
+                                    Toast.makeText(RegisterActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                        }
-                    }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> data = new HashMap<>();
-                            data.put("name", rnickname);
-                            data.put("email", remail);
-                            data.put("passwd", rpasswd);
-                            data.put("passwdck", rpasswdck);
-                            if(rphoto != null){
-                                data.put("photo", rphoto);
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                loading.setVisibility(View.GONE);
+                                Toast.makeText(RegisterActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
                             }
-                            return data;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    requestQueue.add(stringRequest);
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> data = new HashMap<>();
+                                data.put("name", rnickname);
+                                data.put("email", remail);
+                                data.put("passwd", rpasswd);
+                                data.put("passwdck", rpasswdck);
+                                if(rphoto != null){
+                                    data.put("photo", rphoto);
+                                }
+                                return data;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        requestQueue.add(stringRequest);
+                    }
                 }
             }
         }else{
