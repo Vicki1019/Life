@@ -26,7 +26,7 @@
 
                 <TextView
                     android:id="@+id/scan_food_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="198dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:text="食品名稱"
@@ -41,7 +41,7 @@
                     android:id="@+id/drop_down_btn"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="10dp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline23"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="80dp" />
+                    app:layout_constraintGuide_begin="100dp" />
 
                 <Spinner
                     android:id="@+id/scan_input_unit"

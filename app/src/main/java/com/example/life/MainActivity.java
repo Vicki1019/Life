@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            photo = getStringImage(bitmap);
+            photo = String.valueOf(filePath);
             //UploadPicture(sEmail, getStringImage(bitmap));
         }
     }

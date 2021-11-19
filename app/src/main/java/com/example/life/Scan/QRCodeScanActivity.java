@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,10 +79,10 @@ public class QRCodeScanActivity extends AppCompatActivity {
     RequestQueue refaddrequestQueue;
 
     //POST 查詢發票明細
-    private static String qrcodeurl ="https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invapp/InvApp";
+    private static String qrcodeurl ="http://192.168.97.110/PHP_API/index.php/API/getInvList";
     RequestQueue qrcoderequestQueue;
     String invNum, invTerm, invDate, encrypt, sellerID, randomNumber;
-    String unitprice, quntity, rownum, description;
+    String unitprice, scan_quantity, rownum, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +138,9 @@ public class QRCodeScanActivity extends AppCompatActivity {
             randomNumber = scanContent.substring(17,21); //4位隨機碼
             //Toast.makeText(QRCodeScanActivity.this, "發票號碼: "+invNum+"\n發票期別: "+invTerm+"\n發票開立日期: "+invDate+"\n發票檢驗碼: "+encrypt+"\n商家統編: "+sellerID+"\n4位隨機碼: "+randomNumber, Toast.LENGTH_LONG).show();
             //qrcodeurl = "https://api.einvoice.nat.gov.tw/PB2CAPIVAN/invapp/InvApp?version=0.5&type=QRCode&invNum="+invNum+"&action=qryInvDetail&generation=V2&invTerm="+invTerm+"&invDate="+invDate+"&encrypt="+encrypt+"&sellerID="+sellerID+"&UUID=1234567890987654&randomNumber="+randomNumber+"&appID=EINV7202107209712";
-
-            GetInvoice();
+            ScanName.clear();
+            ScanQuantity.clear();
+            GetInvoice(invNum,invTerm,invDate,encrypt,sellerID,randomNumber);
 
 
             //ScanResult.clear();
@@ -327,26 +329,25 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
     }
 
-    public void GetInvoice(){
-        ScanName.clear();
-        ScanQuantity.clear();
+    public void GetInvoice(String invNum,String invTerm,String invDate,String encrypt,String sellerID,String randomNumber){
         qrcoderequestQueue = Volley.newRequestQueue(this);
         StringRequest qrcodestrRequest = new StringRequest(Request.Method.POST, qrcodeurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.i("response", String.valueOf(response));
                 try{
                     JSONObject qrcodejsonObject = new JSONObject(response);
                     JSONArray qrcodejsonArray = qrcodejsonObject.getJSONArray("details");
                     for(int i=0;i<qrcodejsonArray.length();i++) {
                         JSONObject jsonObject = qrcodejsonArray.getJSONObject(i);
 
-                        quntity = jsonObject.getString("quntity");
+                        scan_quantity = jsonObject.getString("quantity");
                         description = jsonObject.getString("description");
-                        /*Toast.makeText(QRCodeScanActivity.this,quntity, Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(QRCodeScanActivity.this,quantity, Toast.LENGTH_LONG).show();
                         Toast.makeText(QRCodeScanActivity.this,description, Toast.LENGTH_LONG).show();*/
 
                         ScanName.add(description);
-                        ScanQuantity.add(quntity);
+                        ScanQuantity.add(scan_quantity);
 
                     }
                 } catch (Exception e) {
@@ -365,7 +366,13 @@ public class QRCodeScanActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> data = new HashMap<>();
-                data.put("email",sEmail);
+                //data.put("email",sEmail);
+                data.put("invNum",invNum);
+                data.put("invTerm",invTerm);
+                data.put("invDate",invDate);
+                data.put("encrypt",encrypt);
+                data.put("sellerID",sellerID);
+                data.put("randomNumber",randomNumber);
                 return data;
             }
         };
