@@ -33,7 +33,7 @@
     <View
         android:id="@+id/view4"
         android:layout_width="wrap_content"
-        android:layout_height="450dp"
+        android:layout_height="460dp"
         android:layout_marginBottom="20dp"
         android:background="#FFEEC6"
         android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -64,34 +64,35 @@
         android:background="#FFF9E9"
         android:clickable="true"
         android:foregroundTint="#6A2B2B"
-        app:layout_constraintEnd_toStartOf="@+id/guideline22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2"
-        app:srcCompat="@drawable/camara" />
+        app:srcCompat="@drawable/add_photo" />
 
     <TextView
         android:id="@+id/refadd_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:text="名稱"
         android:textColor="#884800"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <EditText
         android:id="@+id/refadd_name_input"
         android:layout_width="150dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="18sp"
         android:theme="@style/MyEditText"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
@@ -104,27 +105,25 @@
         android:id="@+id/refadd_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:text="數量"
         android:textColor="#884800"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_name" />
+        app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
     <TextView
         android:id="@+id/refadd_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:text="有效期限"
         android:textColor="#884800"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/refadd_quantity" />
+        app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
     <TextView
         android:id="@+id/refadd_kind"
@@ -180,7 +179,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.62" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <ImageView
         android:id="@+id/decrease_btn"
@@ -198,7 +197,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.53" />
+        app:layout_constraintGuide_percent="0.57" />
 
     <ImageView
         android:id="@+id/increase_btn"
@@ -277,32 +276,31 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.6" />
 
-    <Button
-        android:id="@+id/reflist_upload_photo"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="85dp"
-        android:background="@drawable/notexpshape"
-        android:text="新增圖片"
-        android:textColor="#884800"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.70" />
+        app:layout_constraintGuide_percent="0.73" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.81" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="點擊可新增照片"
+        android:textColor="#8C884800"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refadd_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

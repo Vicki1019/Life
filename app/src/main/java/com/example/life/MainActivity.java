@@ -207,9 +207,8 @@ public class MainActivity extends AppCompatActivity {
         backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
 
         //新增照片
-        Button reflist_upload_photo = (Button) refview.findViewById(R.id.reflist_upload_photo);
-        refadd_photo = (ImageView) refview.findViewById(R.id.refadd_photo);
-        reflist_upload_photo.setOnClickListener(new View.OnClickListener() {
+        ImageView refadd_photo = (ImageView) refview.findViewById(R.id.refadd_photo);
+        refadd_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SelectImg();
