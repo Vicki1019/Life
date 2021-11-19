@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +30,29 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Userset extends AppCompatActivity {
 
-   public EditText editname;
-   public TextView useremail;
-   public String newName;
+   EditText editname;
+   TextView useremail;
+   String newName, newphoto, editName, editEmail;;
+   ImageView user_photo;
+   Bitmap bitmap;
    Button account_back_setting, editname_ok;
-   //Volley
-   private static String editnameurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/updatename";
+   //POST Edit User Info
+   private static String editnameurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/updateinfo";
    private static String editpassurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/updatepass";
+   private static String userurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/getUserInfo";
+   RequestQueue userrequestQueue;
    //Session
    SessionManager sessionManager;
 
@@ -51,12 +64,22 @@ public class Userset extends AppCompatActivity {
         editname = (EditText) findViewById(R.id.account_name);
         useremail = (TextView) findViewById(R.id.account_email);
 
+        //使用者頭貼
+        user_photo = (ImageView) findViewById(R.id.edit_user_photo);
+        user_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImg();
+            }
+        });
+
         sessionManager = new SessionManager(this);
         HashMap<String, String> user = sessionManager.getUserDetail();
-        String editName = user.get(sessionManager.MEMBER_NIKINAME);
-        String editEmail = user.get(sessionManager.EMAIL);
+        editName = user.get(sessionManager.MEMBER_NIKINAME);
+        editEmail = user.get(sessionManager.EMAIL);
         editname.setText(editName);
         useremail.setText(editEmail);
+        GetUserInfo();
 
         //返回設定介面
         account_back_setting = (Button) findViewById(R.id.account_back_setting);
@@ -69,7 +92,7 @@ public class Userset extends AppCompatActivity {
             }
         });
 
-        //修改使用者暱稱
+        //修改使用者暱稱與頭貼
         editname_ok = (Button) findViewById(R.id.editname_ok);
         editname_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +108,7 @@ public class Userset extends AppCompatActivity {
                                     Toast.makeText(Userset.this, "修改成功", Toast.LENGTH_SHORT).show();
                                 } else if (response.equals("failure")) {
                                     if(newName.equals(editName)){
-                                        Toast.makeText(Userset.this, "您的暱稱為："+editName, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Userset.this, "您並無做任何修改", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -100,6 +123,7 @@ public class Userset extends AppCompatActivity {
                                 Map<String, String> data = new HashMap<>();
                                 data.put("newName", newName);
                                 data.put("email", editEmail);
+                                data.put("newphoto", newphoto);
                                 return data;
                             }
                         };
@@ -223,6 +247,64 @@ public class Userset extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
         dialog.getWindow().setLayout(dm.widthPixels-200, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
+
+    //取得使用者頭貼
+    public void GetUserInfo(){
+        userrequestQueue =  Volley.newRequestQueue(this);
+        StringRequest userstrRequest = new StringRequest(Request.Method.POST, userurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject userjsonObject = new JSONObject(response);
+                    JSONArray userjsonArray = userjsonObject.getJSONArray("info");
+                    for(int i=0;i<userjsonArray.length();i++) {
+                        JSONObject jsonObject = userjsonArray.getJSONObject(i);
+                        newphoto = jsonObject.getString("photo");
+                        Uri uri = Uri.parse(newphoto);
+                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Userset.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("emaildata",editEmail);
+                return data;
+            }
+        };
+        userrequestQueue.add(userstrRequest);
+    }
+
+    //手機上傳照片
+    public void SelectImg(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData(); //獲得圖片的uri
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                user_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            newphoto = String.valueOf(filePath);
+            //UploadPicture(sEmail, getStringImage(bitmap));
+        }
     }
 
     // Disable back button
