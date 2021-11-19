@@ -3,10 +3,15 @@ package com.example.life.Login;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,16 +22,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.MainActivity;
 import com.example.life.R;
+import com.example.life.Setting.KindSetActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText nickname, email, passwd, passwdck;
-    private  String rnickname, remail, rpasswd, rpasswdck;
+    private  String rnickname, remail, rpasswd, rpasswdck, rphoto;
     private ProgressBar loading;
+    private ImageView profile_photo_register;
+    private Bitmap bitmap;
     private static String url = "http://192.168.39.110/PHP_API/index.php/Login/register";
 
     @Override
@@ -49,6 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
         passwd = findViewById(R.id.password);
         passwdck = findViewById(R.id.passwordck);
         loading = findViewById(R.id.rloading);
+
+        //修改使用者頭貼
+        profile_photo_register = (ImageView) findViewById(R.id.profile_photo_register);
+        profile_photo_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { SelectImg(); }
+        });
 
     }
 
@@ -98,6 +115,9 @@ public class RegisterActivity extends AppCompatActivity {
                             data.put("email", remail);
                             data.put("passwd", rpasswd);
                             data.put("passwdck", rpasswdck);
+                            if(rphoto != null){
+                                data.put("photo", rphoto);
+                            }
                             return data;
                         }
                     };
@@ -194,5 +214,35 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    //手機上傳照片
+    public void SelectImg(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData(); //獲得圖片的uri
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                profile_photo_register.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            rphoto = String.valueOf(filePath);
+            //UploadPicture(sEmail, getStringImage(bitmap));
+        }
+    }
+    // Disable back button
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

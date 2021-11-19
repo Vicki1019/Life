@@ -23,20 +23,21 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:id="@+id/profile_photo_register"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_title"
-            app:srcCompat="@drawable/user" />
+            app:srcCompat="@drawable/add_photo" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15" />
+            app:layout_constraintGuide_percent="0.13" />
 
         <TextView
             android:id="@+id/register_title"
@@ -52,22 +53,23 @@
 
         <EditText
             android:id="@+id/nickname"
-            android:layout_width="225dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:ems="10"
             android:hint="您的暱稱"
             android:inputType="textPersonName"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         <EditText
             android:id="@+id/myemail"
-            android:layout_width="225dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:hint="請輸入E-mail"
             android:inputType="textPersonName"
@@ -78,9 +80,9 @@
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="225dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:hint="請輸入密碼 (長度5~10)"
             android:inputType="textPassword"
@@ -91,9 +93,9 @@
 
         <EditText
             android:id="@+id/passwordck"
-            android:layout_width="225dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:hint="再次確認密碼"
             android:inputType="textPassword"
@@ -121,7 +123,7 @@
             android:id="@+id/registerok"
             android:layout_width="113dp"
             android:layout_height="70dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:clickable="true"
             android:onClick="register"
             app:layout_constraintEnd_toEndOf="parent"
@@ -139,6 +141,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordck" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="點擊圖片可修改頭貼"
+            android:textColor="#8C884800"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_photo_register" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

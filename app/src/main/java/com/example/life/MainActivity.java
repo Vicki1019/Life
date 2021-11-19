@@ -481,14 +481,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //獲取圖片的路徑
-    private String getStringImage(Bitmap bitmap) {
+    /*private String getStringImage(Bitmap bitmap) {
 
-       /* String[] photoArray = {MediaStore.Images.Media.DATA}; //圖片路徑
+        String[] photoArray = {MediaStore.Images.Media.DATA}; //圖片路徑
         Cursor cursor =  getContentResolver().query(filePath, photoArray, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         String path = cursor.getString(column_index);
-        return path;*/
+        return path;
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -497,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
         String encodedeImg = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
 
         return  encodedeImg;
-    }
+    }*/
 
    /* public void UploadPicture(String email, String photo){
 
