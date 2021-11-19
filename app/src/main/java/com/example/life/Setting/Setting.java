@@ -51,7 +51,7 @@ public class Setting extends Fragment {
     TextView useremail, username,refrename;
     SessionManager sessionManager;
     Button edit_refname_btn;
-    String sRefName, sName, sEmail;
+    String sName, sEmail;
     ImageView user_photo;
     // POST VEHICLE
     private static String vehicleurl = "http://192.168.170.110/PHP_API/index.php/Vehicle/vehicle_ck";
@@ -114,10 +114,8 @@ public class Setting extends Fragment {
         username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
         HashMap<String, String> user = sessionManager.getUserDetail();
-        sRefName = user.get(sessionManager.MEMBER_NIKINAME);
         sName = user.get(sessionManager.MEMBER_NIKINAME);
         sEmail = user.get(sessionManager.EMAIL);
-        refrename.setText(sRefName);
         username.setText(sName);
         useremail.setText(sEmail);
 
@@ -269,10 +267,11 @@ public class Setting extends Fragment {
         edit_refname_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(new_refname.getText().equals("")){
+                String newrefname = new_refname.getText().toString();
+                if(newrefname.equals("")){
                     new_refname.setError("請輸入冰箱名稱");
                 }else{
-                    if(new_refname.getText().length()>8){
+                    if(newrefname.length()>8){
                         new_refname.setError("不得超過8個字");
                     }else{
                         refnamerequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
@@ -297,7 +296,7 @@ public class Setting extends Fragment {
                             protected Map<String, String> getParams() throws AuthFailureError {
                                 Map<String, String> data = new HashMap<>();
                                 data.put("email", sEmail);
-                                data.put("refname", new_refname.getText().toString());
+                                data.put("refname", newrefname);
                                 return data;
                             }
                         };
@@ -315,7 +314,7 @@ public class Setting extends Fragment {
         refname_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
-    //取得使用者頭貼
+    //取得使用者資料
     public void GetUserInfo(){
         userrequestQueue =  Volley.newRequestQueue(getContext().getApplicationContext());
         StringRequest userstrRequest = new StringRequest(Request.Method.POST, userurl, new Response.Listener<String>() {
@@ -327,8 +326,10 @@ public class Setting extends Fragment {
                     for(int i=0;i<userjsonArray.length();i++) {
                         JSONObject jsonObject = userjsonArray.getJSONObject(i);
                         String userphoto = jsonObject.getString("photo");
+                        String refname = jsonObject.getString("group_name");
                         Uri uri = Uri.parse(userphoto);
                         Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        refrename.setText(refname);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
