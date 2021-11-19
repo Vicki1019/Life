@@ -33,10 +33,10 @@ public class NotifySetActivity extends AppCompatActivity {
     //SESSION
     SessionManager sessionManager;
     //POST Get Notify Time
-    private static String notifytimeurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/get_send_hint";
+    private static String notifytimeurl = "http://192.168.170.110/PHP_API/index.php/UserSetting/get_send_hint";
     RequestQueue notifytimerequestQueue;
     // POST Update Notify Time
-    private static String updatetimeurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/update_notify_time";
+    private static String updatetimeurl = "http://192.168.170.110/PHP_API/index.php/UserSetting/update_notify_time";
     RequestQueue updatetimerequestQueue;
 
     @Override
