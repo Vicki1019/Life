@@ -2,8 +2,10 @@ package com.example.life.Setting;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,10 +28,14 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
 import com.example.life.Vehicle.MyVehicleActivity;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,10 +47,14 @@ import java.util.Map;
 public class Setting extends Fragment {
     TextView useremail, username,refname;
     SessionManager sessionManager;
-
+    String sRefName, sName, sEmail;
+    ImageView user_photo;
     // POST VEHICLE
     private static String vehicleurl = "http://192.168.39.110/PHP_API/index.php/Vehicle/vehicle_ck";
     RequestQueue vehiclerequestQueue;
+    // POST USER INFO
+    private static String userurl = "http://192.168.39.110/PHP_API/index.php/UserSetting/getUserInfo";
+    RequestQueue userrequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,12 +107,16 @@ public class Setting extends Fragment {
         username = (TextView) view.findViewById(R.id.username);
         useremail = (TextView) view.findViewById(R.id.useremail);
         HashMap<String, String> user = sessionManager.getUserDetail();
-        String sRefName = user.get(sessionManager.MEMBER_NIKINAME);
-        String sName = user.get(sessionManager.MEMBER_NIKINAME);
-        String sEmail = user.get(sessionManager.EMAIL);
+        sRefName = user.get(sessionManager.MEMBER_NIKINAME);
+        sName = user.get(sessionManager.MEMBER_NIKINAME);
+        sEmail = user.get(sessionManager.EMAIL);
         refname.setText(sRefName);
         username.setText(sName);
         useremail.setText(sEmail);
+
+        GetUserInfo();
+        user_photo = (ImageView) view.findViewById(R.id.user_photo);
+
 
         //帳號設定
         ImageView userset = (ImageView) view.findViewById(R.id.setaccount);
@@ -224,5 +238,39 @@ public class Setting extends Fragment {
         });
 
         return view;
+    }
+
+    public void GetUserInfo(){
+        userrequestQueue =  Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest userstrRequest = new StringRequest(Request.Method.POST, userurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject userjsonObject = new JSONObject(response);
+                    JSONArray userjsonArray = userjsonObject.getJSONArray("info");
+                    for(int i=0;i<userjsonArray.length();i++) {
+                        JSONObject jsonObject = userjsonArray.getJSONObject(i);
+                        String userphoto = jsonObject.getString("photo");
+                        Uri uri = Uri.parse(userphoto);
+                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("emaildata",sEmail);
+                return data;
+            }
+        };
+        userrequestQueue.add(userstrRequest);
     }
 }

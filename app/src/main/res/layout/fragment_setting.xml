@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/user_photo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/user"
@@ -61,7 +61,7 @@
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="40dp"
             android:textColor="#884800"
             android:textSize="20sp"
@@ -72,7 +72,7 @@
             android:id="@+id/useremail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:textColor="#884800"
             android:textSize="18sp"
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.3" />
+            app:layout_constraintGuide_percent="0.35" />
 
         <ImageView
             android:id="@+id/setaccount"

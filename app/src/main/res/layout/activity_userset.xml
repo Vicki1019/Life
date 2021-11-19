@@ -32,10 +32,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/account_user_photo"
+            android:id="@+id/edit_user_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="16dp"
+            android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline11"
@@ -43,8 +44,8 @@
 
         <TextView
             android:id="@+id/account_title1"
-            android:layout_width="50dp"
-            android:layout_height="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="25dp"
             android:text="暱稱"
@@ -53,7 +54,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_user_photo" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_user_photo" />
 
         <EditText
             android:id="@+id/account_name"
@@ -70,8 +71,8 @@
 
         <TextView
             android:id="@+id/account_title2"
-            android:layout_width="50dp"
-            android:layout_height="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="30dp"
             android:text="帳號"
