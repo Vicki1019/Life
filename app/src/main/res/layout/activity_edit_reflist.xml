@@ -53,7 +53,7 @@
       android:id="@+id/refedit_photo"
       android:layout_width="130dp"
       android:layout_height="130dp"
-      android:layout_marginTop="35dp"
+      android:layout_marginTop="30dp"
       android:background="#FFFFFF"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -64,61 +64,57 @@
       android:id="@+id/refedit_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="50dp"
+      android:layout_marginTop="10dp"
       android:text="名稱"
       android:textColor="#884800"
       android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_photo" />
+      app:layout_constraintTop_toTopOf="@+id/guideline29" />
 
   <TextView
       android:id="@+id/refedit_quantity"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="30dp"
       android:text="數量"
       android:textColor="#884800"
       android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_name" />
+      app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
   <TextView
       android:id="@+id/refedit_expdate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="30dp"
       android:text="有效期限"
       android:textColor="#884800"
       android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_quantity" />
+      app:layout_constraintTop_toTopOf="@+id/guideline31" />
 
   <TextView
       android:id="@+id/refedit_kind"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="30dp"
       android:text="分類項目"
       android:textColor="#884800"
       android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_expdate" />
+      app:layout_constraintTop_toTopOf="@+id/guideline32" />
 
   <TextView
       android:id="@+id/refedit_locate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="30dp"
       android:text="存放位置"
       android:textColor="#884800"
       android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_kind" />
+      app:layout_constraintTop_toTopOf="@+id/guideline33" />
 
   <Button
       android:id="@+id/reflist_edit_ok"
@@ -138,24 +134,22 @@
       android:id="@+id/refedit_input_name"
       android:layout_width="200dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="15dp"
-      android:layout_marginTop="35dp"
+      android:layout_marginStart="16dp"
       android:ems="10"
       android:inputType="textPersonName"
       android:textSize="20sp"
       android:theme="@style/MyEditText"
       app:layout_constraintStart_toEndOf="@+id/refedit_name"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_photo" />
+      app:layout_constraintTop_toTopOf="@+id/guideline29" />
 
   <ImageView
       android:id="@+id/refedit_increase_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
-      android:layout_marginTop="25dp"
       android:clickable="true"
       app:layout_constraintStart_toEndOf="@+id/refedit_input_quantity"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
+      app:layout_constraintTop_toTopOf="@+id/guideline30"
       app:srcCompat="@drawable/dincrease" />
 
   <ImageView
@@ -163,10 +157,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
-      android:layout_marginTop="25dp"
       android:clickable="true"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name"
+      app:layout_constraintTop_toTopOf="@+id/guideline30"
       app:srcCompat="@drawable/decrease" />
 
   <TextView
@@ -174,33 +167,30 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
-      android:layout_marginTop="22dp"
       android:text="1"
       android:textColor="#884800"
       android:textSize="20sp"
       app:layout_constraintStart_toEndOf="@+id/refedit_decrease_btn"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
+      app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
   <Spinner
       android:id="@+id/refedit_input_unit"
       android:layout_width="60dp"
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
-      android:layout_marginTop="20dp"
       android:background="@drawable/spinner_back"
       android:spinnerMode="dialog"
       app:layout_constraintStart_toEndOf="@+id/refedit_increase_btn"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_name" />
+      app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
   <ImageView
       android:id="@+id/refedit_calendar_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="15dp"
-      android:layout_marginTop="35dp"
       android:clickable="true"
       app:layout_constraintStart_toEndOf="@+id/refedit_input_expdate"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_quantity"
+      app:layout_constraintTop_toTopOf="@+id/guideline31"
       app:srcCompat="@drawable/calender" />
 
   <TextView
@@ -208,32 +198,29 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="20dp"
-      android:layout_marginTop="35dp"
       android:textSize="20sp"
       app:layout_constraintStart_toEndOf="@+id/refedit_expdate"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_decrease_btn" />
+      app:layout_constraintTop_toTopOf="@+id/guideline31" />
 
   <Spinner
       android:id="@+id/refedit_input_kind"
       android:layout_width="120dp"
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
-      android:layout_marginTop="30dp"
       android:background="@drawable/spinner_back"
       android:spinnerMode="dialog"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_calendar_btn" />
+      app:layout_constraintTop_toTopOf="@+id/guideline32" />
 
   <Spinner
       android:id="@+id/refedit_input_locate"
       android:layout_width="120dp"
       android:layout_height="0dp"
       android:layout_marginStart="20dp"
-      android:layout_marginTop="25dp"
       android:background="@drawable/spinner_back"
       android:spinnerMode="dialog"
       app:layout_constraintStart_toStartOf="@+id/guideline14"
-      app:layout_constraintTop_toBottomOf="@+id/refedit_input_kind" />
+      app:layout_constraintTop_toTopOf="@+id/guideline33" />
 
   <Button
       android:id="@+id/reflist_edit_cancel"
@@ -255,5 +242,53 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       app:layout_constraintGuide_percent="0.5" />
+
+  <TextView
+      android:id="@+id/textView20"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="點擊可修改照片"
+      android:textColor="#8C884800"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/refedit_photo" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline29"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.4" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline30"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.50" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline31"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.58" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline32"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.65" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline33"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.72" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +29,9 @@ import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
 import com.example.life.Setting.KindSetActivity;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,14 +43,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditReflistActivity extends AppCompatActivity {
-    String sEmail, refno, oldfoodname, oldquantity, oldunit, oldexpdate, oldkind, oldlocate; // 原食品詳細資料
-    String editfoodname, editquantity, editunit, editexpdate, editkind, editlocate; //修改食品資料
+    String sEmail, refno, oldfoodname, oldquantity, oldunit, oldexpdate, oldkind, oldlocate, oldphoto; // 原食品詳細資料
+    String editfoodname, editquantity, editunit, editexpdate, editkind, editlocate, editphoto; //修改食品資料
     EditText refedit_input_name;
     TextView refedit_input_quantity, refedit_input_expdate;
     Spinner unitsp, kindsp, locatesp;
-    ImageView reflist_edit_back, refedit_increase_btn, refedit_decrease_btn, refedit_calendar_btn;
+    ImageView reflist_edit_back, refedit_increase_btn, refedit_decrease_btn, refedit_calendar_btn, refedit_photo;
     Button reflist_edit_cancel, reflist_edit_ok;
     int i;
+    private Bitmap bitmap;
     //SESSION
     SessionManager sessionManager;
     //POST Unit
@@ -90,6 +97,9 @@ public class EditReflistActivity extends AppCompatActivity {
         oldexpdate = intent.getStringExtra("oldexpdate"); //取得原有效日期
         oldkind = intent.getStringExtra("oldkind"); //取得原分類
         oldlocate = intent.getStringExtra("oldlocate"); //取得原存放位置
+        if(!intent.getStringExtra("oldphoto").equals("")){
+            oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
+        }
 
         reflist_edit_back = (ImageView) findViewById(R.id.reflist_edit_back);
         reflist_edit_back.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +117,16 @@ public class EditReflistActivity extends AppCompatActivity {
 
         refedit_input_expdate = (TextView) findViewById(R.id.refedit_input_expdate);
         refedit_input_expdate.setText(oldexpdate);
+
+        refedit_photo = (ImageView) findViewById(R.id.refedit_photo);
+        Uri uri = Uri.parse(oldphoto);
+        Picasso.get().load(uri).resize(130, 130).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
+        refedit_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImg();
+            }
+        });
 
         GetQuantity(oldquantity);
         GetUnit();
@@ -313,6 +333,29 @@ public class EditReflistActivity extends AppCompatActivity {
         return locatelist.indexOf(locatename);
     }
 
+    public void SelectImg(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri filePath = data.getData(); //獲得圖片的uri
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                refedit_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            editphoto = String.valueOf(filePath);
+        }
+    }
+
+    //修改冰箱清單
     public void EditRefList(){
         editfoodname = refedit_input_name.getText().toString().trim();//取得食品名稱
         editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
@@ -359,7 +402,10 @@ public class EditReflistActivity extends AppCompatActivity {
                     data.put("expdate",editexpdate);
                     data.put("kind",editkind);
                     data.put("locate",editlocate);
-                    if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate)){
+                    if(!editphoto.equals("null")){
+                        data.put("photo",editphoto);
+                    }
+                    if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate) && editphoto.equals(oldphoto)){
                         data.put("todo","cancel");
                     }else{
                         data.put("todo","edit");

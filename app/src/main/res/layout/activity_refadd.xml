@@ -63,7 +63,6 @@
         android:layout_marginTop="30dp"
         android:background="#FFF9E9"
         android:clickable="true"
-        android:foregroundTint="#6A2B2B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2"

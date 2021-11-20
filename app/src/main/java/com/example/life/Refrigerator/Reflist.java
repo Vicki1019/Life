@@ -55,6 +55,7 @@ import java.util.Map;
  */
 public class Reflist extends Fragment {
     TextView myref;
+    ImageView refdetail_photo;
     String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle,line_token;
     //Session
     SessionManager sessionManager;
@@ -64,9 +65,6 @@ public class Reflist extends Fragment {
     //POST Delete Reflist
     private static String delrefurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
-    //POST LINE Token
-    private static String tokenurl = "http://192.168.170.110/PHP_API/index.php/LineNotify/get_line_token";
-    RequestQueue tokenrequestQueue;
     //GET UPDATE FOOD STATE
     private static String willstateurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/update_food_state_will";
     RequestQueue willstaterequestQueue;
@@ -90,7 +88,6 @@ public class Reflist extends Fragment {
     ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
     ArrayList<String> photoarrayList = new ArrayList<>();
-    //ArrayList<String> reftitlearrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -232,10 +229,8 @@ public class Reflist extends Fragment {
                     backDialog.setOnClickListener(v1 -> {refdetail_dialog.dismiss();});
 
                     //食物照片
-                    ImageView refdetail_photo;
-                    refdetail_photo = refdetailview.findViewById(R.id.refdetail_photo);
+                    refdetail_photo = (ImageView) refdetailview.findViewById(R.id.refdetail_photo);
                     Uri uri = Uri.parse(photoarrayList.get(position));
-                    //Toast.makeText(getContext(), photoarrayList.get(position), Toast.LENGTH_SHORT).show();
                     Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_photo);
                     //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
@@ -275,6 +270,9 @@ public class Reflist extends Fragment {
                             bundle.putString("oldexpdate",expdatearrayList.get(position));
                             bundle.putString("oldkind",kindarrayList.get(position));
                             bundle.putString("oldlocate",locatearrayList.get(position));
+                            if(!photoarrayList.get(position).equals("null")){
+                                bundle.putString("oldphoto",photoarrayList.get(position));
+                            }
                             intent.putExtras(bundle);
                             intent.setClass(getContext(), EditReflistActivity.class);
                             startActivity(intent);
@@ -468,44 +466,6 @@ public class Reflist extends Fragment {
         };
         zerorequestQueue.add(zerostrRequest);
     }
-    
-    //取得使用者LINE Token
-    /*public void GetToken(){
-        tokenrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        StringRequest tokenstrRequest = new StringRequest(Request.Method.POST, tokenurl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject tokenjsonObject = new JSONObject(response);
-                    JSONArray tokenjsonArray = tokenjsonObject.getJSONArray("line_token");
-                    for(int t=0;t<tokenjsonArray.length();t++) {
-                        JSONObject jsonObject = tokenjsonArray.getJSONObject(t);
-                        String result = jsonObject.getString("token");
-                        if(response.equals("failure")){
-                            line_token = "";
-                        }else{
-                            line_token = result;
-                        }
-                    }
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> data = new HashMap<>();
-                data.put("email",sEmail);
-                return data;
-            }
-        };
-        tokenrequestQueue.add(tokenstrRequest);
-    }*/
 
     //檢測食物新鮮度
     public void FOODSTATE(){
