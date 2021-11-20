@@ -94,7 +94,9 @@ public class EditReflistActivity extends AppCompatActivity {
         oldexpdate = intent.getStringExtra("oldexpdate"); //取得原有效日期
         oldkind = intent.getStringExtra("oldkind"); //取得原分類
         oldlocate = intent.getStringExtra("oldlocate"); //取得原存放位置
-        oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
+        //oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
+
+        Toast.makeText(EditReflistActivity.this, refno+oldfoodname+oldquantity+oldunit+oldexpdate+oldkind+oldlocate+oldphoto, Toast.LENGTH_SHORT).show();
 
         reflist_edit_back = (ImageView) findViewById(R.id.reflist_edit_back);
         reflist_edit_back.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +115,7 @@ public class EditReflistActivity extends AppCompatActivity {
         refedit_input_expdate = (TextView) findViewById(R.id.refedit_input_expdate);
         refedit_input_expdate.setText(oldexpdate);
 
-        refedit_photo = (ImageView) findViewById(R.id.refedit_photo);
+       /* refedit_photo = (ImageView) findViewById(R.id.refedit_photo);
         if(!oldphoto.equals("")){
             Uri uri = Uri.parse(oldphoto);
             Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
@@ -123,7 +125,7 @@ public class EditReflistActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SelectImg();
             }
-        });
+        });*/
 
         GetQuantity(oldquantity);
         GetUnit();
@@ -391,11 +393,13 @@ public class EditReflistActivity extends AppCompatActivity {
                     data.put("expdate",editexpdate);
                     data.put("kind",editkind);
                     data.put("locate",editlocate);
-                    if(editphoto.equals("")){
-                        data.put("photo",oldphoto);
+                    /*if(editphoto.equals("")){
+                        if(!oldphoto.equals("")){
+                            data.put("photo",oldphoto);
+                        }
                     }else{
                         data.put("photo",editphoto);
-                    }
+                    }*/
                     if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate) && editphoto.equals(oldphoto)){
                         data.put("todo","cancel");
                     }else{

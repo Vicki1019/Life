@@ -230,7 +230,7 @@ public class Reflist extends Fragment {
                     ImageView refdetail_title_photo = refdetailview.findViewById(R.id.refdetail_title_photo);
                     if(photoarrayList.get(position)!=null){
                         Uri uri = Uri.parse(photoarrayList.get(position));
-                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_title_photo);
+                        Picasso.get().load(uri).fit().centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_title_photo);
                     }
                    //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
@@ -255,6 +255,8 @@ public class Reflist extends Fragment {
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
 
+                    Toast.makeText(getContext(),refnoarrayList.get(position)+foodarrayList.get(position)+quantityarrayList.get(position)+unitarrayList.get(position)+expdatearrayList.get(position)+kindarrayList.get(position)+locatearrayList.get(position)+photoarrayList.get(position), Toast.LENGTH_SHORT).show();
+
                     //修改清單(利用Bundle傳值給EditReflistActivity)
                     Button reflist_edit = refdetailview.findViewById(R.id.reflist_edit);
                     reflist_edit.setOnClickListener(new View.OnClickListener() {
@@ -270,9 +272,9 @@ public class Reflist extends Fragment {
                             bundle.putString("oldexpdate",expdatearrayList.get(position));
                             bundle.putString("oldkind",kindarrayList.get(position));
                             bundle.putString("oldlocate",locatearrayList.get(position));
-                            if(photoarrayList.get(position)!=null){
+                            /*if(!photoarrayList.get(position).equals("")){
                                 bundle.putString("oldphoto",photoarrayList.get(position));
-                            }
+                            }*/
                             intent.putExtras(bundle);
                             intent.setClass(getContext(), EditReflistActivity.class);
                             startActivity(intent);
