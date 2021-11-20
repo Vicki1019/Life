@@ -32,10 +32,10 @@ import java.util.Map;
 public class LineNotifyActivity extends AppCompatActivity {
 
     //POST Get&Save Token
-    private static String notifyurl = "http://192.168.134.110/PHP_API/index.php/LineNotify/get_line_token";
+    private static String notifyurl = "http://192.168.213.110/PHP_API/index.php/LineNotify/get_line_token";
     RequestQueue notifyrequestQueue;
     //POST Delete Token
-    private static String notify_cancel_url = "http://192.168.134.110/PHP_API/index.php/LineNotify/delete_line_token";
+    private static String notify_cancel_url = "http://192.168.213.110/PHP_API/index.php/LineNotify/delete_line_token";
     RequestQueue notifycancelrequestQueue;
     //SESSION
     SessionManager sessionManager;
@@ -74,7 +74,7 @@ public class LineNotifyActivity extends AppCompatActivity {
 
                 if(isChecked == true){
                     if(line_token.equals("null")){
-                        Uri notify_uri = Uri.parse("http://192.168.134.110/PHP_API/index.php/LineNotify/LineAuthorize?email="+sEmail);
+                        Uri notify_uri = Uri.parse("http://192.168.213.110/PHP_API/index.php/LineNotify/LineAuthorize?email="+sEmail);
                         Intent intent = new Intent(Intent.ACTION_VIEW, notify_uri);
                         startActivity(intent);
                     }
@@ -87,7 +87,7 @@ public class LineNotifyActivity extends AppCompatActivity {
         /*WebView webview = (WebView) findViewById(R.id.notify);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient()); //不調用系統瀏覽器
-        webview.loadUrl("http://192.168.134.110/PHP_API/index.php/LineNotify/LineAuthorize");*/
+        webview.loadUrl("http://192.168.213.110/PHP_API/index.php/LineNotify/LineAuthorize");*/
     }
 
     public void NotifyCheck(){

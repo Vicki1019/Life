@@ -49,9 +49,9 @@ public class Userset extends AppCompatActivity {
    Bitmap bitmap;
    Button account_back_setting, editname_ok;
    //POST Edit User Info
-   private static String editnameurl = "http://192.168.134.110/PHP_API/index.php/UserSetting/updateinfo";
-   private static String editpassurl = "http://192.168.134.110/PHP_API/index.php/UserSetting/updatepass";
-   private static String userurl = "http://192.168.134.110/PHP_API/index.php/UserSetting/getUserInfo";
+   private static String editnameurl = "http://192.168.213.110/PHP_API/index.php/UserSetting/updateinfo";
+   private static String editpassurl = "http://192.168.213.110/PHP_API/index.php/UserSetting/updatepass";
+   private static String userurl = "http://192.168.213.110/PHP_API/index.php/UserSetting/getUserInfo";
    RequestQueue userrequestQueue;
    //Session
    SessionManager sessionManager;
