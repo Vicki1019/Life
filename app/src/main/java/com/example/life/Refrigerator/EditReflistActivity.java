@@ -72,9 +72,6 @@ public class EditReflistActivity extends AppCompatActivity {
     //POST Edit RefList
     private static String editrefurl = "http://192.168.134.110/PHP_API/index.php/Refrigerator/update_ref_item";
     RequestQueue editrefrequestQueue;
-    //POST Token
-    //private static String tokenurl = "http://192.168.134.110/PHP_API/index.php/LineNotify/get_line_token";
-    //RequestQueue tokenrequestQueue;
     //POST ZERO NOTIFY
     private static String zerourl = "http://192.168.134.110/PHP_API/index.php/LineNotify/ZeroNotify";
     RequestQueue zerorequestQueue;
@@ -97,9 +94,7 @@ public class EditReflistActivity extends AppCompatActivity {
         oldexpdate = intent.getStringExtra("oldexpdate"); //取得原有效日期
         oldkind = intent.getStringExtra("oldkind"); //取得原分類
         oldlocate = intent.getStringExtra("oldlocate"); //取得原存放位置
-        if(!intent.getStringExtra("oldphoto").equals("")){
-            oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
-        }
+        oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
 
         reflist_edit_back = (ImageView) findViewById(R.id.reflist_edit_back);
         reflist_edit_back.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +114,10 @@ public class EditReflistActivity extends AppCompatActivity {
         refedit_input_expdate.setText(oldexpdate);
 
         refedit_photo = (ImageView) findViewById(R.id.refedit_photo);
-        Uri uri = Uri.parse(oldphoto);
-        Picasso.get().load(uri).resize(130, 130).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
+        if(!oldphoto.equals("")){
+            Uri uri = Uri.parse(oldphoto);
+            Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
+        }
         refedit_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,15 +145,7 @@ public class EditReflistActivity extends AppCompatActivity {
         reflist_edit_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*editfoodname = refedit_input_name.getText().toString().trim();//取得食品名稱
-                editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
-                editunit = unitsp.getSelectedItem().toString().trim(); //取得單位
-                editexpdate = refedit_input_expdate.getText().toString().trim();//取得有效日期
-                editkind = kindsp.getSelectedItem().toString().trim(); //取得分類
-                editlocate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
-                Toast.makeText(EditReflistActivity.this, refno+"\n"+editfoodname+"\n"+editquantity+"\n"+editunit+"\n"+editexpdate+"\n"+editkind+"\n"+editlocate, Toast.LENGTH_SHORT).show();*/
                 EditRefList();
-                //ZeroNotify();
             }
         });
     }
@@ -402,7 +391,9 @@ public class EditReflistActivity extends AppCompatActivity {
                     data.put("expdate",editexpdate);
                     data.put("kind",editkind);
                     data.put("locate",editlocate);
-                    if(!editphoto.equals("null")){
+                    if(editphoto.equals("")){
+                        data.put("photo",oldphoto);
+                    }else{
                         data.put("photo",editphoto);
                     }
                     if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate) && editphoto.equals(oldphoto)){

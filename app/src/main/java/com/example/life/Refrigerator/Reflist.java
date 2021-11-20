@@ -55,7 +55,6 @@ import java.util.Map;
  */
 public class Reflist extends Fragment {
     TextView myref;
-    ImageView refdetail_photo;
     String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle,line_token;
     //Session
     SessionManager sessionManager;
@@ -135,6 +134,7 @@ public class Reflist extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_reflist, container, false);
         myref = (TextView) v.findViewById(R.id.myref);
+        refRecyclerView = v.findViewById(R.id.reflist);
         GetRefList();
         Button change_ref = (Button) v.findViewById(R.id.change_refrigerator);
         change_ref.setOnClickListener(new View.OnClickListener() {
@@ -145,8 +145,6 @@ public class Reflist extends Fragment {
                 startActivity(intent);
             }
         });
-
-        refRecyclerView = v.findViewById(R.id.reflist);
 
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetail();
@@ -229,10 +227,12 @@ public class Reflist extends Fragment {
                     backDialog.setOnClickListener(v1 -> {refdetail_dialog.dismiss();});
 
                     //食物照片
-                    refdetail_photo = (ImageView) refdetailview.findViewById(R.id.refdetail_photo);
-                    Uri uri = Uri.parse(photoarrayList.get(position));
-                    Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_photo);
-                    //食物名稱
+                    ImageView refdetail_title_photo = refdetailview.findViewById(R.id.refdetail_title_photo);
+                    if(photoarrayList.get(position)!=null){
+                        Uri uri = Uri.parse(photoarrayList.get(position));
+                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_title_photo);
+                    }
+                   //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
                     refdetail_title_name.setText(foodarrayList.get(position));
                     //數量、單位
@@ -270,7 +270,7 @@ public class Reflist extends Fragment {
                             bundle.putString("oldexpdate",expdatearrayList.get(position));
                             bundle.putString("oldkind",kindarrayList.get(position));
                             bundle.putString("oldlocate",locatearrayList.get(position));
-                            if(!photoarrayList.get(position).equals("null")){
+                            if(photoarrayList.get(position)!=null){
                                 bundle.putString("oldphoto",photoarrayList.get(position));
                             }
                             intent.putExtras(bundle);
@@ -355,7 +355,6 @@ public class Reflist extends Fragment {
                             locate = jsonObject.getString("locate").trim();
                             state = jsonObject.getString("state").trim();
                             photo = jsonObject.getString("photo").trim();
-                            reftitle = jsonObject.getString("locate_name").trim();
 
                             refnoarrayList.add(refno);
                             ownerarrayList.add(owner);
@@ -368,11 +367,9 @@ public class Reflist extends Fragment {
                             locatearrayList.add(locate);
                             statearrayList.add(state);
                             photoarrayList.add(photo);
-                            //reftitlearrayList.add(reftitle);
 
-                            myref.setText("");
-                            myref.setText(reftitle);
-                            //myref.setText(reftitlearrayList.get(0));
+                            /*myref.setText("");
+                            myref.setText(reftitle);*/
 
                         }else if(result.equals("failure")){
                             Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
