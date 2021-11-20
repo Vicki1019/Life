@@ -60,26 +60,26 @@ public class QRCodeScanActivity extends AppCompatActivity {
     Button scan_add_ok;
     int drop = 0;
     //POST Unit
-    private static String uniturl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://192.168.134.110/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //POST Kind
-    private static String kindurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://192.168.134.110/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //POST Locate
-    private static String locateurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://192.168.134.110/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://192.168.134.110/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //POST 查詢發票明細
-    private static String qrcodeurl ="http://192.168.170.110/PHP_API/index.php/API/getInvList";
+    private static String qrcodeurl ="http://192.168.134.110/PHP_API/index.php/API/getInvList";
     RequestQueue qrcoderequestQueue;
     String invNum, invTerm, invDate, encrypt, sellerID, randomNumber;
     String unitprice, scan_quantity, rownum, description;

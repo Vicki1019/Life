@@ -67,7 +67,7 @@ public class ShopaddActivity extends AppCompatActivity {
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
-    private static String addshopurl = "http://192.168.170.110/PHP_API/index.php/Shopping/shop_list_add";
+    private static String addshopurl = "http://192.168.134.110/PHP_API/index.php/Shopping/shop_list_add";
     RequestQueue addshoprequestQueue;
 
     @Override
