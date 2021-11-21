@@ -285,6 +285,7 @@ public class Reflist extends Fragment {
                     reflist_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SetLoading("刪除中...", true);
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
                             View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
                             Button cancelDelete = refdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
@@ -409,6 +410,7 @@ public class Reflist extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
+                    SetLoading("", false);
                     Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.setClass(getContext(), MainActivity.class);
@@ -503,5 +505,25 @@ public class Reflist extends Fragment {
             }
         });
         gonestaterequestQueue.add(gonestatestrRequest);
+    }
+
+    //Loading介面
+    public void SetLoading(String hint, Boolean bool){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());//創建AlertDialog.Builder
+        View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
+        mBuilder.setView(loadview);//設置View
+        AlertDialog load_dialog = mBuilder.create();
+        if(bool==true){
+            TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+            loading_hint.setText(hint);
+            load_dialog.show();
+            load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+            DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+            dm = getResources().getDisplayMetrics();
+            load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+            load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        }else{
+            load_dialog.hide();
+        }
     }
 }
