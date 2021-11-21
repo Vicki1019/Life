@@ -255,7 +255,7 @@ public class Reflist extends Fragment {
                     EditText refdetail_input_owner = refdetailview.findViewById(R.id.refdetail_input_owner);
                     refdetail_input_owner.setText(ownerarrayList.get(position));
 
-                    Toast.makeText(getContext(),refnoarrayList.get(position)+foodarrayList.get(position)+quantityarrayList.get(position)+unitarrayList.get(position)+expdatearrayList.get(position)+kindarrayList.get(position)+locatearrayList.get(position)+photoarrayList.get(position), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(),refnoarrayList.get(position)+foodarrayList.get(position)+quantityarrayList.get(position)+unitarrayList.get(position)+expdatearrayList.get(position)+kindarrayList.get(position)+locatearrayList.get(position)+photoarrayList.get(position), Toast.LENGTH_SHORT).show();
 
                     //修改清單(利用Bundle傳值給EditReflistActivity)
                     Button reflist_edit = refdetailview.findViewById(R.id.reflist_edit);
@@ -272,9 +272,9 @@ public class Reflist extends Fragment {
                             bundle.putString("oldexpdate",expdatearrayList.get(position));
                             bundle.putString("oldkind",kindarrayList.get(position));
                             bundle.putString("oldlocate",locatearrayList.get(position));
-                            /*if(!photoarrayList.get(position).equals("")){
+                            if(!photoarrayList.get(position).equals("")){
                                 bundle.putString("oldphoto",photoarrayList.get(position));
-                            }*/
+                            }
                             intent.putExtras(bundle);
                             intent.setClass(getContext(), EditReflistActivity.class);
                             startActivity(intent);
