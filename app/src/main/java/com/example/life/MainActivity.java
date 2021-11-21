@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //設置loading介面
-                SetLoading("新增中...");
+                SetLoading("新增中...", true);
 
                 String refadd_name = name_input.getText().toString().trim(); //取得食品名稱
                 String refadd_quantity = quantity.getText().toString().trim(); //取得數量
@@ -388,7 +388,8 @@ public class MainActivity extends AppCompatActivity {
                     StringRequest refaddstrRequest = new StringRequest(Request.Method.POST, refaddurl, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            dialog.hide();
+                            dialog.hide(); //關閉新增冰箱清單dialog
+                            SetLoading("", false); //關閉Loading Dialog
                             if (response.equals("success")) {
                                 Toast.makeText(MainActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent();
@@ -454,21 +455,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Loading介面
-    public void SetLoading(String hint){
+    public void SetLoading(String hint, Boolean bool){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
         View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
         mBuilder.setView(loadview);//設置View
         AlertDialog load_dialog = mBuilder.create();
-
-        TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
-        loading_hint.setText(hint);
-
-        load_dialog.show();
-        load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
-        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
-        load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-        load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        if(bool==true){
+            TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+            loading_hint.setText(hint);
+            load_dialog.show();
+            load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+            DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+            getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+            load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+            load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        }else{
+            load_dialog.hide();
+        }
     }
 
     public void SelectImg(){

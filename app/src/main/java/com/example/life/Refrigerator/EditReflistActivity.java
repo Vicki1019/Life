@@ -2,13 +2,18 @@ package com.example.life.Refrigerator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -29,6 +34,7 @@ import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
 import com.example.life.Setting.KindSetActivity;
+import com.example.life.ShopList.ShopaddActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -349,6 +355,7 @@ public class EditReflistActivity extends AppCompatActivity {
 
     //修改冰箱清單
     public void EditRefList(){
+        SetLoading("修改中...",true);
         editfoodname = refedit_input_name.getText().toString().trim();//取得食品名稱
         editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
         editunit = unitsp.getSelectedItem().toString().trim(); //取得單位
@@ -364,6 +371,7 @@ public class EditReflistActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     if (response.equals("success")) {
+                        SetLoading("",false);
                         ZERO_NOTIFY(refno);
                         Toast.makeText(EditReflistActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
@@ -439,5 +447,33 @@ public class EditReflistActivity extends AppCompatActivity {
             }
         };
         zerorequestQueue.add(zerostrRequest);
+    }
+
+    //Loading介面
+    public void SetLoading(String hint, Boolean bool){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
+        View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
+        mBuilder.setView(loadview);//設置View
+        AlertDialog load_dialog = mBuilder.create();
+        if(bool==true){
+            TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+            loading_hint.setText(hint);
+            load_dialog.show();
+            load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+            DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+            getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+            load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+            load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        }else{
+            load_dialog.hide();
+        }
+    }
+
+    // Disable back button
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(EditReflistActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
