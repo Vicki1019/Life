@@ -170,7 +170,7 @@ public class ShopaddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(ShopaddActivity.this, String.valueOf(shoplist_add_layout.getChildCount()), Toast.LENGTH_SHORT).show();
-
+                SetLoading("新增中...",true);
                 //取得推播時間
                 notifydate = shoplist_choose_date.getText().toString().trim();
                 //Toast.makeText(ShopaddActivity.this, notifydate, Toast.LENGTH_SHORT).show();
@@ -222,11 +222,11 @@ public class ShopaddActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
+                    SetLoading("",false);
                     Intent intent = new Intent();
                     intent.setClass(ShopaddActivity.this, MainActivity.class);
                     startActivity(intent);
                     Toast.makeText(ShopaddActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
-                    //Loading(position);
                     //Toast.makeText(ShopaddActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                     //Toast.makeText(ShopaddActivity.this, String.valueOf(position) + notifydate + name + quantity, Toast.LENGTH_SHORT).show();
                 } else if (response.equals("failure")) {
@@ -252,28 +252,25 @@ public class ShopaddActivity extends AppCompatActivity {
         addshoprequestQueue.add(addshopstringRequest);
     }
 
-    /*public void Loading(int position){
+    //Loading介面
+    public void SetLoading(String hint, Boolean bool){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View loadingview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
-        mBuilder.setView(loadingview);//設置View
-        AlertDialog loading_dialog = mBuilder.create();
-
-        if(position == 0){
-            loading_dialog.show();
-            loading_dialog.setCanceledOnTouchOutside(false); //設定點選螢幕Dialog不消失
-            DisplayMetrics dm = new DisplayMetrics(); //取得螢幕解析度
-            dm = getResources().getDisplayMetrics();
-            loading_dialog.getWindow().setLayout(dm.widthPixels, ViewGroup.LayoutParams.WRAP_CONTENT); //設置螢幕寬度值
-            loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //將原生AlertDialog的背景設為透明
-        }else if(position == shoplist_add_layout.getChildCount()){
-            loading_dialog.dismiss();
-            default_i = -1;
-            Intent intent = new Intent();
-            intent.setClass(ShopaddActivity.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(ShopaddActivity.this, "新增成功", Toast.LENGTH_SHORT).show();
+        View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
+        mBuilder.setView(loadview);//設置View
+        AlertDialog load_dialog = mBuilder.create();
+        if(bool==true){
+            TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+            loading_hint.setText(hint);
+            load_dialog.show();
+            load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+            DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+            getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+            load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+            load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        }else{
+            load_dialog.hide();
         }
-    }*/
+    }
 
     // Disable back button
     @Override
