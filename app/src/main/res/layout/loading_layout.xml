@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#FFEEC6">
+    android:background="@drawable/loading_round_layout">
 
     <TextView
         android:id="@+id/loading_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:text="新增中，請稍後..."
+        android:layout_marginEnd="50dp"
+        android:text="Loading..."
         android:textAlignment="center"
         android:textColor="#884800"
         android:textSize="25sp"

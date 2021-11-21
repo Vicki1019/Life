@@ -35,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.life.Group.GroupDetailActivity;
 import com.example.life.Group.Grouplist;
 import com.example.life.Manager.SessionManager;
 import com.example.life.Refrigerator.Reflist;
@@ -372,6 +373,9 @@ public class MainActivity extends AppCompatActivity {
         refadd_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //設置loading介面
+                SetLoading("新增中...");
+
                 String refadd_name = name_input.getText().toString().trim(); //取得食品名稱
                 String refadd_quantity = quantity.getText().toString().trim(); //取得數量
                 String refadd_unit = unitsp.getSelectedItem().toString().trim(); //取得單位
@@ -379,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
                 String refadd_kind = kindsp.getSelectedItem().toString().trim(); //取得分類
                 String refadd_locate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
                 //Toast.makeText(MainActivity.this, refadd_name+"\n"+refadd_quantity+"\n"+refadd_unit+"\n"+refadd_date+"\n"+refadd_kind+"\n"+refadd_locate, Toast.LENGTH_SHORT).show();
+
                 if(!refadd_name.equals("") && !refadd_date.equals("")){
                     StringRequest refaddstrRequest = new StringRequest(Request.Method.POST, refaddurl, new Response.Listener<String>() {
                         @Override
@@ -443,17 +448,27 @@ public class MainActivity extends AppCompatActivity {
 
     //新增購物清單Dialog與功能
     public void Shopadd(View view) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, ShopaddActivity.class);
+        startActivity(intent);
+    }
+
+    //Loading介面
+    public void SetLoading(String hint){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);//創建AlertDialog.Builder
-        View shopview = getLayoutInflater().inflate(R.layout.activity_shopadd,null);//嵌入View
-        ImageView backDialog = shopview.findViewById(R.id.shopadd_back);//連結關閉視窗的Button
-        mBuilder.setView(shopview);//設置View
-        AlertDialog dialog = mBuilder.create();
-        backDialog.setOnClickListener(v1 -> {dialog.dismiss();});
-        dialog.show();
+        View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
+        mBuilder.setView(loadview);//設置View
+        AlertDialog load_dialog = mBuilder.create();
+
+        TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+        loading_hint.setText(hint);
+
+        load_dialog.show();
+        load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
         DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
-        dm = getResources().getDisplayMetrics();
-        dialog.getWindow().setLayout(dm.widthPixels-190, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        getWindowManager().getDefaultDisplay().getMetrics(dm);//取得螢幕寬度值
+        load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
     }
 
     public void SelectImg(){
