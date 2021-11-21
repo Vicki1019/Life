@@ -58,6 +58,9 @@ public class Reflist extends Fragment {
     String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle,line_token;
     //Session
     SessionManager sessionManager;
+    //POST LOCATE NOW
+    private static String locatenowurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/get_member_locate";
+    RequestQueue locatenowquestQueue;
     //POST Reflist
     private static String getrefurl = "http://192.168.170.110/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
@@ -135,6 +138,7 @@ public class Reflist extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_reflist, container, false);
         myref = (TextView) v.findViewById(R.id.myref);
         refRecyclerView = v.findViewById(R.id.reflist);
+        LocateNow();
         GetRefList();
         Button change_ref = (Button) v.findViewById(R.id.change_refrigerator);
         change_ref.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +156,46 @@ public class Reflist extends Fragment {
         sName = user.get(SessionManager.MEMBER_NIKINAME);
 
         return v;
+    }
+
+    //取得使用者現在位置
+    public void LocateNow(){
+        locatenowquestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest locatestrRequest = new StringRequest(Request.Method.POST, locatenowurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject loacatejsonObject = new JSONObject(response);
+                    JSONArray locatejsonArray = loacatejsonObject.getJSONArray("locate_code");
+                    for(int i=0;i<locatejsonArray.length();i++) {
+                        JSONObject jsonObject = locatejsonArray.getJSONObject(i);
+                        if (response.equals("failure")) {
+                            //Toast.makeText(ChangeRefActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                        }else{
+                            //取得目前冰箱位置
+                            String locate_now = jsonObject.getString("locate").trim();
+                            //Toast.makeText(ChangeRefActivity.this, locate_now, Toast.LENGTH_SHORT).show();
+                            myref.setText(locate_now);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                return data;
+            }
+        };
+        locatenowquestQueue.add(locatestrRequest);
     }
 
     public class MyListAdapter extends RecyclerView.Adapter<Reflist.MyListAdapter.ViewHolder>{
