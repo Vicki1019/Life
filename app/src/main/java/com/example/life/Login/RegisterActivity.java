@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar loading;
     private ImageView profile_photo_register;
     private Bitmap bitmap;
-    private static String url = "http://192.168.213.110/PHP_API/index.php/Login/register";
+    private static String url = "http://192.168.170.110/PHP_API/index.php/Login/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
