@@ -95,6 +95,7 @@ public class EditReflistActivity extends AppCompatActivity {
         oldkind = intent.getStringExtra("oldkind"); //取得原分類
         oldlocate = intent.getStringExtra("oldlocate"); //取得原存放位置
         oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
+        editphoto = oldphoto;
 
         Toast.makeText(EditReflistActivity.this, refno+oldfoodname+oldquantity+oldunit+oldexpdate+oldkind+oldlocate+oldphoto, Toast.LENGTH_SHORT).show();
 
@@ -395,6 +396,10 @@ public class EditReflistActivity extends AppCompatActivity {
                     data.put("locate",editlocate);
                     if(editphoto!=null){
                         data.put("photo",editphoto);
+                    }else{
+                        if(oldphoto!=null){
+                            data.put("photo",oldphoto);
+                        }
                     }
                     if(editfoodname.equals(oldfoodname) && editquantity.equals(oldquantity) && editunit.equals(oldunit) && editexpdate.equals(oldexpdate) && editkind.equals(oldkind) && editlocate.equals(oldlocate) && editphoto==oldphoto){
                         data.put("todo","cancel");
