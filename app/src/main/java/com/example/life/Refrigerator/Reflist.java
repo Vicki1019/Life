@@ -138,7 +138,6 @@ public class Reflist extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_reflist, container, false);
         myref = (TextView) v.findViewById(R.id.myref);
         refRecyclerView = v.findViewById(R.id.reflist);
-        LocateNow();
         GetRefList();
         Button change_ref = (Button) v.findViewById(R.id.change_refrigerator);
         change_ref.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +153,8 @@ public class Reflist extends Fragment {
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(SessionManager.EMAIL);
         sName = user.get(SessionManager.MEMBER_NIKINAME);
+
+        LocateNow();
 
         return v;
     }
@@ -173,8 +174,8 @@ public class Reflist extends Fragment {
                             //Toast.makeText(ChangeRefActivity.this, "Failure", Toast.LENGTH_SHORT).show();
                         }else{
                             //取得目前冰箱位置
-                            String locate_now = jsonObject.getString("locate").trim();
-                            //Toast.makeText(ChangeRefActivity.this, locate_now, Toast.LENGTH_SHORT).show();
+                            String locate_now = jsonObject.getString("group_name").trim();
+                            //Toast.makeText(getContext(), locate_now, Toast.LENGTH_SHORT).show();
                             myref.setText(locate_now);
                         }
                     }
@@ -378,7 +379,6 @@ public class Reflist extends Fragment {
         statearrayList.clear();
         photoarrayList.clear();
         FOODSTATE();
-
         getrefrequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest getrefstrRequest = new StringRequest(Request.Method.POST, getrefurl, new Response.Listener<String>() {
             @Override
