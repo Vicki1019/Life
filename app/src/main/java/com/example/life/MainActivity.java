@@ -76,22 +76,22 @@ public class MainActivity extends AppCompatActivity {
     ImageView refadd_photo;
 
     //POST Unit
-    private static String uniturl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //POST Kind
-    private static String kindurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //GET Locate
-    private static String locateurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //POST ADD Reflist
-    private static String refaddurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
 
@@ -489,10 +489,19 @@ public class MainActivity extends AppCompatActivity {
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 refadd_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+
+                ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                // compress Bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                // Initialize byte array
+                byte[] bytes=stream.toByteArray();
+                // get base64 encoded string
+                photo= Base64.encodeToString(bytes,Base64.DEFAULT);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            photo = String.valueOf(filePath);
+            //photo = String.valueOf(filePath);
             //UploadPicture(sEmail, getStringImage(bitmap));
         }
     }

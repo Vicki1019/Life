@@ -3,6 +3,7 @@ package com.example.life.Refrigerator;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,21 +61,21 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //POST LOCATE NOW
-    private static String locatenowurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/get_member_locate";
+    private static String locatenowurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/get_member_locate";
     RequestQueue locatenowquestQueue;
     //POST Reflist
-    private static String getrefurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     //POST Delete Reflist
-    private static String delrefurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //GET UPDATE FOOD STATE
-    private static String willstateurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/update_food_state_will";
+    private static String willstateurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/update_food_state_will";
     RequestQueue willstaterequestQueue;
-    private static String gonestateurl = "http://192.168.151.110/PHP_API/index.php/Refrigerator/update_food_state_gone";
+    private static String gonestateurl = "http://172.16.1.60/PHP_API/index.php/Refrigerator/update_food_state_gone";
     RequestQueue gonestaterequestQueue;
     //POST ZERO NOTIFY
-    private static String zerourl = "http://192.168.151.110/PHP_API/index.php/LineNotify/ZeroNotify";
+    private static String zerourl = "http://172.16.1.60/PHP_API/index.php/LineNotify/ZeroNotify";
     RequestQueue zerorequestQueue;
 
     //Reflist RecyclerView
@@ -275,7 +277,12 @@ public class Reflist extends Fragment {
                     ImageView refdetail_title_photo = refdetailview.findViewById(R.id.refdetail_title_photo);
                     if(photoarrayList.get(position)!=null){
                         Uri uri = Uri.parse(photoarrayList.get(position));
-                        Picasso.get().load(uri).fit().centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_title_photo);
+                        byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                        // Initialize bitmap
+                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        // set bitmap on imageView
+                        refdetail_title_photo.setImageBitmap(bitmap);
+                        //Picasso.get().load(uri).fit().centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refdetail_title_photo);
                     }
                    //食物名稱
                     TextView refdetail_title_name = refdetailview.findViewById(R.id.refdetail_title_name);
