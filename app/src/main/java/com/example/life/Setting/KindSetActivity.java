@@ -175,6 +175,8 @@ public class KindSetActivity extends AppCompatActivity {
 
                     kindarrayList.remove(position);
                     myListAdapter.notifyItemRemoved(position);
+                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    myListAdapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -188,11 +190,11 @@ public class KindSetActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 if (response.equals("success")) {
                     Toast.makeText(KindSetActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
+                    /*Intent intent = new Intent();
                     intent.setClass(KindSetActivity.this, KindSetActivity.class);
-                    startActivity(intent);
+                    startActivity(intent);*/
                 } else if (response.equals("failure")) {
-                    Toast.makeText(KindSetActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KindSetActivity.this, "預設分類不可刪除", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.setClass(KindSetActivity.this, KindSetActivity.class);
                     startActivity(intent);
