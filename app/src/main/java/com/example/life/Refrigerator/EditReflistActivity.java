@@ -6,11 +6,13 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -125,7 +128,12 @@ public class EditReflistActivity extends AppCompatActivity {
        refedit_photo = (ImageView) findViewById(R.id.refedit_photo);
         if(oldphoto!=null){
             Uri uri = Uri.parse(oldphoto);
-            Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
+            byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+            // Initialize bitmap
+            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            // set bitmap on imageView
+            refedit_photo.setImageBitmap(bitmap);
+            //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(refedit_photo);
         }
         refedit_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,10 +354,19 @@ public class EditReflistActivity extends AppCompatActivity {
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 refedit_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+
+                ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                // compress Bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                // Initialize byte array
+                byte[] bytes=stream.toByteArray();
+                // get base64 encoded string
+                editphoto= Base64.encodeToString(bytes,Base64.DEFAULT);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            editphoto = String.valueOf(filePath);
+            //editphoto = String.valueOf(filePath);
         }
     }
 
