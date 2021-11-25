@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:text="推播日期："
         android:textColor="#884800"
         android:textSize="20sp"
@@ -59,11 +59,12 @@
         android:id="@+id/shoplist_date_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:background="#FFF9E9"
         app:layout_constraintEnd_toStartOf="@+id/guideline20"
-        app:layout_constraintStart_toStartOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/shoplist_date_hint">
+        app:layout_constraintStart_toEndOf="@+id/shoplist_date_hint"
+        app:layout_constraintTop_toBottomOf="@+id/view3">
 
         <TextView
             android:id="@+id/shoplist_choose_date"

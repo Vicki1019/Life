@@ -40,7 +40,6 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:text="冰箱名稱"
             android:textColor="#FFFFFF"
             android:textSize="35sp"
             android:textStyle="bold"
