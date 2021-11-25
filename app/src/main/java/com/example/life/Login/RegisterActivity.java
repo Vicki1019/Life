@@ -236,10 +236,19 @@ public class RegisterActivity extends AppCompatActivity {
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 profile_photo_register.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+
+                ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                // compress Bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                // Initialize byte array
+                byte[] bytes=stream.toByteArray();
+                // get base64 encoded string
+                rphoto= Base64.encodeToString(bytes,Base64.DEFAULT);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            rphoto = String.valueOf(filePath);
+            //rphoto = String.valueOf(filePath);
             //UploadPicture(sEmail, getStringImage(bitmap));
         }
     }

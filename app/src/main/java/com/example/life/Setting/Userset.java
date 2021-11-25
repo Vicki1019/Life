@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -262,7 +265,12 @@ public class Userset extends AppCompatActivity {
                         JSONObject jsonObject = userjsonArray.getJSONObject(i);
                         newphoto = jsonObject.getString("photo");
                         Uri uri = Uri.parse(newphoto);
-                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                        // Initialize bitmap
+                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        // set bitmap on imageView
+                        user_photo.setImageBitmap(bitmap);
+                        //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -299,10 +307,19 @@ public class Userset extends AppCompatActivity {
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 user_photo.setImageBitmap(bitmap); //顯示得到的bitmap圖片
+
+                ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                // compress Bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                // Initialize byte array
+                byte[] bytes=stream.toByteArray();
+                // get base64 encoded string
+                newphoto= Base64.encodeToString(bytes,Base64.DEFAULT);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            newphoto = String.valueOf(filePath);
+            //newphoto = String.valueOf(filePath);
             //UploadPicture(sEmail, getStringImage(bitmap));
         }
     }

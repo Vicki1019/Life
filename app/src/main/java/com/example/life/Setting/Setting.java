@@ -3,6 +3,7 @@ package com.example.life.Setting;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -327,8 +329,14 @@ public class Setting extends Fragment {
                         JSONObject jsonObject = userjsonArray.getJSONObject(i);
                         String userphoto = jsonObject.getString("photo");
                         String refname = jsonObject.getString("group_name");
+                        //顯示使用者頭貼
                         Uri uri = Uri.parse(userphoto);
-                        Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                        // Initialize bitmap
+                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        // set bitmap on imageView
+                        user_photo.setImageBitmap(bitmap);
+                        //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
                         refrename.setText(refname);
                     }
                 } catch (Exception e) {
