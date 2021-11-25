@@ -1,11 +1,9 @@
 package com.example.life.ShopList;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Refrigerator.Reflist;
-import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -46,11 +41,13 @@ import java.util.Map;
  */
 public class Shoplist extends Fragment {
     String sEmail, shopping_no, shopping_name, shopping_quantity;
+    TextView getdate;
+    ImageButton shop_list_up;
     //Session
     SessionManager sessionManager;
     //Calendar
     CalendarView calendarview;
-    TextView getdate;
+    int calendar_state = 0; //預設顯示行事曆
     // POST SHOPLIST
     private static String shopurl = "http://172.16.1.60/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
@@ -123,8 +120,10 @@ public class Shoplist extends Fragment {
         int date = calendar.get(Calendar.DAY_OF_MONTH);
         String defaultdate = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(date); //預設今天日期
         getdate.setText(defaultdate);
+        GetShop(defaultdate);
+
         //日期選擇
-        calendarview = v.findViewById(R.id.calendarView); //fragment要加上getView()
+        calendarview = v.findViewById(R.id.calendarView_shoplist); //fragment要加上getView()
         calendarview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int date) {
@@ -135,6 +134,37 @@ public class Shoplist extends Fragment {
             }
         });
 
+        //顯示完整購物清單
+        shop_list_up = (ImageButton) v.findViewById(R.id.shop_list_up);
+        shop_list_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(calendar_state==0){
+                    calendarview.setVisibility(View.GONE);
+                    shop_list_up.setImageResource(R.drawable.down);
+                    calendar_state = 1;
+                }else if(calendar_state==1){
+                    calendarview.setVisibility(View.VISIBLE);
+                    shop_list_up.setImageResource(R.drawable.up);
+                    calendar_state = 0;
+                }
+            }
+        });
+
+        getdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(calendar_state==0){
+                    calendarview.setVisibility(View.GONE);
+                    shop_list_up.setImageResource(R.drawable.down);
+                    calendar_state = 1;
+                }else if(calendar_state==1){
+                    calendarview.setVisibility(View.VISIBLE);
+                    shop_list_up.setImageResource(R.drawable.up);
+                    calendar_state = 0;
+                }
+            }
+        });
 
         return v;
     }

@@ -36,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <CalendarView
-            android:id="@+id/calendarView"
+            android:id="@+id/calendarView_shoplist"
             style="@android:style/Widget.DeviceDefault.CalendarView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+            app:layout_constraintTop_toBottomOf="@+id/shop_list_up" />
 
         <View
             android:id="@+id/view11"
@@ -81,6 +81,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/getdate" />
+
+        <ImageButton
+            android:id="@+id/shop_list_up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#00FFFFFF"
+            android:src="@drawable/up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView_shoplist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
