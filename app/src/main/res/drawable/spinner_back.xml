@@ -22,7 +22,6 @@
         <bitmap
             android:gravity="end"
             android:src="@drawable/down"
-            android:antialias="true"
-            />
+            android:antialias="true"/>
     </item>
 </layer-list>
