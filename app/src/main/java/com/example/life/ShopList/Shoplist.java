@@ -174,12 +174,12 @@ public class Shoplist extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView shoplist_name;
-            private TextView shoplist_quantity;
+            //private TextView shoplist_quantity;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 shoplist_name = itemView.findViewById(R.id.shoplist_name);
-                shoplist_quantity = itemView.findViewById(R.id.shoplist_quantity);
+                //shoplist_quantity = itemView.findViewById(R.id.shoplist_quantity);
             }
         }
 
@@ -195,8 +195,8 @@ public class Shoplist extends Fragment {
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull Shoplist.MyListAdapter.ViewHolder holder, int position) {
-            holder.shoplist_name.setText(namearrayList.get(position));
-            holder.shoplist_quantity.setText("數量："+quantityerarrayList.get(position));
+            holder.shoplist_name.setText(namearrayList.get(position)+" x"+quantityerarrayList.get(position));
+            //holder.shoplist_quantity.setText("數量："+quantityerarrayList.get(position));
         }
 
         //取得顯示數量
