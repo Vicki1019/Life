@@ -1,9 +1,11 @@
 package com.example.life.ShopList;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -51,6 +54,9 @@ public class Shoplist extends Fragment {
     // POST SHOPLIST
     private static String shopurl = "http://172.16.1.60/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
+    // POST Delete Shop List
+    private static String deleteurl = "http://172.16.1.60/PHP_API/index.php/Shopping/delete_shop_item";
+    RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
     Shoplist.MyListAdapter myListAdapter;
@@ -206,6 +212,66 @@ public class Shoplist extends Fragment {
         }
     }
 
+    //側滑刪除功能
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+        @Override
+        public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            String delete_shopno = shopnoarrayList.get(position);
+            switch(direction){
+                case ItemTouchHelper.LEFT:
+                    DeleteShop(delete_shopno);
+
+                    shopnoarrayList.remove(position);
+                    namearrayList.remove(position);
+                    quantityerarrayList.remove(position);
+                    myListAdapter.notifyItemRemoved(position);
+                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    myListAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
+    //刪除購物清單
+    public void DeleteShop(String shop_no){
+        deleterequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest deletestrRequest = new StringRequest(Request.Method.POST, deleteurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
+                    /*Intent intent = new Intent();
+                    intent.setClass(KindSetActivity.this, KindSetActivity.class);
+                    startActivity(intent);*/
+                } else if (response.equals("failure")) {
+                    Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+                    /*Intent intent = new Intent();
+                    intent.setClass(getContext(), KindSetActivity.class);
+                    startActivity(intent);*/
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", sEmail);
+                data.put("shop_no", shop_no);
+                return data;
+            }
+        };
+        deleterequestQueue.add(deletestrRequest);
+    }
+
     //取得購物清單
     public void GetShop(String date){
         shopnoarrayList.clear();
@@ -244,6 +310,8 @@ public class Shoplist extends Fragment {
                 //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 myListAdapter = new Shoplist.MyListAdapter();
                 shoplist_recyclerview.setAdapter(myListAdapter);
+                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                itemTouchHelper.attachToRecyclerView(shoplist_recyclerview);
             }
         }, new Response.ErrorListener() {
             @Override
