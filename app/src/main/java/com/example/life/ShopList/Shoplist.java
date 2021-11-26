@@ -205,7 +205,13 @@ public class Shoplist extends Fragment {
             holder.delete_shop_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DeleteShop(String.valueOf(position));
+                    DeleteShop(shopnoarrayList.get(position));
+                    shopnoarrayList.remove(position);
+                    namearrayList.remove(position);
+                    quantityerarrayList.remove(position);
+                    myListAdapter.notifyItemRemoved(position);
+                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    myListAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -243,7 +249,7 @@ public class Shoplist extends Fragment {
     };*/
 
     //刪除購物清單
-    public void DeleteShop(String shop_no){
+    public void DeleteShop(String position){
         deleterequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
         StringRequest deletestrRequest = new StringRequest(Request.Method.POST, deleteurl, new Response.Listener<String>() {
             @Override
@@ -270,7 +276,7 @@ public class Shoplist extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> data = new HashMap<>();
                 data.put("email", sEmail);
-                data.put("shop_no", shop_no);
+                data.put("shop_no", position);
                 return data;
             }
         };
@@ -282,7 +288,7 @@ public class Shoplist extends Fragment {
         shopnoarrayList.clear();
         namearrayList.clear();
         quantityerarrayList.clear();
-        shoprequestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        shoprequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
         StringRequest getshopstrRequest = new StringRequest(Request.Method.POST, shopurl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
