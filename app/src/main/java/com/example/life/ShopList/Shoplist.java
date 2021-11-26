@@ -50,10 +50,10 @@ public class Shoplist extends Fragment {
     CalendarView calendarview;
     int calendar_state = 0; //預設顯示行事曆
     // POST SHOPLIST
-    private static String shopurl = "http://172.16.1.60/PHP_API/index.php/Shopping/get_shopping_list";
+    private static String shopurl = "http://192.168.80.110/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
     // POST Delete Shop List
-    private static String deleteurl = "http://172.16.1.60/PHP_API/index.php/Shopping/delete_shop_item";
+    private static String deleteurl = "http://192.168.80.110/PHP_API/index.php/Shopping/delete_shop_item";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
