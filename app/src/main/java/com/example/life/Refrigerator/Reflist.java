@@ -337,7 +337,6 @@ public class Reflist extends Fragment {
                     reflist_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            SetLoading("刪除中...", true);
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
                             View refdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
                             Button cancelDelete = refdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
@@ -350,6 +349,7 @@ public class Reflist extends Fragment {
                             refdelete_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    SetLoading("刪除中...", true);
                                     DelRefList(refnoarrayList.get(position));
                                 }
                             });
@@ -461,11 +461,11 @@ public class Reflist extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
-                    SetLoading("", false);
                     Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.setClass(getContext(), MainActivity.class);
                     startActivity(intent);
+                    SetLoading("", false);
                     ZERO_NOTIFY(refno);
                 } else if (response.equals("failure")) {
                     Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();

@@ -106,7 +106,7 @@ public class EditReflistActivity extends AppCompatActivity {
         oldphoto = intent.getStringExtra("oldphoto"); //取得原照片
         editphoto = oldphoto;
 
-        Toast.makeText(EditReflistActivity.this, refno+oldfoodname+oldquantity+oldunit+oldexpdate+oldkind+oldlocate+oldphoto, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(EditReflistActivity.this, refno+oldfoodname+oldquantity+oldunit+oldexpdate+oldkind+oldlocate+oldphoto, Toast.LENGTH_SHORT).show();
 
         reflist_edit_back = (ImageView) findViewById(R.id.reflist_edit_back);
         reflist_edit_back.setOnClickListener(new View.OnClickListener() {
