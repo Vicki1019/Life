@@ -23,7 +23,6 @@
         android:layout_height="40dp"
         android:layout_marginStart="25dp"
         android:clickable="true"
-        android:contentDescription="TODO"
         app:layout_constraintBottom_toTopOf="@+id/view7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -1,6 +1,5 @@
 package com.example.life.ShopList;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -179,13 +177,14 @@ public class Shoplist extends Fragment {
     public class MyListAdapter extends RecyclerView.Adapter<Shoplist.MyListAdapter.ViewHolder>{
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-            private TextView shoplist_name;
-            private TextView shoplist_quantity;
+            private TextView shoplist_name, shoplist_quantity;
+            private ImageButton delete_shop_btn;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 shoplist_name = itemView.findViewById(R.id.shoplist_name);
                 shoplist_quantity = itemView.findViewById(R.id.shoplist_quantity);
+                delete_shop_btn = itemView.findViewById(R.id.delete_shop_btn);
             }
         }
 
@@ -202,7 +201,13 @@ public class Shoplist extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull @NotNull Shoplist.MyListAdapter.ViewHolder holder, int position) {
             holder.shoplist_name.setText(namearrayList.get(position));
-            holder.shoplist_quantity.setText("數量："+quantityerarrayList.get(position));
+            holder.shoplist_quantity.setText("x "+quantityerarrayList.get(position));
+            holder.delete_shop_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DeleteShop(String.valueOf(position));
+                }
+            });
         }
 
         //取得顯示數量
@@ -213,7 +218,7 @@ public class Shoplist extends Fragment {
     }
 
     //側滑刪除功能
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    /*ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
             return false;
@@ -235,7 +240,7 @@ public class Shoplist extends Fragment {
                     break;
             }
         }
-    };
+    };*/
 
     //刪除購物清單
     public void DeleteShop(String shop_no){
@@ -310,8 +315,8 @@ public class Shoplist extends Fragment {
                 //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 myListAdapter = new Shoplist.MyListAdapter();
                 shoplist_recyclerview.setAdapter(myListAdapter);
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-                itemTouchHelper.attachToRecyclerView(shoplist_recyclerview);
+                /*ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                itemTouchHelper.attachToRecyclerView(shoplist_recyclerview);*/
             }
         }, new Response.ErrorListener() {
             @Override

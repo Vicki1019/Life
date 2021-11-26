@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/shoplist_name"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -26,18 +26,42 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/shoplist_quantity"
-        android:layout_width="80dp"
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:focusable="false"
-        android:text="商品數量"
+        android:layout_marginLeft="10dp"
+        android:text="數量："
         android:textColor="#884800"
         android:textSize="20sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shoplist_quantity"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:text="00"
+        android:textColor="#884800"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/delete_shop_btn"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/close" />
 
 </LinearLayout>

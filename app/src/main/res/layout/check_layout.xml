@@ -9,7 +9,7 @@
         android:id="@+id/view16"
         android:layout_width="0dp"
         android:layout_height="155dp"
-        android:background="#FFEEC6"
+        android:background="@drawable/round_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
