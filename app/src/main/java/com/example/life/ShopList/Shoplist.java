@@ -1,5 +1,6 @@
 package com.example.life.ShopList;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,11 +9,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +49,7 @@ public class Shoplist extends Fragment {
     String sEmail, shopping_no, shopping_name, shopping_quantity;
     TextView getdate;
     ImageButton shop_list_up;
+    int edit_state_name =0, edit_state_quantity=0;
     //Session
     SessionManager sessionManager;
     //Calendar
@@ -201,7 +207,42 @@ public class Shoplist extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull @NotNull Shoplist.MyListAdapter.ViewHolder holder, int position) {
             holder.shoplist_name.setText(namearrayList.get(position));
-            holder.shoplist_quantity.setText("x "+quantityerarrayList.get(position));
+            holder.shoplist_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //開啟EditText編輯
+                    holder.shoplist_name.setFocusable(true);
+                    holder.shoplist_name.setFocusableInTouchMode(true);
+                    holder.shoplist_name.requestFocus();
+                    //開啟鍵盤
+                    InputMethodManager imm = (InputMethodManager)holder.shoplist_name.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
+                    holder.shoplist_name.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            String name = String.valueOf(s);
+                            Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+                }
+            });
+            holder.shoplist_quantity.setText(quantityerarrayList.get(position));
+            holder.shoplist_quantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             holder.delete_shop_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
