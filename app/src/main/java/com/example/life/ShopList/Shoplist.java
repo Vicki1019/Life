@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
+import com.example.life.Refrigerator.EditReflistActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -46,20 +49,25 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Shoplist extends Fragment {
-    String sEmail, shopping_no, shopping_name, shopping_quantity;
+    String sEmail, shopping_no, shopping_name, shopping_quantity, edit_food_no, edit_food_name, edit_food_quantity, after_name, after_quantity;
     TextView getdate;
     ImageButton shop_list_up;
-    int edit_state_name =0, edit_state_quantity=0;
+    private InputMethodManager imm;
     //Session
     SessionManager sessionManager;
     //Calendar
     CalendarView calendarview;
     int calendar_state = 0; //預設顯示行事曆
-    // POST SHOPLIST
-    private static String shopurl = "http://192.168.80.110/PHP_API/index.php/Shopping/get_shopping_list";
+    // POST SHOPPING LIST
+    private static String shopurl = "http://192.168.65.110/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
-    // POST Delete Shop List
-    private static String deleteurl = "http://192.168.80.110/PHP_API/index.php/Shopping/delete_shop_item";
+    // POST UPDATE Shopping List
+    private static String updatenameurl = "http://192.168.65.110/PHP_API/index.php/Shopping/update_shop_name";
+    RequestQueue updatenamerequestQueue;
+    private static String updatequantityurl = "http://192.168.65.110/PHP_API/index.php/Shopping/update_shop_quantity";
+    RequestQueue updatequantityrequestQueue;
+    // POST Delete Shopping List
+    private static String deleteurl = "http://192.168.65.110/PHP_API/index.php/Shopping/delete_shop_item";
     RequestQueue deleterequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
@@ -120,7 +128,6 @@ public class Shoplist extends Fragment {
         sEmail = user.get(SessionManager.EMAIL);
 
         shoplist_recyclerview = v.findViewById(R.id.shoplist_recyclerview);
-
 
         //行事曆
         getdate = (TextView) v.findViewById(R.id.getdate);
@@ -183,7 +190,7 @@ public class Shoplist extends Fragment {
     public class MyListAdapter extends RecyclerView.Adapter<Shoplist.MyListAdapter.ViewHolder>{
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-            private TextView shoplist_name, shoplist_quantity;
+            private EditText shoplist_name, shoplist_quantity;
             private ImageButton delete_shop_btn;
 
             public ViewHolder(@NonNull View itemView) {
@@ -216,33 +223,106 @@ public class Shoplist extends Fragment {
                     holder.shoplist_name.requestFocus();
                     //開啟鍵盤
                     InputMethodManager imm = (InputMethodManager)holder.shoplist_name.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
-                    holder.shoplist_name.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            String name = String.valueOf(s);
-                            Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             });
+            //偵測名稱欄位是否失去焦點
+            holder.shoplist_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        edit_food_no = shopnoarrayList.get(position); //儲存要更新之商品編號
+                        edit_food_name = namearrayList.get(position); //儲存要更新之商品名稱
+                        holder.shoplist_name.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                    after_name = String.valueOf(s);
+                            }
+                        });
+
+                    }else{
+                        //Toast.makeText(getContext(), edit_food_no+after_name, Toast.LENGTH_SHORT).show();
+                        if(edit_food_no!=null && after_name!=null && after_name!=""){
+                            UpdateName(edit_food_no, after_name);
+                        }
+                        edit_food_no="";
+                        after_name="";
+                        //關閉EditText編輯
+                        holder.shoplist_name.setFocusable(false);
+                        holder.shoplist_name.setFocusableInTouchMode(false);
+                        holder.shoplist_name.requestFocus();
+                        //關閉鍵盤
+                        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
+                }
+            });
+
             holder.shoplist_quantity.setText(quantityerarrayList.get(position));
             holder.shoplist_quantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //開啟EditText編輯
+                    holder.shoplist_quantity.setFocusable(true);
+                    holder.shoplist_quantity.setFocusableInTouchMode(true);
+                    holder.shoplist_quantity.requestFocus();
+                    //開啟鍵盤
+                    InputMethodManager imm = (InputMethodManager)holder.shoplist_quantity.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             });
+            //偵測數量欄位是否失去焦點
+            holder.shoplist_quantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        edit_food_no = shopnoarrayList.get(position); //儲存要更新之商品編號
+                        edit_food_quantity = quantityerarrayList.get(position); //儲存要更新之商品數量
+                        holder.shoplist_quantity.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                after_quantity = String.valueOf(s);
+                            }
+                        });
+
+                    }else{
+                        //Toast.makeText(getContext(), edit_food_no+after_name, Toast.LENGTH_SHORT).show();
+                        if(edit_food_no!=null && after_quantity!=null && after_quantity!=""){
+                            UpdateQuantity(edit_food_no, after_quantity);
+                        }
+                        edit_food_no="";
+                        after_quantity="";
+                        //關閉EditText編輯
+                        holder.shoplist_quantity.setFocusable(false);
+                        holder.shoplist_quantity.setFocusableInTouchMode(false);
+                        holder.shoplist_quantity.requestFocus();
+                        //關閉鍵盤
+                        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
+                }
+            });
+
             holder.delete_shop_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -263,31 +343,6 @@ public class Shoplist extends Fragment {
             return shopnoarrayList.size();
         }
     }
-
-    //側滑刪除功能
-    /*ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-        @Override
-        public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            String delete_shopno = shopnoarrayList.get(position);
-            switch(direction){
-                case ItemTouchHelper.LEFT:
-                    DeleteShop(delete_shopno);
-
-                    shopnoarrayList.remove(position);
-                    namearrayList.remove(position);
-                    quantityerarrayList.remove(position);
-                    myListAdapter.notifyItemRemoved(position);
-                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
-                    myListAdapter.notifyDataSetChanged();
-                    break;
-            }
-        }
-    };*/
 
     //刪除購物清單
     public void DeleteShop(String position){
@@ -382,4 +437,63 @@ public class Shoplist extends Fragment {
         shoprequestQueue.add(getshopstrRequest);
     }
 
+    //更新購物清單商品名稱
+    public void UpdateName(String shop_no, String shop_name){
+        updatenamerequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest namestrRequest = new StringRequest(Request.Method.POST, updatenameurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("success")){
+                    //Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                }else if(response.equals("falure")){
+                    Toast.makeText(getContext(), "修改失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                data.put("shop_no",shop_no);
+                data.put("shop_name",shop_name);
+                return data;
+            }
+        };
+        updatenamerequestQueue.add(namestrRequest);
+    }
+
+    //更新購物清單商品數量
+    public void UpdateQuantity(String shop_no, String shop_quantity){
+        updatequantityrequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest quntitystrRequest = new StringRequest(Request.Method.POST, updatequantityurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("success")){
+                    //Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                }else if(response.equals("falure")){
+                    Toast.makeText(getContext(), "修改失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                data.put("shop_no",shop_no);
+                data.put("shop_quantity",shop_quantity);
+                return data;
+            }
+        };
+        updatequantityrequestQueue.add(quntitystrRequest);
+    }
 }
