@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class VehicleSetActivity extends AppCompatActivity {
     //Volley
-    private static String vehicleurl = "http://192.168.234.110/PHP_API/index.php/Vehicle/update_barcode";
+    private static String vehicleurl = "http://172.16.1.67/PHP_API/index.php/Vehicle/update_barcode";
     RequestQueue vehiclerequestQueue;
     //Session
     SessionManager sessionManager;
