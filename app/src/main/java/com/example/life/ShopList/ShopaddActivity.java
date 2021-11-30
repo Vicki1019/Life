@@ -2,7 +2,6 @@ package com.example.life.ShopList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,17 +11,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,18 +32,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.life.Login.LoginActivity;
-import com.example.life.Login.RegisterActivity;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.example.life.Scan.QRCodeScanActivity;
-import com.example.life.Setting.KindSetActivity;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,14 +48,17 @@ public class ShopaddActivity extends AppCompatActivity {
     EditText shoplist_input_name, shoplist_input_quantity;
     String sEmail, notifydate, shoplist_name, shoplist_quantity;
     ArrayList<String> Namelist = new ArrayList<>();
-    ArrayList<String> Quantitylist = new ArrayList<>();
-    //int i=1;
+    ArrayList<Editable> Quantitylist = new ArrayList<>();
+    int food_input_no=1;
     View shoplist_addview;
     LinearLayout shoplist_add_layout;
     RecyclerView add_shoplist_recyclerview;
-    //ShopaddActivity.MyListAdapter myListAdapter;
+    ShopaddActivity.MyListAdapter myListAdapter;
     Button add_view_btn;
     int default_i = -1;
+    //Edittext焦點
+    int etFocusPos = -1;
+    int idSelectView = -1;
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
@@ -80,42 +75,160 @@ public class ShopaddActivity extends AppCompatActivity {
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
 
-        shoplist_add_layout = findViewById(R.id.shoplist_add_layout);
-        add_view_btn = (Button) findViewById(R.id.add_view_btn);
-        add_view_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddView();
-            }
-        });
+        //shoplist_add_layout = findViewById(R.id.shoplist_add_layout);
 
-        //建置購物清單填寫欄位
-        /*add_shoplist_recyclerview = findViewById(R.id.add_shoplist_recyclerview);
+        add_shoplist_recyclerview = findViewById(R.id.add_shoplist_recyclerview);
+        //設置RecyclerView
         add_shoplist_recyclerview.setLayoutManager(new LinearLayoutManager(ShopaddActivity.this));
+        //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         myListAdapter = new ShopaddActivity.MyListAdapter();
-        add_shoplist_recyclerview.setAdapter(myListAdapter);*/
-        /*Namelist.clear();
-        Quantitylist.clear();*/
+        add_shoplist_recyclerview.setAdapter(myListAdapter);
+
         Shopadd();
     }
 
     //新增購物清單欄位
-    public void AddView() {
-        shoplist_addview = getLayoutInflater().inflate(R.layout.shoplist_add_layout, null, false);
-        default_i = 0;
-        ImageView shoplist_remove = (ImageView) shoplist_addview.findViewById(R.id.shoplist_remove);
-        shoplist_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RemoveView(shoplist_addview);
-            }
-        });
-
-        shoplist_add_layout.addView(shoplist_addview);
+    public void AddView(int position){
+        myListAdapter.notifyItemInserted(position);
+        myListAdapter.notifyItemRangeInserted(position,myListAdapter.getItemCount());
+        myListAdapter.notifyDataSetChanged();
+        food_input_no++;
     }
 
-    private void RemoveView(View view) {
-        shoplist_add_layout.removeView(view);
+    //刪除購物清單欄位
+    public void DeleteView(int position){
+            myListAdapter.notifyItemRemoved(position);
+            myListAdapter.notifyItemRangeRemoved(position,myListAdapter.getItemCount());
+            myListAdapter.notifyDataSetChanged();
+            food_input_no--;
+    }
+
+    //建立分類RecyclerView
+    public class MyListAdapter extends RecyclerView.Adapter<ShopaddActivity.MyListAdapter.ViewHolder>{
+
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            private EditText shoplist_input_name, shoplist_input_quantity;
+            private ImageView shoplist_remove;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                shoplist_input_name = itemView.findViewById(R.id.shoplist_input_name);
+                shoplist_input_quantity = itemView.findViewById(R.id.shoplist_input_quantity);
+                shoplist_remove = itemView.findViewById(R.id.shoplist_remove);
+            }
+        }
+
+        //連接layout檔案，Return一個view
+        @NonNull
+        @Override
+        public ShopaddActivity.MyListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.shoplist_add_layout,parent,false);
+            return new ShopaddActivity.MyListAdapter.ViewHolder(view);
+        }
+
+        //取得物件的控制
+        @Override
+        public void onBindViewHolder(@NonNull @NotNull ShopaddActivity.MyListAdapter.ViewHolder holder, int position) {
+
+            holder.shoplist_input_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        etFocusPos = position;
+                        holder.shoplist_input_name.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                Namelist.add(String.valueOf(s));
+                            }
+                        });
+
+                        Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos), Toast.LENGTH_SHORT).show();
+                        if(etFocusPos == 0){
+                            holder.shoplist_remove.setVisibility(View.INVISIBLE);
+                        }
+                        add_view_btn = (Button) findViewById(R.id.add_view_btn);
+                        add_view_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                holder.shoplist_input_name.setText(Namelist.get(etFocusPos));
+                                myListAdapter.notifyItemInserted(etFocusPos);
+                                myListAdapter.notifyItemRangeInserted(etFocusPos,myListAdapter.getItemCount());
+                                myListAdapter.notifyDataSetChanged();
+                                food_input_no++;
+                            }
+                        });
+
+                        holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                myListAdapter.notifyItemRemoved(etFocusPos);
+                                myListAdapter.notifyItemRangeRemoved(etFocusPos,myListAdapter.getItemCount());
+                                myListAdapter.notifyDataSetChanged();
+                                food_input_no--;
+                            }
+                        });
+
+                    }else{
+                        etFocusPos = -1;
+                    }
+                }
+            });
+
+            holder.shoplist_input_quantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        etFocusPos = position;
+                        Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos), Toast.LENGTH_SHORT).show();
+                        if(etFocusPos == 0){
+                            holder.shoplist_remove.setVisibility(View.INVISIBLE);
+                        }
+                        add_view_btn = (Button) findViewById(R.id.add_view_btn);
+                        add_view_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                myListAdapter.notifyItemInserted(etFocusPos);
+                                myListAdapter.notifyItemRangeInserted(etFocusPos,myListAdapter.getItemCount());
+                                myListAdapter.notifyDataSetChanged();
+                                food_input_no++;
+                            }
+                        });
+
+                        holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                myListAdapter.notifyItemRemoved(etFocusPos);
+                                myListAdapter.notifyItemRangeRemoved(etFocusPos,myListAdapter.getItemCount());
+                                myListAdapter.notifyDataSetChanged();
+                                food_input_no--;
+                            }
+                        });
+
+                    }else{
+                        etFocusPos = -1;
+                    }
+                }
+            });
+
+
+        }
+
+        //取得顯示數量
+        @Override
+        public int getItemCount() {
+            return food_input_no;
+        }
     }
 
 
