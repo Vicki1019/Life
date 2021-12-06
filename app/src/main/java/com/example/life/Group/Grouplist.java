@@ -57,10 +57,10 @@ public class Grouplist extends Fragment {
     //Session
     SessionManager sessionManager;
     //POST GroupList
-    private static String getgroupurl = "http://172.16.1.67/PHP_API/index.php/Group/get_allGroup_totalMember";
+    private static String getgroupurl = "http://10.0.34.168/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
     //POST JoinGroup
-    private static String joingroupurl = "http://172.16.1.67/PHP_API/index.php/Group/join_group";
+    private static String joingroupurl = "http://10.0.34.168/PHP_API/index.php/Group/join_group";
     RequestQueue joingroupquestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
