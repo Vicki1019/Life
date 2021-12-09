@@ -49,6 +49,7 @@ import java.util.Map;
  * Use the {@link Setting#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class Setting extends Fragment {
     TextView useremail, username,refrename;
     SessionManager sessionManager;
