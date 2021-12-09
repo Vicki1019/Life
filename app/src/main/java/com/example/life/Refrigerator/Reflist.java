@@ -61,21 +61,21 @@ public class Reflist extends Fragment {
     //Session
     SessionManager sessionManager;
     //POST LOCATE NOW
-    private static String locatenowurl = "http://172.16.1.74/PHP_API/index.php/Refrigerator/get_member_locate";
+    private static String locatenowurl = "http://140.128.1.58/PHP_API/index.php/Refrigerator/get_member_locate";
     RequestQueue locatenowquestQueue;
     //POST Reflist
-    private static String getrefurl = "http://172.16.1.74/PHP_API/index.php/Refrigerator/getreflist";
+    private static String getrefurl = "http://140.128.1.58/PHP_API/index.php/Refrigerator/getreflist";
     RequestQueue getrefrequestQueue;
     //POST Delete Reflist
-    private static String delrefurl = "http://172.16.1.74/PHP_API/index.php/Refrigerator/delete_ref_item";
+    private static String delrefurl = "http://140.128.1.58/PHP_API/index.php/Refrigerator/delete_ref_item";
     RequestQueue delrefrequestQueue;
     //GET UPDATE FOOD STATE
-    private static String willstateurl = "http://172.16.1.74/PHP_API/index.php/Refrigerator/update_food_state_will";
+    private static String willstateurl = "http://140.128.1.58/PHP_API/index.php/Refrigerator/update_food_state_will";
     RequestQueue willstaterequestQueue;
-    private static String gonestateurl = "http://172.16.1.74/PHP_API/index.php/Refrigerator/update_food_state_gone";
+    private static String gonestateurl = "http://140.128.1.58/PHP_API/index.php/Refrigerator/update_food_state_gone";
     RequestQueue gonestaterequestQueue;
     //POST ZERO NOTIFY
-    private static String zerourl = "http://172.16.1.74/PHP_API/index.php/LineNotify/ZeroNotify";
+    private static String zerourl = "http://140.128.1.58/PHP_API/index.php/LineNotify/ZeroNotify";
     RequestQueue zerorequestQueue;
 
     //Reflist RecyclerView
