@@ -57,13 +57,13 @@ public class Setting extends Fragment {
     String sName, sEmail;
     ImageView user_photo;
     // POST VEHICLE
-    private static String vehicleurl = "http://140.128.1.58/PHP_API/index.php/Vehicle/vehicle_ck";
+    private static String vehicleurl = "http://172.16.1.75/PHP_API/index.php/Vehicle/vehicle_ck";
     RequestQueue vehiclerequestQueue;
     // POST USER INFO
-    private static String userurl = "http://140.128.1.58/PHP_API/index.php/UserSetting/getUserInfo";
+    private static String userurl = "http://172.16.1.75/PHP_API/index.php/UserSetting/getUserInfo";
     RequestQueue userrequestQueue;
     // POST Edit RefName
-    private static String refnameurl = "http://140.128.1.58/PHP_API/index.php/UserSetting/update_refname";
+    private static String refnameurl = "http://172.16.1.75/PHP_API/index.php/UserSetting/update_refname";
     RequestQueue refnamerequestQueue;
 
     // TODO: Rename parameter arguments, choose names that match
