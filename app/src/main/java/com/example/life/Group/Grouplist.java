@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,7 +36,8 @@ import com.example.life.R;
 import com.example.life.Refrigerator.Reflist;
 import com.example.life.Setting.KindSetActivity;
 import com.example.life.ShopList.Shoplist;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -56,6 +58,8 @@ public class Grouplist extends Fragment {
     String sEmail, group_no, group_name, total_member;
     //Session
     SessionManager sessionManager;
+    FloatingActionMenu groupmenu;
+    FloatingActionButton button_joingroup, button_groupadd;
     //POST GroupList
     private static String getgroupurl = "http://172.16.1.35/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
@@ -122,8 +126,9 @@ public class Grouplist extends Fragment {
 
         GetMyGroup();
 
-        FloatingActionButton join_btn = v.findViewById(R.id.joingroup);
-        join_btn.setOnClickListener(new View.OnClickListener() {
+        groupmenu = v.findViewById(R.id.group_floatingActionMenu);
+        button_joingroup = v.findViewById(R.id.button_joingroup);
+        button_joingroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JoinGroup();
@@ -183,6 +188,7 @@ public class Grouplist extends Fragment {
             return groupnoarrayList.size();
         }
     }
+
 
     //取得群組清單
     public void GetMyGroup(){
