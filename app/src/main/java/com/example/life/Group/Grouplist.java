@@ -63,6 +63,9 @@ public class Grouplist extends Fragment {
     //POST GroupList
     private static String getgroupurl = "http://172.16.1.35/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
+    //POST Create Group
+    private static String creategroupurl = "http://172.16.1.35/PHP_API/index.php/Group/create_group";
+    RequestQueue creategroupquestQueue;
     //POST JoinGroup
     private static String joingroupurl = "http://172.16.1.35/PHP_API/index.php/Group/join_group";
     RequestQueue joingroupquestQueue;
@@ -134,6 +137,13 @@ public class Grouplist extends Fragment {
                 JoinGroup();
             }
         });
+        button_groupadd = v.findViewById(R.id.button_groupadd);
+        button_groupadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreatGroup();
+            }
+        });
 
         return v;
     }
@@ -189,6 +199,64 @@ public class Grouplist extends Fragment {
         }
     }
 
+    //建立新群組
+    public void CreatGroup(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());//創建AlertDialog.Builder
+        View creategroup_view = getLayoutInflater().inflate(R.layout.create_group_layout,null);//嵌入View
+        ImageView backDialog = creategroup_view.findViewById(R.id.create_group_back);//連結關閉視窗的Button
+        mBuilder.setView(creategroup_view);//設置View
+        AlertDialog create_group_dialog = mBuilder.create();
+        //關閉視窗的監聽事件
+        backDialog.setOnClickListener(v1 -> {create_group_dialog.dismiss();});
+
+        creategroupquestQueue = Volley.newRequestQueue(getContext());
+        EditText create_group_name = (EditText) creategroup_view.findViewById(R.id.create_group_name);
+        Button create_group_btn = (Button) creategroup_view.findViewById(R.id.create_group_btn);
+        create_group_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String group_name = create_group_name.getText().toString().trim();
+                if(group_name.equals("")){
+                    create_group_name.setError("請輸入群組名稱");
+                }else{
+                    StringRequest creatgroupstrRequest = new StringRequest(Request.Method.POST, creategroupurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.equals("success")){
+                                create_group_dialog.hide();
+                                Toast.makeText(getContext(), "新增成功", Toast.LENGTH_SHORT).show();
+                            }else if(response.equals("failure")){
+                                Toast.makeText(getContext(), "新增失敗", Toast.LENGTH_SHORT).show();
+                            }else if(response.equals("alreadyjoin")){
+                                Toast.makeText(getContext(), "您已在該群組", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email",sEmail);
+                            data.put("group_name",group_name);
+                            return data;
+                        }
+                    };
+                    creategroupquestQueue.add(creatgroupstrRequest);
+                }
+            }
+        });
+
+        create_group_dialog.show();
+        create_group_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+        DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+        dm = getResources().getDisplayMetrics();
+        create_group_dialog.getWindow().setLayout(dm.widthPixels-100, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+        create_group_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+    }
 
     //取得群組清單
     public void GetMyGroup(){
