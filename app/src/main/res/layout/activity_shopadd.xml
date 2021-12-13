@@ -22,7 +22,7 @@
         android:id="@+id/shopadd_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toTopOf="@+id/view3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
