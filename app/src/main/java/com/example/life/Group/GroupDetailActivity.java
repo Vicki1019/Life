@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +37,13 @@ public class GroupDetailActivity extends AppCompatActivity {
     String group_no, group_name, member_name,member_email;
     ImageView group_back;
     TextView group_name_title, group_no_copy;
-    //Volley
+    Button delete_group;
+    //POST GET MEMBERINFO
     private static String groupurl = "http://172.16.1.35/PHP_API/index.php/Group/get_group_member";
     RequestQueue grouprequestQueue;
+    //POST CHECK DEFAULT GROUP
+    private static String defaultckurl = "http://172.16.1.35/PHP_API/index.php/Group/check_default_group";
+    RequestQueue defaultckrequestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
     GroupDetailActivity.MyListAdapter myListAdapter;
@@ -72,7 +77,44 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         groupRecyclerView = findViewById(R.id.group_member_list);
 
+        DefaultCheck(group_no);
         GetGroupMember();
+
+        delete_group = (Button)findViewById(R.id.delete_group);
+        delete_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    //檢查該群組是否為預設群組
+    public void DefaultCheck(String group_no){
+        defaultckrequestQueue = Volley.newRequestQueue(this);
+        StringRequest defaultckstrRequest = new StringRequest(Request.Method.POST, defaultckurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("isdefault")){
+                    delete_group.setVisibility(View.INVISIBLE);
+                }else if(response.equals("notdefault")){
+                    delete_group.setVisibility(View.VISIBLE);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(GroupDetailActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("group_no", group_no);
+                return data;
+            }
+        };
+        defaultckrequestQueue.add(defaultckstrRequest);
     }
 
     public void GetGroupMember(){
