@@ -37,7 +37,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     ImageView group_back;
     TextView group_name_title, group_no_copy;
     //Volley
-    private static String groupurl = "http://172.16.1.35/PHP_API/index.php/Group/get_group_member";
+    private static String groupurl = "http://10.0.34.233/PHP_API/index.php/Group/get_group_member";
     RequestQueue grouprequestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
