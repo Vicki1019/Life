@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +48,9 @@ public class GroupDetailActivity extends AppCompatActivity {
     //POST CHECK DEFAULT GROUP
     private static String defaultckurl = "http://172.16.1.35/PHP_API/index.php/Group/check_default_group";
     RequestQueue defaultckrequestQueue;
+    //POST DELETE GROUP
+    private static String deletegroupurl = "http://172.16.1.35/PHP_API/index.php/Group/delete_group";
+    RequestQueue deletegrouprequestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
     GroupDetailActivity.MyListAdapter myListAdapter;
@@ -84,7 +91,28 @@ public class GroupDetailActivity extends AppCompatActivity {
         delete_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(GroupDetailActivity.this);//創建AlertDialog.Builder
+                View groupdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
+                Button cancelDelete = groupdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
+                mBuilder.setView(groupdeleteckview);//設置View
+                AlertDialog delgroup_dialog = mBuilder.create();
+                //關閉視窗的監聽事件
+                cancelDelete.setOnClickListener(v1 -> {delgroup_dialog.dismiss();});
 
+                TextView group_check_msg = groupdeleteckview.findViewById(R.id.check_msg);
+                group_check_msg.setText("確定要刪除「"+group_name+"」嗎?");
+
+                Button groupdelete_ok = groupdeleteckview.findViewById(R.id.check_ok);
+                groupdelete_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SetLoading("刪除中...", true);
+                        DeleteGroup(group_no);
+                    }
+                });
+                delgroup_dialog.show();
+                delgroup_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+                delgroup_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
             }
         });
     }
@@ -209,5 +237,57 @@ public class GroupDetailActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(GroupDetailActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    //刪除群組
+    public void DeleteGroup(String group_no){
+        deletegrouprequestQueue = Volley.newRequestQueue(this);
+        StringRequest deletegroupstrRequest = new StringRequest(Request.Method.POST, deletegroupurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("success")){
+                    Toast.makeText(GroupDetailActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(GroupDetailActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    SetLoading("", false);
+                }else if(response.equals("failure")){
+                    Toast.makeText(GroupDetailActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(GroupDetailActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("group_no", group_no);
+                return data;
+            }
+        };
+        deletegrouprequestQueue.add(deletegroupstrRequest);
+    }
+
+    //Loading介面
+    public void SetLoading(String hint, Boolean bool){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(GroupDetailActivity.this);//創建AlertDialog.Builder
+        View loadview = getLayoutInflater().inflate(R.layout.loading_layout,null);//嵌入View
+        mBuilder.setView(loadview);//設置View
+        AlertDialog load_dialog = mBuilder.create();
+        if(bool==true){
+            TextView loading_hint = (TextView) loadview.findViewById(R.id.loading_hint);
+            loading_hint.setText(hint);
+            load_dialog.show();
+            load_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+            DisplayMetrics dm = new DisplayMetrics();//取得螢幕解析度
+            dm = getResources().getDisplayMetrics();
+            load_dialog.getWindow().setLayout(dm.widthPixels-250, ViewGroup.LayoutParams.WRAP_CONTENT);//設置螢幕寬度值
+            load_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+        }else{
+            load_dialog.hide();
+        }
     }
 }
