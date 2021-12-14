@@ -62,7 +62,7 @@ public class ShopaddActivity extends AppCompatActivity {
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
-    private static String addshopurl = "http://192.168.234.110/PHP_API/index.php/Shopping/shop_list_add";
+    private static String addshopurl = "http://172.16.1.35/PHP_API/index.php/Shopping/shop_list_add";
     RequestQueue addshoprequestQueue;
 
     @Override
@@ -83,7 +83,8 @@ public class ShopaddActivity extends AppCompatActivity {
         //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         myListAdapter = new ShopaddActivity.MyListAdapter();
         add_shoplist_recyclerview.setAdapter(myListAdapter);
-
+        Namelist.clear();
+        Namelist.add("");
         Shopadd();
     }
 
@@ -135,7 +136,9 @@ public class ShopaddActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
+                        idSelectView = v.getId();
                         etFocusPos = position;
+                        //即時更新資料到陣列
                         holder.shoplist_input_name.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,79 +152,49 @@ public class ShopaddActivity extends AppCompatActivity {
 
                             @Override
                             public void afterTextChanged(Editable s) {
-                                Namelist.add(String.valueOf(s));
+                                if(Namelist.size()!=0 && Namelist.get(position)!=null){
+                                    Namelist.remove(position);
+                                }
+                                Namelist.add(position, String.valueOf(s));
                             }
                         });
 
-                        Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos), Toast.LENGTH_SHORT).show();
-                        if(etFocusPos == 0){
+                        if(position == 0){
                             holder.shoplist_remove.setVisibility(View.INVISIBLE);
                         }
+
                         add_view_btn = (Button) findViewById(R.id.add_view_btn);
                         add_view_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                holder.shoplist_input_name.setText(Namelist.get(etFocusPos));
+                                holder.shoplist_input_name.clearFocus();
+                                if(etFocusPos!=-1 && etFocusPos==position){
+                                    holder.shoplist_input_name.requestFocus();
+                                    if(Namelist.size()!=0 && Namelist.get(etFocusPos)!=null) {
+                                        holder.shoplist_input_name.setText(Namelist.get(etFocusPos));
+                                    }
+                                }
+                                food_input_no++;
                                 myListAdapter.notifyItemInserted(etFocusPos);
                                 myListAdapter.notifyItemRangeInserted(etFocusPos,myListAdapter.getItemCount());
                                 myListAdapter.notifyDataSetChanged();
-                                food_input_no++;
                             }
                         });
 
                         holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                myListAdapter.notifyItemRemoved(etFocusPos);
-                                myListAdapter.notifyItemRangeRemoved(etFocusPos,myListAdapter.getItemCount());
-                                myListAdapter.notifyDataSetChanged();
+                                Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
                                 food_input_no--;
+                                holder.shoplist_input_name.setText("");
+                                myListAdapter.notifyItemRemoved(position);
+                                myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                                myListAdapter.notifyDataSetChanged();
                             }
                         });
-
-                    }else{
-                        etFocusPos = -1;
                     }
                 }
             });
-
-            holder.shoplist_input_quantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus){
-                        etFocusPos = position;
-                        Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos), Toast.LENGTH_SHORT).show();
-                        if(etFocusPos == 0){
-                            holder.shoplist_remove.setVisibility(View.INVISIBLE);
-                        }
-                        add_view_btn = (Button) findViewById(R.id.add_view_btn);
-                        add_view_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                myListAdapter.notifyItemInserted(etFocusPos);
-                                myListAdapter.notifyItemRangeInserted(etFocusPos,myListAdapter.getItemCount());
-                                myListAdapter.notifyDataSetChanged();
-                                food_input_no++;
-                            }
-                        });
-
-                        holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                myListAdapter.notifyItemRemoved(etFocusPos);
-                                myListAdapter.notifyItemRangeRemoved(etFocusPos,myListAdapter.getItemCount());
-                                myListAdapter.notifyDataSetChanged();
-                                food_input_no--;
-                            }
-                        });
-
-                    }else{
-                        etFocusPos = -1;
-                    }
-                }
-            });
-
-
         }
 
         //取得顯示數量
