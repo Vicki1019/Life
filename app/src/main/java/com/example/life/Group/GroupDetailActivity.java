@@ -51,6 +51,9 @@ public class GroupDetailActivity extends AppCompatActivity {
     //POST DELETE GROUP
     private static String deletegroupurl = "http://172.16.1.35/PHP_API/index.php/Group/delete_group";
     RequestQueue deletegrouprequestQueue;
+    //POST DELETE GROUP MEMBER
+    private static String deletememberurl = "http://172.16.1.35/PHP_API/index.php/Group/delete_group_member";
+    RequestQueue deletememberrequestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
     GroupDetailActivity.MyListAdapter myListAdapter;
@@ -199,11 +202,13 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView group_member_account, group_member_name;
+            private Button delete_group_member;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                group_member_account = itemView.findViewById(R.id.group_member_account);
+                //group_member_account = itemView.findViewById(R.id.group_member_account);
                 group_member_name = itemView.findViewById(R.id.group_member_name);
+                delete_group_member = itemView.findViewById(R.id.delete_group_member);
             }
         }
 
@@ -219,8 +224,34 @@ public class GroupDetailActivity extends AppCompatActivity {
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull GroupDetailActivity.MyListAdapter.ViewHolder holder, int position) {
-            holder.group_member_account.setText(memberemailarrayList.get(position));
+            //holder.group_member_account.setText(memberemailarrayList.get(position));
             holder.group_member_name.setText(membernamearrayList.get(position));
+            holder.delete_group_member.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(GroupDetailActivity.this);//創建AlertDialog.Builder
+                    View memberdeleteckview = getLayoutInflater().inflate(R.layout.check_layout,null);//嵌入View
+                    Button cancelDelete = memberdeleteckview.findViewById(R.id.check_cancel);//連結關閉視窗的Button
+                    mBuilder.setView(memberdeleteckview);//設置View
+                    AlertDialog delmember_dialog = mBuilder.create();
+                    //關閉視窗的監聽事件
+                    cancelDelete.setOnClickListener(v1 -> {delmember_dialog.dismiss();});
+
+                    TextView group_check_msg = memberdeleteckview.findViewById(R.id.check_msg);
+                    group_check_msg.setText("確定要移除「"+membernamearrayList.get(position)+"」嗎?");
+
+                    Button groupdelete_ok = memberdeleteckview.findViewById(R.id.check_ok);
+                    groupdelete_ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DeleteMember(memberemailarrayList.get(position), group_no, delmember_dialog);
+                        }
+                    });
+                    delmember_dialog.show();
+                    delmember_dialog.setCanceledOnTouchOutside(false);// 設定點選螢幕Dialog不消失
+                    delmember_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
+                }
+            });
         }
 
         //取得顯示數量
@@ -269,6 +300,43 @@ public class GroupDetailActivity extends AppCompatActivity {
             }
         };
         deletegrouprequestQueue.add(deletegroupstrRequest);
+    }
+
+    public void DeleteMember(String email, String group_no, AlertDialog delmember_dialog){
+        deletememberrequestQueue = Volley.newRequestQueue(this);
+        StringRequest deletememberstrRequest = new StringRequest(Request.Method.POST, deletememberurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("success")){
+                    SetLoading("刪除中...", true);
+                    Toast.makeText(GroupDetailActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(GroupDetailActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    SetLoading("", false);
+                }else if(response.equals("isdefault")){
+                    Toast.makeText(GroupDetailActivity.this, "群組創建者不得移除", Toast.LENGTH_SHORT).show();
+                    delmember_dialog.hide();
+                }else if(response.equals("failure")){
+                    Toast.makeText(GroupDetailActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
+                    delmember_dialog.hide();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(GroupDetailActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email", email);
+                data.put("group_no", group_no);
+                return data;
+            }
+        };
+        deletememberrequestQueue.add(deletememberstrRequest);
     }
 
     //Loading介面
