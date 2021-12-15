@@ -9,9 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +65,8 @@ public class KindSetActivity extends AppCompatActivity {
     RecyclerView myRecyclerView;
     MyListAdapter myListAdapter;
     ArrayList<String> kindarrayList = new ArrayList<>();
+    ArrayList<String> kindphotoarrayList = new ArrayList<>();
+    Bitmap bitmap;
 
 
     @Override
@@ -80,7 +88,9 @@ public class KindSetActivity extends AppCompatActivity {
             }
         });
         GetKind();
+
     }
+
 
     //取得kind資料
     public void GetKind(){
@@ -94,7 +104,9 @@ public class KindSetActivity extends AppCompatActivity {
                     for(int k=0;k<kindjsonArray.length();k++){
                         JSONObject jsonObject= kindjsonArray.getJSONObject(k);
                         String kind_cn = jsonObject.getString("kind_cn");
+                        String photo = jsonObject.getString("kind_photo");
                         kindarrayList.add(kind_cn);
+                        kindphotoarrayList.add(photo);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -129,10 +141,12 @@ public class KindSetActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView kindname;
+            private ImageView kindphoto;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 kindname = itemView.findViewById(R.id.kindset_name);
+                kindphoto = itemView.findViewById(R.id.kind_photo);
             }
         }
 
@@ -149,6 +163,11 @@ public class KindSetActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
             holder.kindname.setText(kindarrayList.get(position));
+            Uri uri = Uri.parse(kindphotoarrayList.get(position));
+            byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+            // Initialize bitmap
+            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            holder.kindphoto.setImageBitmap(bitmap);
         }
 
         //取得顯示數量
@@ -174,6 +193,7 @@ public class KindSetActivity extends AppCompatActivity {
                     DeleteKind();
 
                     kindarrayList.remove(position);
+                    kindphotoarrayList.remove(position);
                     myListAdapter.notifyItemRemoved(position);
                     myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
                     myListAdapter.notifyDataSetChanged();
