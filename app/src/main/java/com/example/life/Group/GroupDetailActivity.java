@@ -315,11 +315,11 @@ public class GroupDetailActivity extends AppCompatActivity {
                     startActivity(intent);
                     SetLoading("", false);
                 }else if(response.equals("isdefault")){
+                    delmember_dialog.hide();
                     Toast.makeText(GroupDetailActivity.this, "群組創建者不得移除", Toast.LENGTH_SHORT).show();
-                    delmember_dialog.hide();
                 }else if(response.equals("failure")){
-                    Toast.makeText(GroupDetailActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
                     delmember_dialog.hide();
+                    Toast.makeText(GroupDetailActivity.this, "刪除失敗", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
