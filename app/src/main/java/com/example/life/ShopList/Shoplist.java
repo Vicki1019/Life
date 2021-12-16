@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -49,8 +51,9 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Shoplist extends Fragment {
-    String sEmail, shopping_no, shopping_name, shopping_quantity, edit_food_no, edit_food_name, edit_food_quantity, after_name, after_quantity;
+    String sEmail, shopping_no, shopping_name, shopping_quantity, shopping_check, edit_food_no, edit_food_name, edit_food_quantity, after_name, after_quantity;
     TextView getdate;
+    int ischeck = 0;
     ImageButton shop_list_up;
     private InputMethodManager imm;
     //Session
@@ -69,12 +72,16 @@ public class Shoplist extends Fragment {
     // POST Delete Shopping List
     private static String deleteurl = "http://172.16.1.35/PHP_API/index.php/Shopping/delete_shop_item";
     RequestQueue deleterequestQueue;
+    // POST UPDATE CHECKED
+    private static String updateckurl = "http://172.16.1.35/PHP_API/index.php/Shopping/update_shop_checked";
+    RequestQueue updateckrequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
     Shoplist.MyListAdapter myListAdapter;
     ArrayList<String> shopnoarrayList = new ArrayList<>();
     ArrayList<String> namearrayList = new ArrayList<>();
-    ArrayList<String> quantityerarrayList = new ArrayList<>();
+    ArrayList<String> quantityarrayList = new ArrayList<>();
+    ArrayList<String> checkarrayList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -192,12 +199,14 @@ public class Shoplist extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder{
             private EditText shoplist_name, shoplist_quantity;
             private ImageButton delete_shop_btn;
+            private CheckBox shop_list_check;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 shoplist_name = itemView.findViewById(R.id.shoplist_name);
                 shoplist_quantity = itemView.findViewById(R.id.shoplist_quantity);
                 delete_shop_btn = itemView.findViewById(R.id.delete_shop_btn);
+                shop_list_check = itemView.findViewById(R.id.shop_list_check);
             }
         }
 
@@ -268,7 +277,7 @@ public class Shoplist extends Fragment {
                 }
             });
 
-            holder.shoplist_quantity.setText(quantityerarrayList.get(position));
+            holder.shoplist_quantity.setText(quantityarrayList.get(position));
             holder.shoplist_quantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -287,7 +296,7 @@ public class Shoplist extends Fragment {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
                         edit_food_no = shopnoarrayList.get(position); //儲存要更新之商品編號
-                        edit_food_quantity = quantityerarrayList.get(position); //儲存要更新之商品數量
+                        edit_food_quantity = quantityarrayList.get(position); //儲存要更新之商品數量
                         holder.shoplist_quantity.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -329,10 +338,29 @@ public class Shoplist extends Fragment {
                     DeleteShop(shopnoarrayList.get(position));
                     shopnoarrayList.remove(position);
                     namearrayList.remove(position);
-                    quantityerarrayList.remove(position);
+                    quantityarrayList.remove(position);
                     myListAdapter.notifyItemRemoved(position);
                     myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
                     myListAdapter.notifyDataSetChanged();
+                }
+            });
+
+            if(checkarrayList.get(position).equals("0")){
+                holder.shop_list_check.setChecked(false);
+            }else if(checkarrayList.get(position).equals("1")){
+                holder.shop_list_check.setChecked(true);
+            }
+
+            holder.shop_list_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.shop_list_check.isChecked() == true){
+                        UpdateChecked(shopnoarrayList.get(position), "1");
+                        //Toast.makeText(getContext(), shopnoarrayList.get(position).toString(), Toast.LENGTH_SHORT).show();
+                    }else if(holder.shop_list_check.isChecked() == false){
+                        UpdateChecked(shopnoarrayList.get(position), "0");
+                        //Toast.makeText(getContext(), shopnoarrayList.get(position).toString(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -383,7 +411,8 @@ public class Shoplist extends Fragment {
     public void GetShop(String date){
         shopnoarrayList.clear();
         namearrayList.clear();
-        quantityerarrayList.clear();
+        quantityarrayList.clear();
+        checkarrayList.clear();
         shoprequestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
         StringRequest getshopstrRequest = new StringRequest(Request.Method.POST, shopurl, new Response.Listener<String>() {
             @Override
@@ -399,10 +428,12 @@ public class Shoplist extends Fragment {
                             shopping_no = jsonObject.getString("shoppinglistno").trim();
                             shopping_name = jsonObject.getString("foodname").trim();
                             shopping_quantity = jsonObject.getString("quantity").trim();
+                            shopping_check = jsonObject.getString("checkbox").trim();
 
                             shopnoarrayList.add(shopping_no);
                             namearrayList.add(shopping_name);
-                            quantityerarrayList.add(shopping_quantity);
+                            quantityarrayList.add(shopping_quantity);
+                            checkarrayList.add(shopping_check);
 
                         }else if(result.equals("failure")){
 
@@ -495,5 +526,34 @@ public class Shoplist extends Fragment {
             }
         };
         updatequantityrequestQueue.add(quntitystrRequest);
+    }
+
+    public void UpdateChecked(String shop_no, String ischecked){
+        updateckrequestQueue = Volley.newRequestQueue(getContext());
+        StringRequest updateckstrRequest = new StringRequest(Request.Method.POST, updateckurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.equals("success")){
+                    //Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                }else if(response.equals("falure")){
+                    Toast.makeText(getContext(), "修改失敗", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("email",sEmail);
+                data.put("shop_no",shop_no);
+                data.put("ischecked",ischecked);
+                return data;
+            }
+        };
+        updateckrequestQueue.add(updateckstrRequest);
     }
 }
