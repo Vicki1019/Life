@@ -62,18 +62,18 @@ public class Shoplist extends Fragment {
     CalendarView calendarview;
     int calendar_state = 0; //預設顯示行事曆
     // POST SHOPPING LIST
-    private static String shopurl = "http://172.16.1.35/PHP_API/index.php/Shopping/get_shopping_list";
+    private static String shopurl = "http://192.168.100.117/PHP_API/index.php/Shopping/get_shopping_list";
     RequestQueue shoprequestQueue;
     // POST UPDATE Shopping List
-    private static String updatenameurl = "http://172.16.1.35/PHP_API/index.php/Shopping/update_shop_name";
+    private static String updatenameurl = "http://192.168.100.117/PHP_API/index.php/Shopping/update_shop_name";
     RequestQueue updatenamerequestQueue;
-    private static String updatequantityurl = "http://172.16.1.35/PHP_API/index.php/Shopping/update_shop_quantity";
+    private static String updatequantityurl = "http://192.168.100.117/PHP_API/index.php/Shopping/update_shop_quantity";
     RequestQueue updatequantityrequestQueue;
     // POST Delete Shopping List
-    private static String deleteurl = "http://172.16.1.35/PHP_API/index.php/Shopping/delete_shop_item";
+    private static String deleteurl = "http://192.168.100.117/PHP_API/index.php/Shopping/delete_shop_item";
     RequestQueue deleterequestQueue;
     // POST UPDATE CHECKED
-    private static String updateckurl = "http://172.16.1.35/PHP_API/index.php/Shopping/update_shop_checked";
+    private static String updateckurl = "http://192.168.100.117/PHP_API/index.php/Shopping/update_shop_checked";
     RequestQueue updateckrequestQueue;
     //RecyclerView
     RecyclerView shoplist_recyclerview;
