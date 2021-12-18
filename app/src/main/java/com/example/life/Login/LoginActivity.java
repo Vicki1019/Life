@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar loading;
     private SignInButton google_signin_btn;
     //POST LOGIN
-    private static String url = "http://192.168.100.117/PHP_API/index.php/Login/login";
+    private static String url = "http://192.168.24.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
     //Google
     GoogleSignInClient mGoogleSignInClient;
