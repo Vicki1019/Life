@@ -3,7 +3,6 @@ package com.example.life.Login;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.account);
         passwd = findViewById(R.id.passwd);
         //Google登入
+
         google_signin_btn= findViewById(R.id.google_signin_btn);
         google_signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -162,6 +162,13 @@ public class EditReflistActivity extends AppCompatActivity {
         reflist_edit_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*editfoodname = refedit_input_name.getText().toString().trim();//取得食品名稱
+                editquantity = refedit_input_quantity.getText().toString().trim();//取得數量
+                editunit = unitsp.getSelectedItem().toString().trim(); //取得單位
+                editexpdate = refedit_input_expdate.getText().toString().trim();//取得有效日期
+                editkind = kindsp.getSelectedItem().toString().trim(); //取得分類
+                editlocate = locatesp.getSelectedItem().toString().trim(); //取得存放位置
+                Toast.makeText(EditReflistActivity.this, refno+"\n"+editfoodname+"\n"+editquantity+"\n"+editunit+"\n"+editexpdate+"\n"+editkind+"\n"+editlocate, Toast.LENGTH_SHORT).show();*/
                 EditRefList();
             }
         });
@@ -185,7 +192,7 @@ public class EditReflistActivity extends AppCompatActivity {
         refedit_decrease_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(i>0){
+                if(i>1){
                     i--;
                     refedit_input_quantity.setText(String.valueOf(i));
                 }

@@ -29,6 +29,24 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    /*repositories {
+        //maven {url"https://www.jitpack.io"}
+        maven {url"https://jitpack.io/private#auth"}
+    }
+    allprojects {
+        repositories {
+            google()
+            jcenter()
+            maven {
+                setUrl("https://jitpack.io")
+                credentials {
+                    username = "jp_abc123Token"
+                }
+            }
+        }
+    }*/
+
 }
 
 dependencies {
