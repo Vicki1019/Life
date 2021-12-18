@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 0;
+    private int RC_SIGN_IN = 0;
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
@@ -71,7 +71,8 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("251261556037-ts65vqij3lmt8p29us0hb1b72g2b3kko.apps.googleusercontent.com")
+                .requestIdToken("766002549118-02cq7d4du6t38hpb2b38u1sf9gog9nn6.apps.googleusercontent.com")
+                //.requestIdToken("251261556037-ts65vqij3lmt8p29us0hb1b72g2b3kko.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -177,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
