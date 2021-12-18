@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private int RC_SIGN_IN = 0;
+    private static final int RC_SIGN_IN = 0;
     private EditText email, passwd;
     private String lemail, lpasswd;
     private ProgressBar loading;
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
 
         //Session
@@ -194,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("account", "Email: "+account.getEmail());
                 Log.i("account", "ID: "+account.getId());
                 Log.i("account", "DisplayName: "+account.getDisplayName());
+
             } catch (ApiException e) {
                 Log.w("error", "Google sign in failed", e);
             }
