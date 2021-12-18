@@ -122,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 if(rphoto != null){
                                     data.put("photo", rphoto);
                                 }
+                                data.put("google_sign_in", "false");
                                 return data;
                             }
                         };

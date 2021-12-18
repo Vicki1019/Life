@@ -3,8 +3,11 @@ package com.example.life.Login;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -35,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,12 +46,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 0;
     private EditText email, passwd;
-    private String lemail, lpasswd;
+    private String lemail, lpasswd, google_photo;
     private ProgressBar loading;
     private SignInButton google_signin_btn;
     //POST LOGIN
-    private static String url = "http://192.168.24.110/PHP_API/index.php/Login/login";
+    private static String loginurl = "http://192.168.24.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
+    //POST REGISTER
+    private static String registerurl = "http://192.168.24.110/PHP_API/index.php/Login/register";
     //Google
     GoogleSignInClient mGoogleSignInClient;
 
@@ -71,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("766002549118-02cq7d4du6t38hpb2b38u1sf9gog9nn6.apps.googleusercontent.com")
+                //.requestIdToken("766002549118-02cq7d4du6t38hpb2b38u1sf9gog9nn6.apps.googleusercontent.com")
                 //.requestIdToken("251261556037-ts65vqij3lmt8p29us0hb1b72g2b3kko.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
@@ -110,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
       //Volley_POST
         if(!lemail.equals("") && !lpasswd.equals("")){
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, loginurl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -175,6 +181,48 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void Google_signIn(String google_email, String google_name, String google_photo){
+        loading.setVisibility(View.VISIBLE);
+        RequestQueue registerrequestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest registerstrRequest = new StringRequest(Request.Method.POST, registerurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    loading.setVisibility(View.GONE);
+                    //Toast.makeText(LoginActivity.this, "註冊成功，請重新登入", Toast.LENGTH_SHORT).show();
+                    //建立SESSION
+                    sessionManager.createSession(google_name, google_email);
+                    //從LoginActivity 跳轉到 MainActivity
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (response.equals("failure")) {
+                    loading.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loading.setVisibility(View.GONE);
+                Toast.makeText(LoginActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> data = new HashMap<>();
+                data.put("name", google_name);
+                data.put("email", google_email);
+                if(google_photo != null){
+                    data.put("photo", google_photo);
+                }
+                data.put("google_sign_in", "true");
+                return data;
+            }
+        };
+        registerrequestQueue.add(registerstrRequest);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -188,11 +236,31 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                String google_email = account.getEmail();
+                String google_name = account.getDisplayName();
+                Uri google_photo_uri = account.getPhotoUrl();
+                try{
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), google_photo_uri);
+                    ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                    // compress Bitmap
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
+                    // Initialize byte array
+                    byte[] bytes=stream.toByteArray();
+                    // get base64 encoded string
+                    google_photo = Base64.encodeToString(bytes,Base64.DEFAULT);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Google_signIn(google_email, google_name, google_photo);
+                
                 String result = "登入成功\nEmail："+account.getEmail()+"\nGoogle名稱："
                         +account.getDisplayName();
                 Log.i("account", "Token: "+account.getIdToken());
                 Log.i("account", "Email: "+account.getEmail());
                 Log.i("account", "ID: "+account.getId());
+                Log.i("account", "Picture: "+account.getPhotoUrl());
                 Log.i("account", "DisplayName: "+account.getDisplayName());
 
             } catch (ApiException e) {
