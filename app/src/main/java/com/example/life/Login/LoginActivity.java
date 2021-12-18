@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar loading;
     private SignInButton google_signin_btn;
     //POST LOGIN
-    private static String url = "http://172.16.1.35/PHP_API/index.php/Login/login";
+    private static String url = "http://192.168.100.117/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
     //Google
     GoogleSignInClient mGoogleSignInClient;
@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("251261556037-ts65vqij3lmt8p29us0hb1b72g2b3kko.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -171,5 +172,48 @@ public class LoginActivity extends AppCompatActivity {
                 passwd.setError("請輸入密碼");
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            handleSignInResult(task);
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                String result = "登入成功\nEmail："+account.getEmail()+"\nGoogle名稱："
+                        +account.getDisplayName();
+                Log.i("account", "Token: "+account.getIdToken());
+                Log.i("account", "Email: "+account.getEmail());
+                Log.i("account", "ID: "+account.getId());
+                Log.i("account", "DisplayName: "+account.getDisplayName());
+            } catch (ApiException e) {
+                Log.w("error", "Google sign in failed", e);
+            }
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            Log.i("account", "account info=" + account);
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("error", "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
     }
 }
