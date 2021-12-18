@@ -46,7 +46,7 @@ import java.util.Map;
 public class ShopaddActivity extends AppCompatActivity {
     TextView shoplist_choose_date;
     EditText shoplist_input_name, shoplist_input_quantity;
-    String sEmail, notifydate, shoplist_name, shoplist_quantity;
+    String sEmail, notifydate, shoplist_name, shoplist_quantity, aftertxt;
     ArrayList<String> Namelist = new ArrayList<>();
     ArrayList<Editable> Quantitylist = new ArrayList<>();
     int food_input_no=1;
@@ -152,14 +152,13 @@ public class ShopaddActivity extends AppCompatActivity {
 
                             @Override
                             public void afterTextChanged(Editable s) {
-                                if(Namelist.size()!=0 && Namelist.get(position)!=null){
-                                    Namelist.remove(position);
-                                }
-                                Namelist.add(position, String.valueOf(s));
+                                aftertxt = String.valueOf(s);
                             }
                         });
 
-                        if(position == 0){
+                        Namelist.add(position, aftertxt);
+
+                        if(etFocusPos == 0){
                             holder.shoplist_remove.setVisibility(View.INVISIBLE);
                         }
 
@@ -180,19 +179,18 @@ public class ShopaddActivity extends AppCompatActivity {
                                 myListAdapter.notifyDataSetChanged();
                             }
                         });
-
-                        holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
-                                food_input_no--;
-                                holder.shoplist_input_name.setText("");
-                                myListAdapter.notifyItemRemoved(position);
-                                myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
-                                myListAdapter.notifyDataSetChanged();
-                            }
-                        });
                     }
+                }
+            });
+            holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
+                    food_input_no--;
+                    holder.shoplist_input_name.setText("");
+                    myListAdapter.notifyItemRemoved(position);
+                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    myListAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -256,7 +254,6 @@ public class ShopaddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(ShopaddActivity.this, String.valueOf(shoplist_add_layout.getChildCount()), Toast.LENGTH_SHORT).show();
-                SetLoading("新增中...",true);
                 //取得推播時間
                 notifydate = shoplist_choose_date.getText().toString().trim();
                 //Toast.makeText(ShopaddActivity.this, notifydate, Toast.LENGTH_SHORT).show();
@@ -303,6 +300,7 @@ public class ShopaddActivity extends AppCompatActivity {
 
     //POST Shoplist
     public void AddShopList(int position, String notifydate, String name, String quantity){
+        SetLoading("新增中...",true);
         addshoprequestQueue = Volley.newRequestQueue(this);
         StringRequest addshopstringRequest = new StringRequest(Request.Method.POST, addshopurl, new Response.Listener<String>() {
             @Override
