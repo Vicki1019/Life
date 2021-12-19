@@ -61,13 +61,13 @@ public class Grouplist extends Fragment {
     FloatingActionMenu groupmenu;
     FloatingActionButton button_joingroup, button_groupadd;
     //POST GroupList
-    private static String getgroupurl = "http://192.168.210.110/PHP_API/index.php/Group/get_allGroup_totalMember";
+    private static String getgroupurl = "http://172.16.1.41/PHP_API/index.php/Group/get_allGroup_totalMember";
     RequestQueue getgroupquestQueue;
     //POST Create Group
-    private static String creategroupurl = "http://192.168.210.110/PHP_API/index.php/Group/create_group";
+    private static String creategroupurl = "http://172.16.1.41/PHP_API/index.php/Group/create_group";
     RequestQueue creategroupquestQueue;
     //POST JoinGroup
-    private static String joingroupurl = "http://192.168.210.110/PHP_API/index.php/Group/join_group";
+    private static String joingroupurl = "http://172.16.1.41/PHP_API/index.php/Group/join_group";
     RequestQueue joingroupquestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
