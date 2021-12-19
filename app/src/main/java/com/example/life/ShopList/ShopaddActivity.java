@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,9 +15,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -58,7 +61,6 @@ public class ShopaddActivity extends AppCompatActivity {
     int default_i = -1;
     //Edittext焦點
     int etFocusPos = -1;
-    int idSelectView = -1;
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
@@ -83,8 +85,8 @@ public class ShopaddActivity extends AppCompatActivity {
         //refRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         myListAdapter = new ShopaddActivity.MyListAdapter();
         add_shoplist_recyclerview.setAdapter(myListAdapter);
-        Namelist.clear();
-        Namelist.add("");
+        //設置RecyclerView緩存容量
+        add_shoplist_recyclerview.setItemViewCacheSize(20);
         Shopadd();
     }
 
@@ -131,12 +133,14 @@ public class ShopaddActivity extends AppCompatActivity {
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull ShopaddActivity.MyListAdapter.ViewHolder holder, int position) {
+            if(position == 0){
+                holder.shoplist_remove.setVisibility(View.INVISIBLE);
+            }
 
             holder.shoplist_input_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
-                        idSelectView = v.getId();
                         etFocusPos = position;
                         //即時更新資料到陣列
                         holder.shoplist_input_name.addTextChangedListener(new TextWatcher() {
@@ -153,44 +157,40 @@ public class ShopaddActivity extends AppCompatActivity {
                             @Override
                             public void afterTextChanged(Editable s) {
                                 aftertxt = String.valueOf(s);
-                            }
-                        });
-
-                        Namelist.add(position, aftertxt);
-
-                        if(etFocusPos == 0){
-                            holder.shoplist_remove.setVisibility(View.INVISIBLE);
-                        }
-
-                        add_view_btn = (Button) findViewById(R.id.add_view_btn);
-                        add_view_btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                holder.shoplist_input_name.clearFocus();
-                                if(etFocusPos!=-1 && etFocusPos==position){
-                                    holder.shoplist_input_name.requestFocus();
-                                    if(Namelist.size()!=0 && Namelist.get(etFocusPos)!=null) {
-                                        holder.shoplist_input_name.setText(Namelist.get(etFocusPos));
+                                if(Namelist==null){
+                                    Namelist.add(etFocusPos, aftertxt);
+                                }else{
+                                    if(etFocusPos <= Namelist.size()-1){
+                                        if(Namelist.get(etFocusPos)!=null){
+                                            Namelist.set(etFocusPos, aftertxt);
+                                        }else{
+                                            Namelist.add(etFocusPos, aftertxt);
+                                        }
+                                    }else{
+                                        Namelist.add(etFocusPos, aftertxt);
                                     }
                                 }
-                                food_input_no++;
-                                myListAdapter.notifyItemInserted(etFocusPos);
-                                myListAdapter.notifyItemRangeInserted(etFocusPos,myListAdapter.getItemCount());
-                                myListAdapter.notifyDataSetChanged();
                             }
                         });
                     }
                 }
+
             });
+
+
+            Log.i("response","Msg"+etFocusPos+" "+position+" "+Namelist);
+
             holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
-                    food_input_no--;
-                    holder.shoplist_input_name.setText("");
-                    myListAdapter.notifyItemRemoved(position);
-                    myListAdapter.notifyItemRangeRemoved(position, myListAdapter.getItemCount());
+                    //Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
+                    Namelist.remove(position);
+                    myListAdapter.notifyItemRemoved(etFocusPos);
+                    myListAdapter.notifyItemRangeRemoved(etFocusPos,Namelist.size()-1);
                     myListAdapter.notifyDataSetChanged();
+                    if(etFocusPos<=Namelist.size()-1){
+                        shoplist_input_name.setText(Namelist.get(etFocusPos));
+                    }
                 }
             });
         }
@@ -198,7 +198,11 @@ public class ShopaddActivity extends AppCompatActivity {
         //取得顯示數量
         @Override
         public int getItemCount() {
-            return food_input_no;
+            if(Namelist.size()==0){
+                return 1;
+            }else{
+                return Namelist.size()+1;
+            }
         }
     }
 
@@ -268,11 +272,11 @@ public class ShopaddActivity extends AppCompatActivity {
                         default_i = 0;
                         Toast.makeText(ShopaddActivity.this, "至少要新增一個欄位", Toast.LENGTH_SHORT).show();
                     }else if(default_i == 0){
-                        for(int i=0; i<shoplist_add_layout.getChildCount(); i++){
-                            shoplist_addview = shoplist_add_layout.getChildAt(i);
+                        for(int i=0; i<Namelist.size(); i++){
+                            //shoplist_addview = Namelist.get(i);
                             //取得食物名稱
-                            shoplist_input_name = shoplist_addview.findViewById(R.id.shoplist_input_name);
-                            shoplist_name = shoplist_input_name.getText().toString().trim();
+                            //shoplist_input_name = shoplist_addview.findViewById(R.id.shoplist_input_name);
+                            shoplist_name = Namelist.get(i);
                             //取得食物數量
                             shoplist_input_quantity = shoplist_addview.findViewById(R.id.shoplist_input_quantity);
                             shoplist_quantity = shoplist_input_quantity.getText().toString().trim();
