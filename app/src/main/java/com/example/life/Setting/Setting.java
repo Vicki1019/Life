@@ -40,6 +40,11 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -331,13 +336,17 @@ public class Setting extends Fragment {
                         String userphoto = jsonObject.getString("photo");
                         String refname = jsonObject.getString("group_name");
                         //顯示使用者頭貼
-                        Uri uri = Uri.parse(userphoto);
-                        byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
-                        // Initialize bitmap
-                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        // set bitmap on imageView
-                        user_photo.setImageBitmap(bitmap);
-                        //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        if(userphoto.startsWith("https")){
+                            Picasso.get().load(userphoto).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        }else{
+                            Uri uri = Uri.parse(userphoto);
+                            byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                            // Initialize bitmap
+                            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                            // set bitmap on imageView
+                            user_photo.setImageBitmap(bitmap);
+                            //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        }
                         refrename.setText(refname);
                     }
                 } catch (Exception e) {

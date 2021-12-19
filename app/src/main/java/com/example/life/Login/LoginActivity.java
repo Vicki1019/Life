@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -39,6 +40,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,14 +52,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 0;
     private EditText email, passwd;
-    private String lemail, lpasswd, google_photo;
+    private String lemail, lpasswd;
     private ProgressBar loading;
     private SignInButton google_signin_btn;
     //POST LOGIN
-    private static String loginurl = "http://192.168.24.110/PHP_API/index.php/Login/login";
+    private static String loginurl = "http://192.168.210.110/PHP_API/index.php/Login/login";
     SessionManager sessionManager;
     //POST REGISTER
-    private static String registerurl = "http://192.168.24.110/PHP_API/index.php/Login/register";
+    private static String registerurl = "http://192.168.210.110/PHP_API/index.php/Login/register";
     //Google
     GoogleSignInClient mGoogleSignInClient;
 
@@ -116,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
       //Volley_POST
         if(!lemail.equals("") && !lpasswd.equals("")){
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, loginurl, new Response.Listener<String>() {
+            StringRequest loginstrRequest = new StringRequest(Request.Method.POST, loginurl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -161,11 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> data = new HashMap<>();
                 data.put("email", lemail);
                 data.put("passwd", lpasswd);
+                data.put("google_sign_in", "true");
                 return data;
             }
           };
-          RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-          requestQueue.add(stringRequest);
+          RequestQueue loginrequestQueue = Volley.newRequestQueue(this);
+          loginrequestQueue.add(loginstrRequest);
         }else{
             loading.setVisibility(View.GONE);
             if(lemail.equals("") && lpasswd.equals("")) {
@@ -198,7 +205,55 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 } else if (response.equals("failure")) {
                     loading.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "此信箱已註冊過", Toast.LENGTH_SHORT).show();
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, loginurl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject logjsonObject = new JSONObject(response);
+                                JSONArray logjsonArray = logjsonObject.getJSONArray("userinfo");
+                                for(int i=0;i<logjsonArray.length();i++) {
+                                    JSONObject jsonObject = logjsonArray.getJSONObject(i);
+                                    String result = jsonObject.getString("response");
+                                    if (result.equals("success")) {
+                                        loading.setVisibility(View.GONE);
+                                        //取得登入user資料
+                                        String member_nickname = jsonObject.getString("member_nickname").trim();
+                                        String email = jsonObject.getString("email").trim();
+
+                                        //建立SESSION
+                                        sessionManager.createSession(member_nickname, email);
+                                        //從LoginActivity 跳轉到 MainActivity
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    } else if (result.equals("failure")) {
+                                        loading.setVisibility(View.GONE);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loading.setVisibility(View.GONE);
+                            Toast.makeText(LoginActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> data = new HashMap<>();
+                            data.put("email", google_email);
+                            data.put("passwd", "");
+                            data.put("google_sign_in", "true");
+                            return data;
+                        }
+                    };
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue.add(stringRequest);
                 }
             }
         }, new Response.ErrorListener() {
@@ -213,6 +268,7 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> data = new HashMap<>();
                 data.put("name", google_name);
                 data.put("email", google_email);
+                data.put("passwd", "");
                 if(google_photo != null){
                     data.put("photo", google_photo);
                 }
@@ -238,20 +294,7 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String google_email = account.getEmail();
                 String google_name = account.getDisplayName();
-                Uri google_photo_uri = account.getPhotoUrl();
-                try{
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), google_photo_uri);
-                    ByteArrayOutputStream stream=new ByteArrayOutputStream();
-                    // compress Bitmap
-                    bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream);
-                    // Initialize byte array
-                    byte[] bytes=stream.toByteArray();
-                    // get base64 encoded string
-                    google_photo = Base64.encodeToString(bytes,Base64.DEFAULT);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String google_photo = account.getPhotoUrl().toString();
 
                 Google_signIn(google_email, google_name, google_photo);
                 
@@ -269,7 +312,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    /*private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Log.i("account", "account info=" + account);
@@ -281,7 +324,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.w("error", "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
         }
-    }
+    }*/
 
     private void updateUI(GoogleSignInAccount account) {
     }
