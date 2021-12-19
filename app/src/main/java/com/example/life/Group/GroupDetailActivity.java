@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +32,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.R;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -38,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GroupDetailActivity extends AppCompatActivity {
-    String group_no, group_name, member_name,member_email;
+    String group_no, group_name, member_name,member_email, profile_picture;
     ImageView group_back;
     TextView group_name_title, group_no_copy;
     Button delete_group;
@@ -59,6 +66,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     GroupDetailActivity.MyListAdapter myListAdapter;
     ArrayList<String> membernamearrayList = new ArrayList<>();
     ArrayList<String> memberemailarrayList = new ArrayList<>();
+    ArrayList<String> picturearrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,9 +174,11 @@ public class GroupDetailActivity extends AppCompatActivity {
                             //取得群組成員資料
                             member_name = jsonObject.getString("member_nickname").trim();
                             member_email = jsonObject.getString("email").trim();
+                            profile_picture = jsonObject.getString("profile_picture").trim();
 
                             membernamearrayList.add(member_name);
                             memberemailarrayList.add(member_email);
+                            picturearrayList.add(profile_picture);
                         }
                     }
                 } catch (Exception e) {
@@ -203,12 +213,14 @@ public class GroupDetailActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView group_member_account, group_member_name;
             private Button delete_group_member;
+            private ImageView group_member_photo;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 //group_member_account = itemView.findViewById(R.id.group_member_account);
                 group_member_name = itemView.findViewById(R.id.group_member_name);
                 delete_group_member = itemView.findViewById(R.id.delete_group_member);
+                group_member_photo = itemView.findViewById(R.id.group_member_photo);
             }
         }
 
@@ -252,6 +264,18 @@ public class GroupDetailActivity extends AppCompatActivity {
                     delmember_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//將原生AlertDialog的背景設為透明
                 }
             });
+
+            if(picturearrayList.get(position).startsWith("https")){
+                Picasso.get().load(picturearrayList.get(position)).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(holder.group_member_photo);
+            }else{
+                Uri uri = Uri.parse(picturearrayList.get(position));
+                byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                // Initialize bitmap
+                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                // set bitmap on imageView
+                holder.group_member_photo.setImageBitmap(bitmap);
+                //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+            }
         }
 
         //取得顯示數量

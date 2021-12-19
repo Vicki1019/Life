@@ -6,6 +6,13 @@
     android:layout_marginTop="10dp"
     android:background="#FFF9E9">
 
+    <ImageView
+        android:id="@+id/group_member_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_weight="2"
+        app:srcCompat="@drawable/user" />
+
     <TextView
         android:id="@+id/group_member_name"
         android:layout_width="150dp"
