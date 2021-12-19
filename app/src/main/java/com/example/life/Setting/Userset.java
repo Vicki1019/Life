@@ -264,13 +264,17 @@ public class Userset extends AppCompatActivity {
                     for(int i=0;i<userjsonArray.length();i++) {
                         JSONObject jsonObject = userjsonArray.getJSONObject(i);
                         newphoto = jsonObject.getString("photo");
-                        Uri uri = Uri.parse(newphoto);
-                        byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
-                        // Initialize bitmap
-                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        // set bitmap on imageView
-                        user_photo.setImageBitmap(bitmap);
-                        //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        if(newphoto.startsWith("https")){
+                            Picasso.get().load(newphoto).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        }else{
+                            Uri uri = Uri.parse(newphoto);
+                            byte[] bytes= Base64.decode(String.valueOf(uri),Base64.DEFAULT);
+                            // Initialize bitmap
+                            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                            // set bitmap on imageView
+                            user_photo.setImageBitmap(bitmap);
+                            //Picasso.get().load(uri).resize(100, 100).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).config(Bitmap.Config.RGB_565).into(user_photo);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
