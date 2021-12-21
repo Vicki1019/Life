@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,9 +47,9 @@ import java.util.Map;
 public class ShopaddActivity extends AppCompatActivity {
     TextView shoplist_choose_date;
     EditText shoplist_input_name, shoplist_input_quantity;
-    String sEmail, notifydate, shoplist_name, shoplist_quantity, aftertxt;
+    String sEmail, notifydate, shoplist_name, shoplist_quantity, name_aftertxt, quntity_aftertxt;
     ArrayList<String> Namelist = new ArrayList<>();
-    ArrayList<Editable> Quantitylist = new ArrayList<>();
+    ArrayList<String> Quantitylist = new ArrayList<>();
     int food_input_no=1;
     View shoplist_addview;
     LinearLayout shoplist_add_layout;
@@ -60,11 +58,12 @@ public class ShopaddActivity extends AppCompatActivity {
     Button add_view_btn;
     int default_i = -1;
     //Edittext焦點
-    int etFocusPos = -1;
+    int name_etFocusPos = -1;
+    int quntit_etFocusPos = -1;
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
-    private static String addshopurl = "http://172.16.1.41/PHP_API/index.php/Shopping/shop_list_add";
+    private static String addshopurl = "http://10.0.67.94/PHP_API/index.php/Shopping/shop_list_add";
     RequestQueue addshoprequestQueue;
 
     @Override
@@ -141,7 +140,7 @@ public class ShopaddActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
-                        etFocusPos = position;
+                        name_etFocusPos = position;
                         //即時更新資料到陣列
                         holder.shoplist_input_name.addTextChangedListener(new TextWatcher() {
                             @Override
@@ -156,43 +155,84 @@ public class ShopaddActivity extends AppCompatActivity {
 
                             @Override
                             public void afterTextChanged(Editable s) {
-                                aftertxt = String.valueOf(s);
+                                name_aftertxt = String.valueOf(s);
                                 if(Namelist==null){
-                                    Namelist.add(etFocusPos, aftertxt);
+                                    Namelist.add(name_etFocusPos, name_aftertxt);
                                 }else{
-                                    if(etFocusPos <= Namelist.size()-1){
-                                        if(Namelist.get(etFocusPos)!=null){
-                                            Namelist.set(etFocusPos, aftertxt);
+                                    if(name_etFocusPos <= Namelist.size()-1){
+                                        if(Namelist.get(name_etFocusPos)!=null){
+                                            Namelist.set(name_etFocusPos, name_aftertxt);
                                         }else{
-                                            Namelist.add(etFocusPos, aftertxt);
+                                            Namelist.add(name_etFocusPos, name_aftertxt);
                                         }
                                     }else{
-                                        Namelist.add(etFocusPos, aftertxt);
+                                        Namelist.add(name_etFocusPos, name_aftertxt);
                                     }
                                 }
                             }
                         });
+                        Log.i("response","Name："+name_etFocusPos+" "+position+" "+Namelist);
                     }
                 }
 
             });
 
+            holder.shoplist_input_quantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        quntit_etFocusPos = position;
+                        //即時更新資料到陣列
+                        holder.shoplist_input_quantity.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            Log.i("response","Msg"+etFocusPos+" "+position+" "+Namelist);
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                quntity_aftertxt = String.valueOf(s);
+                                if(Quantitylist==null){
+                                    Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
+                                }else{
+                                    if(quntit_etFocusPos <= Quantitylist.size()-1){
+                                        if(Quantitylist.get(quntit_etFocusPos)!=null){
+                                            Quantitylist.set(quntit_etFocusPos, quntity_aftertxt);
+                                        }else{
+                                            Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
+                                        }
+                                    }else{
+                                        Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
+                                    }
+                                }
+                            }
+                        });
+                        Log.i("response","Quantity："+quntit_etFocusPos+" "+position+" "+Quantitylist);
+                    }
+                }
+            });
+
 
             holder.shoplist_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
-                    Namelist.remove(position);
-                    myListAdapter.notifyItemRemoved(etFocusPos);
-                    myListAdapter.notifyItemRangeRemoved(etFocusPos,Namelist.size()-1);
-                    myListAdapter.notifyDataSetChanged();
-                    if(etFocusPos<=Namelist.size()-1){
-                        shoplist_input_name.setText(Namelist.get(etFocusPos));
+                    if(Namelist!=null && Quantitylist!=null){
+                        Namelist.remove(position);
+                        Quantitylist.remove(position);
                     }
+                    myListAdapter.notifyItemRemoved(position);
+                    myListAdapter.notifyItemChanged(position, getItemCount());
                 }
             });
+
+
+
         }
 
         //取得顯示數量
@@ -200,8 +240,10 @@ public class ShopaddActivity extends AppCompatActivity {
         public int getItemCount() {
             if(Namelist.size()==0){
                 return 1;
-            }else{
+            }else if(Namelist.size() == Quantitylist.size()){
                 return Namelist.size()+1;
+            }else{
+                return Namelist.size();
             }
         }
     }
