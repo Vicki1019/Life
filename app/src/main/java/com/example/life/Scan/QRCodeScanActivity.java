@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -51,8 +53,6 @@ public class QRCodeScanActivity extends AppCompatActivity {
     SessionManager sessionManager;
     String sEmail;
     ImageView scan_back;
-    ArrayList<String> ScanName = new ArrayList<>();
-    ArrayList<String> ScanQuantity = new ArrayList<>();
     IntentIntegrator scanIntegrator;
     String[] scanresult;
     RecyclerView refRecyclerView;
@@ -83,6 +83,16 @@ public class QRCodeScanActivity extends AppCompatActivity {
     RequestQueue qrcoderequestQueue;
     String invNum, invTerm, invDate, encrypt, sellerID, randomNumber;
     String unitprice, scan_quantity, rownum, description;
+
+    ArrayList<String> ScanName = new ArrayList<>();
+    ArrayList<String> ScanQuantity = new ArrayList<>();
+    ArrayList<String> ScanUnit = new ArrayList<>();
+    ArrayList<String> ScanExpdate = new ArrayList<>();
+    ArrayList<String> ScanKind = new ArrayList<>();
+    ArrayList<String> ScanLocate = new ArrayList<>();
+
+    Calendar Today;
+    CharSequence today_default;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +126,9 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
         //設置掃描結果清單
         refRecyclerView = findViewById(R.id.scan_add_reflist);
+
+        Today = Calendar.getInstance();
+        today_default = DateFormat.format("yyyy-MM-dd", Today.getTime());
 
     }
 
@@ -269,9 +282,53 @@ public class QRCodeScanActivity extends AppCompatActivity {
             holder.scan_input_quantity.setText(ScanQuantity.get(position));
 
             //下拉選單
-            GetUnit(holder.scan_input_unit); //unit
-            GetKind(holder.scan_input_kind); //kind
-            GetLocate(holder.scan_input_locate); //locate
+            //holder.scan_input_unit.setSelection(ScanUnit.indexOf(ScanUnit.get(position)));
+            GetUnit(holder.scan_input_unit,position); //unit
+            /*if(holder.scan_input_unit.getSelectedItem()!=null){
+                ScanUnit.set(position,holder.scan_input_unit.getSelectedItem().toString());
+            }*/
+            holder.scan_input_unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    ScanUnit.set(position, holder.scan_input_unit.getItemAtPosition(pos).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            //Log.i("scan_default_list","Unit："+ScanUnit);
+
+
+            GetKind(holder.scan_input_kind, position); //kind
+            holder.scan_input_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    ScanKind.set(position, holder.scan_input_kind.getItemAtPosition(pos).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            //Log.i("scan_default_list","Kind："+ScanKind);
+
+
+            GetLocate(holder.scan_input_locate, position); //locate
+            holder.scan_input_locate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    ScanLocate.set(position, holder.scan_input_locate.getItemAtPosition(pos).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            //Log.i("scan_default_list","Locate："+ScanLocate);
 
             //點擊刪除該項目
             holder.delete_scan_item.setOnClickListener(new View.OnClickListener() {
@@ -279,12 +336,24 @@ public class QRCodeScanActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     ScanName.remove(position);
                     ScanQuantity.remove(position);
+                    ScanUnit.remove(position);
+                    ScanKind.remove(position);
+                    ScanLocate.remove(position);
+                    ScanExpdate.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeRemoved(position, myListAdapter.getItemCount());
                     notifyDataSetChanged();
+
+                    Log.i("scan_default_list","Name："+ScanName);
+                    Log.i("scan_default_list","Quantity："+ScanQuantity);
+                    Log.i("scan_default_list","Unit："+ScanUnit);
+                    Log.i("scan_default_list","Kind："+ScanKind);
+                    Log.i("scan_default_list","Locate："+ScanLocate);
+                    Log.i("scan_default_list","Expdate："+ScanExpdate);
                 }
             });
             //點擊選擇有效期限
+            holder.scan_input_expdate.setText(ScanExpdate.get(position));
             holder.scan_expdate_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -296,7 +365,8 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int date) {
                             String dateTime = String.valueOf(year)+"-"+String.valueOf(month+1)+"-"+String.valueOf(date);
-                            holder.scan_input_expdate.setText(dateTime);
+                            ScanExpdate.set(position,dateTime);
+                            holder.scan_input_expdate.setText(ScanExpdate.get(position));
                         }
                     }, year, month, date).show();
                 }
@@ -306,13 +376,13 @@ public class QRCodeScanActivity extends AppCompatActivity {
             scan_add_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for(int i=0;i<ScanName.size();i++){
-                        String foodname = holder.scan_food_name.getText().toString();
-                        String quantity = holder.scan_input_quantity.getText().toString().trim(); //取得數量
-                        String unit = holder.scan_input_unit.getSelectedItem().toString().trim(); //取得單位
-                        String date = holder.scan_input_expdate.getText().toString().trim(); //取得有效期限
-                        String kind = holder.scan_input_kind.getSelectedItem().toString().trim(); //取得分類
-                        String locate = holder.scan_input_locate.getSelectedItem().toString().trim(); //取得存放位置
+                    for(int q=0;q<ScanName.size();q++){
+                        String foodname = ScanName.get(q);
+                        String quantity = ScanQuantity.get(q); //取得數量
+                        String unit = ScanUnit.get(q); //取得單位
+                        String date = ScanExpdate.get(q); //取得有效期限
+                        String kind = ScanKind.get(q); //取得分類
+                        String locate = ScanLocate.get(q); //取得存放位置
                         if(!date.equals("")){
                             AddScanlist(foodname, quantity, unit, date, kind, locate);
                         }else{
@@ -350,8 +420,19 @@ public class QRCodeScanActivity extends AppCompatActivity {
 
                         ScanName.add(description);
                         ScanQuantity.add(scan_quantity);
+                        ScanUnit.add("包");
+                        ScanKind.add("五穀雜糧");
+                        ScanLocate.add("冷藏");
+                        ScanExpdate.add(today_default.toString());
 
                     }
+                    Log.i("scan_default_list","Name："+ScanName);
+                    Log.i("scan_default_list","Quantity："+ScanQuantity);
+                    Log.i("scan_default_list","Unit："+ScanUnit);
+                    Log.i("scan_default_list","Kind："+ScanKind);
+                    Log.i("scan_default_list","Locate："+ScanLocate);
+                    Log.i("scan_default_list","Expdate："+ScanExpdate);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -382,7 +463,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
     }
 
     //取得unit
-    public void GetUnit(Spinner unitsp){
+    public void GetUnit(Spinner unitsp, int pos){
         unitrequestQueue = Volley.newRequestQueue(this);
         StringRequest unitstrRequest = new StringRequest(Request.Method.POST, uniturl, new Response.Listener<String>() {
             @Override
@@ -402,6 +483,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                 unitAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, unitlist);
                 unitAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
                 unitsp.setAdapter(unitAdapter);
+                unitsp.setSelection(unitlist.indexOf(ScanUnit.get(pos)));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -420,7 +502,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
     }
 
     //取得kind
-    public void GetKind(Spinner kindsp){
+    public void GetKind(Spinner kindsp,int pos){
         kindrequestQueue = Volley.newRequestQueue(this);
 
         StringRequest kindstrRequest = new StringRequest(Request.Method.POST, kindurl, new Response.Listener<String>() {
@@ -441,6 +523,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                 kindAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, kindlist);
                 kindAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
                 kindsp.setAdapter(kindAdapter);
+                kindsp.setSelection(kindlist.indexOf(ScanKind.get(pos)));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -459,7 +542,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
     }
 
     //取得locate
-    public void GetLocate(Spinner locatesp){
+    public void GetLocate(Spinner locatesp, int pos){
         locaterequestQueue = Volley.newRequestQueue(this);
 
         StringRequest locatestrRequest = new StringRequest(Request.Method.GET, locateurl, new Response.Listener<String>() {
@@ -480,6 +563,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                 locateAdapter = new ArrayAdapter<>(QRCodeScanActivity.this, android.R.layout.simple_spinner_item, locatelist);
                 locateAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
                 locatesp.setAdapter(locateAdapter);
+                locatesp.setSelection(locatelist.indexOf(ScanLocate.get(pos)));
             }
         }, new Response.ErrorListener() {
             @Override
