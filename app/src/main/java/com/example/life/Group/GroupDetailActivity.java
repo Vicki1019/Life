@@ -50,16 +50,16 @@ public class GroupDetailActivity extends AppCompatActivity {
     TextView group_name_title, group_no_copy;
     Button delete_group;
     //POST GET MEMBERINFO
-    private static String groupurl = "http://172.16.1.41/PHP_API/index.php/Group/get_group_member";
+    private static String groupurl = "http://10.0.67.94/PHP_API/index.php/Group/get_group_member";
     RequestQueue grouprequestQueue;
     //POST CHECK DEFAULT GROUP
-    private static String defaultckurl = "http://172.16.1.41/PHP_API/index.php/Group/check_default_group";
+    private static String defaultckurl = "http://10.0.67.94/PHP_API/index.php/Group/check_default_group";
     RequestQueue defaultckrequestQueue;
     //POST DELETE GROUP
-    private static String deletegroupurl = "http://172.16.1.41/PHP_API/index.php/Group/delete_group";
+    private static String deletegroupurl = "http://10.0.67.94/PHP_API/index.php/Group/delete_group";
     RequestQueue deletegrouprequestQueue;
     //POST DELETE GROUP MEMBER
-    private static String deletememberurl = "http://172.16.1.41/PHP_API/index.php/Group/delete_group_member";
+    private static String deletememberurl = "http://10.0.67.94/PHP_API/index.php/Group/delete_group_member";
     RequestQueue deletememberrequestQueue;
     //RecyclerView
     RecyclerView groupRecyclerView;
