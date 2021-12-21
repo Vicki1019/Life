@@ -138,7 +138,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if(scanningResult.getContents() != null){
+        if(scanningResult.getContents() != null && !scanningResult.getContents().substring(0,2).equals("**")){
             //Toast.makeText(QRCodeScanActivity.this,"掃描內容: "+scanningResult.getContents(), Toast.LENGTH_LONG).show();
             String scanContent = scanningResult.getContents();
             invNum = scanContent.substring(0,10); //發票號碼
@@ -191,10 +191,10 @@ public class QRCodeScanActivity extends AppCompatActivity {
             myListAdapter = new QRCodeScanActivity.MyListAdapter();
             refRecyclerView.setAdapter(myListAdapter);*/
         }else{
-            //Toast.makeText(QRCodeScanActivity.this,"發生錯誤",Toast.LENGTH_LONG).show();
             Intent i = new Intent();
             i.setClass(QRCodeScanActivity.this, MainActivity.class);
             startActivity(i);
+            Toast.makeText(QRCodeScanActivity.this,"請對準左邊QR Code進行掃描",Toast.LENGTH_LONG).show();
         }
     }
 
