@@ -48,6 +48,7 @@ public class ShopaddActivity extends AppCompatActivity {
     TextView shoplist_choose_date;
     EditText shoplist_input_name, shoplist_input_quantity;
     String sEmail, notifydate, shoplist_name, shoplist_quantity, name_aftertxt, quntity_aftertxt;
+    Button add_view_btn;
     ArrayList<String> Namelist = new ArrayList<>();
     ArrayList<String> Quantitylist = new ArrayList<>();
     int food_input_no=1;
@@ -55,7 +56,6 @@ public class ShopaddActivity extends AppCompatActivity {
     LinearLayout shoplist_add_layout;
     RecyclerView add_shoplist_recyclerview;
     ShopaddActivity.MyListAdapter myListAdapter;
-    Button add_view_btn;
     int default_i = -1;
     //Edittext焦點
     int name_etFocusPos = -1;
@@ -75,6 +75,11 @@ public class ShopaddActivity extends AppCompatActivity {
         sessionManager.checkLogin(); //檢查是否登入
         HashMap<String, String> user = sessionManager.getUserDetail();
         sEmail = user.get(sessionManager.EMAIL);
+
+        Namelist.add(" ");
+        Quantitylist.add(" ");
+
+        add_view_btn = (Button) findViewById(R.id.add_view_btn);;
 
         //shoplist_add_layout = findViewById(R.id.shoplist_add_layout);
 
@@ -132,9 +137,20 @@ public class ShopaddActivity extends AppCompatActivity {
         //取得物件的控制
         @Override
         public void onBindViewHolder(@NonNull @NotNull ShopaddActivity.MyListAdapter.ViewHolder holder, int position) {
-            if(position == 0){
+            add_view_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Namelist.add(" ");
+                    Quantitylist.add(" ");
+                    /*myListAdapter.notifyItemInserted(name_etFocusPos);*/
+                    myListAdapter.notifyItemChanged(position, getItemCount());
+                }
+            });
+
+
+            /*if(position == 0){
                 holder.shoplist_remove.setVisibility(View.INVISIBLE);
-            }
+            }*/
 
             holder.shoplist_input_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -165,8 +181,6 @@ public class ShopaddActivity extends AppCompatActivity {
                                         }else{
                                             Namelist.add(name_etFocusPos, name_aftertxt);
                                         }
-                                    }else{
-                                        Namelist.add(name_etFocusPos, name_aftertxt);
                                     }
                                 }
                             }
@@ -206,8 +220,6 @@ public class ShopaddActivity extends AppCompatActivity {
                                         }else{
                                             Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
                                         }
-                                    }else{
-                                        Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
                                     }
                                 }
                             }
@@ -223,8 +235,15 @@ public class ShopaddActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //Toast.makeText(ShopaddActivity.this, String.valueOf(etFocusPos)+","+String.valueOf(position)+Namelist, Toast.LENGTH_SHORT).show();
                     if(Namelist!=null && Quantitylist!=null){
-                        Namelist.remove(position);
-                        Quantitylist.remove(position);
+                        if(position == Namelist.size()){
+                            Namelist.remove(position-1);
+                            Quantitylist.remove(position-1);
+                        }else{
+                            Namelist.remove(position);
+                            Quantitylist.remove(position);
+                        }
+                        holder.shoplist_input_name.setText("");
+                        holder.shoplist_input_quantity.setText("");
                     }
                     myListAdapter.notifyItemRemoved(position);
                     myListAdapter.notifyItemChanged(position, getItemCount());
@@ -238,10 +257,8 @@ public class ShopaddActivity extends AppCompatActivity {
         //取得顯示數量
         @Override
         public int getItemCount() {
-            if(Namelist.size()==0){
+            if(Namelist.size()<=1) {
                 return 1;
-            }else if(Namelist.size() == Quantitylist.size()){
-                return Namelist.size()+1;
             }else{
                 return Namelist.size();
             }
