@@ -55,7 +55,7 @@ public class KindSetActivity extends AppCompatActivity {
     //Session
     SessionManager sessionManager;
     //Volley
-    private static String kindurl = "http://10.0.67.94/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://10.0.67.94/PHP_API/index.php/UserSetting/getKind_setting";
     RequestQueue kindrequestQueue;
     private static String addurl = "http://10.0.67.94/PHP_API/index.php/UserSetting/addkind";
     RequestQueue addrequestQueue;
