@@ -58,7 +58,7 @@ public class ShopaddActivity extends AppCompatActivity {
     int default_i = -1;
     //Edittext焦點
     int name_etFocusPos = -1;
-    int quntit_etFocusPos = -1;
+    int quntity_etFocusPos = -1;
     //SESSION
     SessionManager sessionManager;
     //POST SHOPLIST
@@ -93,22 +93,6 @@ public class ShopaddActivity extends AppCompatActivity {
 
     }
 
-    //新增購物清單欄位
-    public void AddView(int position){
-        myListAdapter.notifyItemInserted(position);
-        myListAdapter.notifyItemRangeInserted(position,myListAdapter.getItemCount());
-        myListAdapter.notifyDataSetChanged();
-        food_input_no++;
-    }
-
-    //刪除購物清單欄位
-    public void DeleteView(int position){
-            myListAdapter.notifyItemRemoved(position);
-            myListAdapter.notifyItemRangeRemoved(position,myListAdapter.getItemCount());
-            myListAdapter.notifyDataSetChanged();
-            food_input_no--;
-    }
-
     //建立分類RecyclerView
     public class MyListAdapter extends RecyclerView.Adapter<ShopaddActivity.MyListAdapter.ViewHolder>{
 
@@ -141,15 +125,9 @@ public class ShopaddActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Namelist.add(" ");
                     Quantitylist.add(" ");
-                    /*myListAdapter.notifyItemInserted(name_etFocusPos);*/
                     myListAdapter.notifyItemChanged(position, getItemCount());
                 }
             });
-
-
-            /*if(position == 0){
-                holder.shoplist_remove.setVisibility(View.INVISIBLE);
-            }*/
 
             holder.shoplist_input_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -194,7 +172,7 @@ public class ShopaddActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
-                        quntit_etFocusPos = position;
+                        quntity_etFocusPos = position;
                         //即時更新資料到陣列
                         holder.shoplist_input_quantity.addTextChangedListener(new TextWatcher() {
                             @Override
@@ -211,19 +189,19 @@ public class ShopaddActivity extends AppCompatActivity {
                             public void afterTextChanged(Editable s) {
                                 quntity_aftertxt = String.valueOf(s);
                                 if(Quantitylist==null){
-                                    Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
+                                    Quantitylist.add(quntity_etFocusPos, quntity_aftertxt);
                                 }else{
-                                    if(quntit_etFocusPos <= Quantitylist.size()-1){
-                                        if(Quantitylist.get(quntit_etFocusPos)!=null){
-                                            Quantitylist.set(quntit_etFocusPos, quntity_aftertxt);
+                                    if(quntity_etFocusPos <= Quantitylist.size()-1){
+                                        if(Quantitylist.get(quntity_etFocusPos)!=null){
+                                            Quantitylist.set(quntity_etFocusPos, quntity_aftertxt);
                                         }else{
-                                            Quantitylist.add(quntit_etFocusPos, quntity_aftertxt);
+                                            Quantitylist.add(quntity_etFocusPos, quntity_aftertxt);
                                         }
                                     }
                                 }
                             }
                         });
-                        Log.i("response","Quantity："+quntit_etFocusPos+" "+position+" "+Quantitylist);
+                        Log.i("response","Quantity："+quntity_etFocusPos+" "+position+" "+Quantitylist);
                     }
                 }
             });
@@ -331,7 +309,26 @@ public class ShopaddActivity extends AppCompatActivity {
                     shoplist_choose_date.setError(null);
                     if(Namelist.size()!=0 && Quantitylist.size()!=0){
                         for(int a=0;a<Namelist.size();a++){
-                            if(!Namelist.get(a).equals(" ") && !Quantitylist.get(a).equals(" ")){
+                            if(!Namelist.get(a).equals(" ")){
+                                if(!Quantitylist.get(a).equals(" ")){
+                                    AddShopList(notifydate, Namelist.get(a), Quantitylist.get(a));
+                                }else{
+                                    shoplist_input_quantity.setError("請輸入數量");
+                                }
+                            }else{
+                                if(!Quantitylist.get(a).equals(" ")){
+                                    shoplist_input_name.setError("請輸入名稱");
+                                }else{
+                                    shoplist_input_name.setError("請輸入名稱");
+                                    shoplist_input_quantity.setError("請輸入數量");
+                                }
+                            }
+                        }
+                    }
+
+                    /*if(Namelist.size()!=0 && Quantitylist.size()!=0){
+                        for(int a=0;a<Namelist.size();a++){
+                            if(!Namelist.get(a).isEmpty() && !Quantitylist.get(a).isEmpty()){
                                 if(!shoplist_input_name.equals("") && !shoplist_input_quantity.equals("")){
                                     AddShopList(notifydate, Namelist.get(a), Quantitylist.get(a));
                                 }else{
@@ -345,7 +342,9 @@ public class ShopaddActivity extends AppCompatActivity {
                                         if(shoplist_input_quantity.equals("")){shoplist_input_quantity.setError("請輸入數量");}
                                     }
                                 }
+
                             }else{
+                                Log.i("response","test");
                                 if(shoplist_input_name.equals("")){
                                     if(shoplist_input_quantity.equals("")){
                                         shoplist_input_name.setError("請輸入名稱");
@@ -357,7 +356,7 @@ public class ShopaddActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
             }
         });
