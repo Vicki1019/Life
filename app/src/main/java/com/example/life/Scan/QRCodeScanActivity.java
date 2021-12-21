@@ -60,26 +60,26 @@ public class QRCodeScanActivity extends AppCompatActivity {
     Button scan_add_ok;
     int drop = 0;
     //POST Unit
-    private static String uniturl = "http://10.0.67.94/PHP_API/index.php/Refrigerator/getunit";
+    private static String uniturl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getunit";
     ArrayList<String> unitlist = new ArrayList<>();
     ArrayAdapter<String> unitAdapter;
     RequestQueue unitrequestQueue;
     //POST Kind
-    private static String kindurl = "http://10.0.67.94/PHP_API/index.php/Refrigerator/getkind";
+    private static String kindurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getkind";
     ArrayList<String> kindlist = new ArrayList<>();
     ArrayAdapter<String> kindAdapter;
     RequestQueue kindrequestQueue;
     //POST Locate
-    private static String locateurl = "http://10.0.67.94/PHP_API/index.php/Refrigerator/getlocate";
+    private static String locateurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/getlocate";
     ArrayList<String> locatelist = new ArrayList<>();
     ArrayAdapter<String> locateAdapter;
     RequestQueue locaterequestQueue;
     //ADD Reflist
-    private static String refaddurl = "http://10.0.67.94/PHP_API/index.php/Refrigerator/refadd";
+    private static String refaddurl = "http://172.16.1.44/PHP_API/index.php/Refrigerator/refadd";
     RequestQueue refaddrequestQueue;
 
     //POST 查詢發票明細
-    private static String qrcodeurl ="http://10.0.67.94/PHP_API/index.php/API/getInvList";
+    private static String qrcodeurl ="http://172.16.1.44/PHP_API/index.php/API/getInvList";
     RequestQueue qrcoderequestQueue;
     String invNum, invTerm, invDate, encrypt, sellerID, randomNumber;
     String unitprice, scan_quantity, rownum, description;
@@ -306,16 +306,18 @@ public class QRCodeScanActivity extends AppCompatActivity {
             scan_add_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String foodname = holder.scan_food_name.getText().toString();
-                    String quantity = holder.scan_input_quantity.getText().toString().trim(); //取得數量
-                    String unit = holder.scan_input_unit.getSelectedItem().toString().trim(); //取得單位
-                    String date = holder.scan_input_expdate.getText().toString().trim(); //取得有效期限
-                    String kind = holder.scan_input_kind.getSelectedItem().toString().trim(); //取得分類
-                    String locate = holder.scan_input_locate.getSelectedItem().toString().trim(); //取得存放位置
-                    if(!date.equals("")){
-                        AddScanlist(foodname, quantity, unit, date, kind, locate);
-                    }else{
-                        holder.scan_input_expdate.setError("請選擇有效日期");
+                    for(int i=0;i<ScanName.size();i++){
+                        String foodname = holder.scan_food_name.getText().toString();
+                        String quantity = holder.scan_input_quantity.getText().toString().trim(); //取得數量
+                        String unit = holder.scan_input_unit.getSelectedItem().toString().trim(); //取得單位
+                        String date = holder.scan_input_expdate.getText().toString().trim(); //取得有效期限
+                        String kind = holder.scan_input_kind.getSelectedItem().toString().trim(); //取得分類
+                        String locate = holder.scan_input_locate.getSelectedItem().toString().trim(); //取得存放位置
+                        if(!date.equals("")){
+                            AddScanlist(foodname, quantity, unit, date, kind, locate);
+                        }else{
+                            holder.scan_input_expdate.setError("請選擇有效日期");
+                        }
                     }
                 }
             });
