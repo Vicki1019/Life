@@ -379,12 +379,12 @@ public class Shoplist extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
-                    Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "刪除成功", Toast.LENGTH_SHORT).show();
                     /*Intent intent = new Intent();
                     intent.setClass(KindSetActivity.this, KindSetActivity.class);
                     startActivity(intent);*/
                 } else if (response.equals("failure")) {
-                    Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "刪除失敗", Toast.LENGTH_SHORT).show();
                     /*Intent intent = new Intent();
                     intent.setClass(getContext(), KindSetActivity.class);
                     startActivity(intent);*/

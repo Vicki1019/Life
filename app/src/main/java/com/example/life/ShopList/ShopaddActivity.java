@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShopaddActivity extends AppCompatActivity {
-    TextView shoplist_choose_date;
+    TextView shoplist_choose_date, empty_hint;
     String sEmail, notifydate, shoplist_name, shoplist_quantity, name_aftertxt, quntity_aftertxt;
     Button add_view_btn;
     ArrayList<String> Namelist = new ArrayList<>();
@@ -90,6 +90,8 @@ public class ShopaddActivity extends AppCompatActivity {
         add_shoplist_recyclerview.setAdapter(myListAdapter);
         //設置RecyclerView緩存容量
         add_shoplist_recyclerview.setItemViewCacheSize(20);
+
+        empty_hint = (TextView)findViewById(R.id.empty_hint);
 
     }
 
@@ -307,56 +309,39 @@ public class ShopaddActivity extends AppCompatActivity {
                     shoplist_choose_date.setError("請選擇推播日期");
                 }else{
                     shoplist_choose_date.setError(null);
+                    int count=0;
                     if(Namelist.size()!=0 && Quantitylist.size()!=0){
                         for(int a=0;a<Namelist.size();a++){
-                            if(!Namelist.get(a).equals(" ")){
-                                if(!Quantitylist.get(a).equals(" ")){
-                                    AddShopList(notifydate, Namelist.get(a), Quantitylist.get(a));
-                                }else{
-                                    shoplist_input_quantity.setError("請輸入數量");
-                                }
+
+                            Log.i("flag","名稱："+Namelist.get(a)+"數量："+Quantitylist.get(a));
+                            if((Namelist.get(a).equals(" ") && Quantitylist.get(a).equals(" ")) || (Namelist.get(a).equals("") && Quantitylist.get(a).equals(""))){
+                                //shoplist_input_name.setError("請輸入名稱");
+                                //shoplist_input_quantity.setError("請輸入數量");
+                                empty_hint.setVisibility(View.VISIBLE);
+
+                            }else if(Namelist.get(a).equals(" ") || Namelist.get(a).equals("")){
+                                //shoplist_input_name.setError("請輸入名稱");
+                                empty_hint.setVisibility(View.VISIBLE);
+
+                            }else if(Quantitylist.get(a).equals(" ") || Quantitylist.get(a).equals("")){
+                                //shoplist_input_quantity.setError("請輸入數量");
+                                empty_hint.setVisibility(View.VISIBLE);
+
                             }else{
-                                if(!Quantitylist.get(a).equals(" ")){
-                                    shoplist_input_name.setError("請輸入名稱");
-                                }else{
-                                    shoplist_input_name.setError("請輸入名稱");
-                                    shoplist_input_quantity.setError("請輸入數量");
-                                }
+                                count++;
                             }
+                        }
+
+                        if(count == Namelist.size()){
+                            for(int a=0;a<Namelist.size();a++){
+                                AddShopList(notifydate, Namelist.get(a), Quantitylist.get(a));
+                                empty_hint.setVisibility(View.INVISIBLE);
+                                Log.i("flag","名稱："+Namelist.get(a)+"數量："+Quantitylist.get(a));
+                            }
+                        }else{
+                            Log.i("flag","名稱或數量不可為空");
                         }
                     }
-
-                    /*if(Namelist.size()!=0 && Quantitylist.size()!=0){
-                        for(int a=0;a<Namelist.size();a++){
-                            if(!Namelist.get(a).isEmpty() && !Quantitylist.get(a).isEmpty()){
-                                if(!shoplist_input_name.equals("") && !shoplist_input_quantity.equals("")){
-                                    AddShopList(notifydate, Namelist.get(a), Quantitylist.get(a));
-                                }else{
-                                    if(shoplist_input_name.equals("")){
-                                        if(shoplist_input_quantity.equals("")){
-                                            shoplist_input_name.setError("請輸入名稱");
-                                            shoplist_input_quantity.setError("請輸入數量");
-                                        }else{
-                                            shoplist_input_name.setError("請輸入名稱");}
-                                    }else{
-                                        if(shoplist_input_quantity.equals("")){shoplist_input_quantity.setError("請輸入數量");}
-                                    }
-                                }
-
-                            }else{
-                                Log.i("response","test");
-                                if(shoplist_input_name.equals("")){
-                                    if(shoplist_input_quantity.equals("")){
-                                        shoplist_input_name.setError("請輸入名稱");
-                                        shoplist_input_quantity.setError("請輸入數量");
-                                    }else{
-                                        shoplist_input_name.setError("請輸入名稱");}
-                                }else{
-                                    if(shoplist_input_quantity.equals("")){shoplist_input_quantity.setError("請輸入數量");}
-                                }
-                            }
-                        }
-                    }*/
                 }
             }
         });

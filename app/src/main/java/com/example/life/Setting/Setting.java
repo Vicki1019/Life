@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -33,6 +34,9 @@ import com.example.life.MainActivity;
 import com.example.life.R;
 import com.example.life.Manager.SessionManager;
 import com.example.life.Vehicle.MyVehicleActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -70,6 +74,8 @@ public class Setting extends Fragment {
     // POST Edit RefName
     private static String refnameurl = "http://172.16.1.44/PHP_API/index.php/UserSetting/update_refname";
     RequestQueue refnamerequestQueue;
+
+    GoogleSignInClient mGoogleSignInClient;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -245,6 +251,13 @@ public class Setting extends Fragment {
                     @Override
                     public void onClick(View v) {
                         sessionManager.logout();
+                        mGoogleSignInClient.signOut()
+                                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        // ...
+                                    }
+                                });
                     }
                 });
 
