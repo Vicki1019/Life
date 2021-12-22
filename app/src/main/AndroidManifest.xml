@@ -41,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login.LoginActivity" />
+        <receiver android:name=".NotificationReceiver"/>
     </application>
 
 </manifest>

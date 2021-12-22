@@ -1,15 +1,20 @@
 package com.example.life.Refrigerator;
 
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +41,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
 import com.example.life.R;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -77,6 +80,8 @@ public class Reflist extends Fragment {
     //POST ZERO NOTIFY
     private static String zerourl = "http://172.16.1.44/PHP_API/index.php/LineNotify/ZeroNotify";
     RequestQueue zerorequestQueue;
+
+    private String CHANNEL_ID = "Coder";
 
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
@@ -133,6 +138,8 @@ public class Reflist extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,6 +164,15 @@ public class Reflist extends Fragment {
         sName = user.get(SessionManager.MEMBER_NIKINAME);
 
         LocateNow();
+
+        //檢查手機版本是否支援通知
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID, "DemoCode", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getActivity().getSystemService(NotificationManager.class);
+            assert manager != null;
+            manager.createNotificationChannel(channel);
+        }
 
         return v;
     }
@@ -497,6 +513,23 @@ public class Reflist extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
+                    RemoteViews view = new RemoteViews(getActivity().getPackageName(),R.layout.custom_notification_layout);
+
+                    /**建置通知欄位的內容*/
+                    NotificationCompat.Builder builder
+                            = new NotificationCompat.Builder(getActivity(),CHANNEL_ID)
+                            .setSmallIcon(R.drawable.logo_icon)
+                            .setContent(view)
+                            .setContentTitle("哈囉你好！")
+                            .setContentText("跟你打個招呼啊～")
+                            .setAutoCancel(true)
+                            .setOnlyAlertOnce(true)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+                    NotificationManagerCompat notificationManagerCompat
+                            = NotificationManagerCompat.from(getActivity());
+                    /**發出通知*/
+                    notificationManagerCompat.notify(1,builder.build());
 
                 } else if (response.equals("failure")) {
                     Toast.makeText(getContext(), "推播失敗", Toast.LENGTH_SHORT).show();
