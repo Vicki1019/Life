@@ -40,6 +40,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.life.MainActivity;
 import com.example.life.Manager.SessionManager;
+import com.example.life.NotificationReceiver;
 import com.example.life.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +60,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class Reflist extends Fragment {
+    private static final String CHANNEL_ID = "Coder";
     TextView myref;
     String sEmail, sName, refno, owner,food, quantity, unit, expdate, day, kind, locate, state, photo, reftitle,line_token;
     //Session
@@ -81,7 +83,6 @@ public class Reflist extends Fragment {
     private static String zerourl = "http://172.16.1.44/PHP_API/index.php/LineNotify/ZeroNotify";
     RequestQueue zerorequestQueue;
 
-    private String CHANNEL_ID = "Coder";
 
     //Reflist RecyclerView
     RecyclerView refRecyclerView;
@@ -97,6 +98,7 @@ public class Reflist extends Fragment {
     ArrayList<String> locatearrayList = new ArrayList<>();
     ArrayList<String> statearrayList = new ArrayList<>();
     ArrayList<String> photoarrayList = new ArrayList<>();
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -165,7 +167,7 @@ public class Reflist extends Fragment {
 
         LocateNow();
 
-        //檢查手機版本是否支援通知
+        //檢查手機版本是否支援通知並新增頻道
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID, "DemoCode", NotificationManager.IMPORTANCE_DEFAULT);
@@ -173,6 +175,7 @@ public class Reflist extends Fragment {
             assert manager != null;
             manager.createNotificationChannel(channel);
         }
+
 
         return v;
     }
@@ -513,23 +516,22 @@ public class Reflist extends Fragment {
             @Override
             public void onResponse(String response) {
                 if (response.equals("success")) {
-                    RemoteViews view = new RemoteViews(getActivity().getPackageName(),R.layout.custom_notification_layout);
 
-                    /**建置通知欄位的內容*/
+                    //建置通知欄位的內容
                     NotificationCompat.Builder builder
-                            = new NotificationCompat.Builder(getActivity(),CHANNEL_ID)
+                            = new NotificationCompat.Builder(getContext(),CHANNEL_ID)
                             .setSmallIcon(R.drawable.logo_icon)
-                            .setContent(view)
-                            .setContentTitle("哈囉你好！")
-                            .setContentText("跟你打個招呼啊～")
+                            .setContentTitle("生活冰館")
+                            .setContentText("冰箱有食材用完啦，記得要去補貨！")
                             .setAutoCancel(true)
-                            .setOnlyAlertOnce(true)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+
+                    //發出通知
                     NotificationManagerCompat notificationManagerCompat
-                            = NotificationManagerCompat.from(getActivity());
-                    /**發出通知*/
+                            = NotificationManagerCompat.from(getContext());
                     notificationManagerCompat.notify(1,builder.build());
+
 
                 } else if (response.equals("failure")) {
                     Toast.makeText(getContext(), "推播失敗", Toast.LENGTH_SHORT).show();
